@@ -1,0 +1,87 @@
+import { useState } from "react";
+import "./LoginPage.css";
+
+export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="login-bg">
+      <nav className="login-navbar">
+        <div className="login-logo-area">
+          <svg className="lp-logo-svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="6" className="lp-logo-rect1" />
+            <rect x="8" y="12" width="5" height="12" rx="2" className="lp-logo-rect2" />
+            <rect x="15" y="6" width="5" height="18" rx="2" className="lp-logo-rect2" />
+            <rect x="22" y="18" width="5" height="6" rx="2" className="lp-logo-rect2" />
+          </svg>
+          <span className="login-logo-text">your-pace.ai</span>
+        </div>
+        <button className="login-signin-top">Sign in</button>
+      </nav>
+      <div className="login-form-container">
+        <div className="login-form">
+          <svg className="login-form-logo" width="42" height="42" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="6" className="lp-logo-rect1" />
+            <rect x="8" y="12" width="5" height="12" rx="2" className="lp-logo-rect2" />
+            <rect x="15" y="6" width="5" height="18" rx="2" className="lp-logo-rect2" />
+            <rect x="22" y="18" width="5" height="6" rx="2" className="lp-logo-rect2" />
+          </svg>
+          <h2 className="login-form-title">Welcome!</h2>
+          <p className="login-form-subtitle">Let's start your learning journey.</p>
+          <button className="login-google-btn">
+            <img src="https://media.wired.com/photos/5926ffe47034dc5f91bed4e8/3:2/w_2240,c_limit/google-logo.jpg" alt="G" className="google-icon" />
+            Continue with Google
+          </button>
+          <div className="login-or-row">
+            <div className="login-or-line" />
+            <span className="login-or-text">or continue with</span>
+            <div className="login-or-line" />
+          </div>
+          <form>
+            <input
+              className="login-input"
+              type="email"
+              placeholder="Enter your email"
+              autoComplete="username"
+            />
+            <div className="login-password-row">
+              <input
+                className="login-input"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+              />
+              <span
+                className="login-eye"
+                onClick={() => setShowPassword((v) => !v)}
+                tabIndex={0}
+                role="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3.5" stroke="#a3a3a3" strokeWidth="1.7" />
+                  <path
+                    d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                    stroke="#a3a3a3"
+                    strokeWidth="1.7"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div className="login-actions-row">
+              <span className="login-forgot">Forgot password?</span>
+            </div>
+            <button className="login-signin-btn" type="submit">
+              Sign In
+            </button>
+          </form>
+          <div className="login-signup-row">
+            <span>Don't have an account? </span>
+            <a className="login-signup-link" href="#">Sign up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
