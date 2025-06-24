@@ -1,0 +1,244 @@
+.login-bg {
+    min-height: 100vh;
+    background: #161616;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Navbar */
+  .login-navbar {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 38px 0 38px;
+    box-sizing: border-box;
+  }
+  .login-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .login-logo-text {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-left: 8px;
+    letter-spacing: -1px;
+  }
+  .lp-logo-svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .lp-logo-rect1 {
+    fill: #fff;
+  }
+  .lp-logo-rect2 {
+    fill: #18181b;
+  }
+  .login-signin-top {
+    background: #fff;
+    color: #18181b;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 7px 19px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+  .login-signin-top:hover {
+    background: #ececec;
+  }
+
+  /* Centered Login Form */
+  .login-form-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-form {
+    width: 350px;
+    background: transparent;
+    border-radius: 16px;
+    padding: 40px 0 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .login-form-logo {
+    margin-bottom: 12px;
+  }
+  .login-form-title {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    text-align: center;
+  }
+  .login-form-subtitle {
+    color: #a3a3a3;
+    font-size: 1.04rem;
+    margin-bottom: 22px;
+    font-weight: 400;
+    text-align: center;
+  }
+  .login-google-btn {
+    width: 100%;
+    background: #18181b;
+    color: #fff;
+    border: 1.5px solid #333;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    cursor: pointer;
+    margin-bottom: 22px;
+    transition: background 0.17s;
+  }
+  .login-google-btn:hover {
+    background: #222;
+  }
+  .google-icon {
+    width: 19px;
+    height: 19px;
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .login-or-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 22px 0;
+  }
+  .login-or-line {
+    flex: 1;
+    height: 1px;
+    background: #292929;
+    border-radius: 2px;
+  }
+  .login-or-text {
+    color: #6e6e6e;
+    font-size: 0.98rem;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .login-input {
+    width: 100%;
+    background: #18181b;
+    color: #e5e5e5;
+    border: 1.5px solid #333;
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 13px 15px;
+    outline: none;
+    font-weight: 500;
+    transition: border 0.18s, background 0.18s;
+  }
+  .login-input:focus {
+    border: 1.5px solid #fff;
+    background: #202020;
+  }
+  .login-password-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .login-password-row .login-input {
+    padding-right: 38px;
+  }
+  .login-eye {
+    position: absolute;
+    right: 12px;
+    top: 7px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background 0.16s;
+    outline: none;
+    display: flex;
+    align-items: center;
+  }
+  .login-eye:active,
+  .login-eye:focus {
+    background: #262626;
+  }
+  .login-actions-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+  }
+  .login-forgot {
+    color: #a3a3a3;
+    font-size: 0.96rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.18s;
+  }
+  .login-forgot:hover {
+    color: #fff;
+  }
+
+  .login-signin-btn {
+    width: 100%;
+    background: #a3a3a3;
+    color: #222;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 14px 0 10px 0;
+    transition: background 0.18s, color 0.18s;
+  }
+  .login-signin-btn:hover {
+    background: #bbbbbb;
+    color: #161616;
+  }
+
+  .login-signup-row {
+    text-align: center;
+    color: #bbb;
+    font-size: 1rem;
+    margin-top: 12px;
+  }
+  .login-signup-link {
+    color: #fff;
+    margin-left: 4px;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.18s;
+  }
+  .login-signup-link:hover {
+    color: #aaa;
+  }
+
+  @media (max-width: 480px) {
+    .login-form {
+      width: 98vw;
+      min-width: 0;
+      padding: 40px 0 24px 0;
+    }
+    .login-navbar {
+      padding: 18px 12px 0 12px;
+    }
+  }
