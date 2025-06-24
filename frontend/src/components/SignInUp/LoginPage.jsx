@@ -14,7 +14,7 @@ export default function LoginPage() {
             <rect x="15" y="6" width="5" height="18" rx="2" className="lp-logo-rect2" />
             <rect x="22" y="18" width="5" height="6" rx="2" className="lp-logo-rect2" />
           </svg>
-          <span className="login-logo-text">your-pace.ai</span>
+          <span className="login-logo-text">your-pace.com</span>
         </div>
         <button className="login-signin-top">Sign in</button>
       </nav>
@@ -29,7 +29,7 @@ export default function LoginPage() {
           <h2 className="login-form-title">Welcome!</h2>
           <p className="login-form-subtitle">Let's start your learning journey.</p>
           <button className="login-google-btn">
-            <img src="https://media.wired.com/photos/5926ffe47034dc5f91bed4e8/3:2/w_2240,c_limit/google-logo.jpg" alt="G" className="google-icon" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/250px-Google_Favicon_2025.svg.png" alt="G" className="google-icon" />
             Continue with Google
           </button>
           <div className="login-or-row">
@@ -39,14 +39,14 @@ export default function LoginPage() {
           </div>
           <form>
             <input
-              className="login-input"
+              className="login-input-email"
               type="email"
               placeholder="Enter your email"
               autoComplete="username"
             />
             <div className="login-password-row">
               <input
-                className="login-input"
+                className="login-input-password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 autoComplete="current-password"
