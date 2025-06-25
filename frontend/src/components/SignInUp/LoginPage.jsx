@@ -1,5 +1,6 @@
-import { useState } from "react";
-import "./LoginPage.css";
+import { useState } from "react"
+import "./LoginPage.css"
+import { Link } from 'react-router-dom'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +17,7 @@ export default function LoginPage() {
           </svg>
           <span className="login-logo-text">your-pace.com</span>
         </div>
-        <button className="login-signin-top">Sign in</button>
+        <Link to="/login" className="login-signin-top">Sign in</Link>
       </nav>
       <div className="login-form-container">
         <div className="login-form">
@@ -78,7 +79,7 @@ export default function LoginPage() {
           </form>
           <div className="login-signup-row">
             <span>Don't have an account? </span>
-            <a className="login-signup-link" href="#">Sign up</a>
+            <Link to="/signup" className="login-signup-link" href="#">Sign up</Link>
           </div>
         </div>
       </div>
