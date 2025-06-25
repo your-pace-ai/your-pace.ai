@@ -36,20 +36,6 @@
   .lp-logo-rect2 {
     fill: #18181b;
   }
-  /* .login-signin-top {
-    background: #fff;
-    color: #18181b;
-    border: none;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 7px 19px;
-    cursor: pointer;
-    transition: background 0.18s;
-  } */
-  /* .login-signin-top:hover {
-    background: #ececec;
-  } */
 
   .login-form-container {
     flex: 1;
