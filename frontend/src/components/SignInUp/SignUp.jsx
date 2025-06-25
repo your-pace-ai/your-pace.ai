@@ -1,10 +1,45 @@
 import "./SignUp.css"
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 export const SignUp = () => {
+    const navigate = useNavigate()
     const [showPassword, setshowPassword] = useState(false)
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
+
+    const handleLocalSignUp = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/local-auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          })
+        })
+
+        if (response.ok) navigate("/login")
+        else throw new Error("Failed to sign up")
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      await handleLocalSignUp()
+
+    }
+
+    useEffect(() => {
+
+      (async () => {
+        await handleLocalSignUp()
+      })()
+    }, [])
 
     return (
         <div className="sign-up-bg">
@@ -38,11 +73,13 @@ export const SignUp = () => {
                 <span className="sign-up-or-text">or signup with</span>
                 <div className="sign-up-or-line" />
               </div>
-              <form>
-                
+              <form onSubmit={handleSubmit}>
+
                 <input
                   className="sign-up-input-email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   autoComplete="username"
                 />
@@ -51,6 +88,8 @@ export const SignUp = () => {
                   <input
                     className="sign-up-input-password"
                     type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     autoComplete="current-password"
                   />
