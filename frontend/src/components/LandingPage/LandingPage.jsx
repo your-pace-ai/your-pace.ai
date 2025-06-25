@@ -1,4 +1,5 @@
-import "./LandingPage.css";
+import "./LandingPage.css"
+import { Link } from 'react-router-dom'
 
 export default function LandingPage() {
   return (
@@ -17,7 +18,7 @@ export default function LandingPage() {
           <span className="lp-nav-link">
             Features
           </span>
-          <button className="lp-get-started-nav">Get Started</button>
+          <Link to="/login" className="lp-get-started-nav">Get Started</Link>
         </div>
       </nav>
 
@@ -30,7 +31,7 @@ export default function LandingPage() {
         </p>
         <div className="lp-hero-buttons">
           <button className="lp-see-features">See features</button>
-          <button className="lp-get-started">Get Started</button>
+          <Link to="/login" className="lp-get-started">Get Started</Link>
         </div>
         <div className="lp-avatars-row">
           <span className="lp-avatars">

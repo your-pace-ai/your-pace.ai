@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+    INSTRUCTOR
+    STUDENT
+}
+
+model User {
+  id String @id @default(uuid())
+  firstName String?
+  lastName String?
+  email String @unique
+  password String
+  username String? @unique
+  role Role @default(STUDENT)
+  createdAt DateTime @default(now())
+  learningHub LearningHub []
+  post Post []
+  followedBy User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
+}
+
+
+model Post {
+    id Int @id @default(autoincrement())
+    title String
+    content String
+    createdAt DateTime @default(now())
+    like Int @default(0)
+    user User @relation(fields: [userId], references: [id])
+    userId String
+    comment PostComment []
+    @@index([title])
+}
+
+model PostComment {
+    id Int @id @default(autoincrement())
+    comment String
+    createdAt DateTime @default(now())
+    post Post @relation(fields: [postId], references: [id])
+    postId Int
+}
+
+model LearningHub {
+    id Int @id @default(autoincrement())
+    name String
+    subHub SubHub []
+    user User @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model SubHub {
+    id Int @id @default(autoincrement())
+    name String
+    learningHub LearningHub @relation(fields: [learningHubId], references: [id])
+    learningHubId Int
+    chapters Chapter []
+    subHubComment SubHubComment []
+    flashCard FlashCard []
+    quiz Quiz []
+}
+
+model Chapter {
+    id Int @id @default(autoincrement())
+    content String
+    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHubId Int
+}
+
+model SubHubComment {
+    id Int @id @default(autoincrement())
+    comment String
+    createdAt DateTime @default(now())
+    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHubId Int
+}
+
+model FlashCard {
+    id Int @id @default(autoincrement())
+    question String
+    answer String
+    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHubId Int
+}
+
+model Quiz {
+    id Int @id @default(autoincrement())
+    question String
+    options Json
+    answer String
+    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHubId Int
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
