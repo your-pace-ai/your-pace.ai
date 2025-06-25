@@ -1,0 +1,202 @@
+.landing-page {
+    min-height: 100vh;
+    background: #fff;
+    font-family: 'Inter', Arial, sans-serif;
+    color: #18181b;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lp-navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 48px 20px 48px;
+    border-bottom: 1px solid #f3f3f6;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  .lp-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lp-logo-text {
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin-left: 8px;
+    color: #18181b;
+    letter-spacing: -1px;
+  }
+  .lp-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .lp-nav-link {
+    font-weight: 500;
+    font-size: 1.06rem;
+    color: #232323;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s;
+  }
+  .lp-nav-link:hover {
+    color: #111827;
+  }
+  .lp-get-started-nav {
+    background: #18181b;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    padding: 11px 28px;
+    border-radius: 9999px;
+    font-size: 1.08rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 1px 4px rgba(20,20,20,0.07);
+  }
+  .lp-get-started-nav:hover {
+    background: #232323;
+    transform: scale(1.04);
+  }
+
+  .lp-logo-svg {
+    display: inline-block;
+  }
+  .lp-logo-rect1 {
+    fill: #111827;
+  }
+  .lp-logo-rect2 {
+    fill: #fff;
+  }
+
+  .lp-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 90px 15px 0 15px;
+  }
+  .lp-yc-badge {
+    background: #fff7ed;
+    color: #f97316;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 9999px;
+    padding: 6px 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 6px rgba(250,146,50,0.06);
+  }
+  .lp-y-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #f97316;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.08rem;
+    border-radius: 50%;
+    letter-spacing: 0;
+  }
+  .lp-hero-title {
+    font-size: 3.1rem;
+    font-weight: 700;
+    margin: 0 0 26px 0;
+    color: #18181b;
+    line-height: 1.15;
+  }
+  @media (min-width: 600px) {
+    .lp-hero-title { font-size: 3.7rem; }
+  }
+  .lp-for-you {
+    color: #18181b;
+    letter-spacing: -0.5px;
+  }
+  .lp-hero-desc {
+    color: #757575;
+    font-size: 1.25rem;
+    max-width: 540px;
+    margin: 0 auto 36px auto;
+    line-height: 1.5;
+  }
+  .lp-hero-buttons {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-bottom: 38px;
+  }
+  .lp-see-features,
+  .lp-get-started {
+    padding: 14px 38px;
+    border-radius: 9999px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    box-shadow: 0 2px 8px rgba(20,20,20,0.04);
+    transition: background 0.15s, color 0.15s, box-shadow 0.18s, transform 0.12s;
+  }
+  .lp-see-features {
+    background: #fff;
+    color: #18181b;
+    border: 1.5px solid #ececec;
+  }
+  .lp-see-features:hover {
+    background: #f3f3f3;
+  }
+  .lp-get-started {
+    background: #18181b;
+    color: #fff;
+  }
+  .lp-get-started:hover {
+    background: #232323;
+    transform: scale(1.04);
+  }
+  .lp-avatars-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .lp-avatars {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  .lp-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33px;
+    height: 33px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 50%;
+    color: #fff;
+    border: 2.5px solid #fff;
+    margin-left: -10px;
+    box-shadow: 0 0px 2px rgba(60,60,60,0.07);
+  }
+  .lp-avatar.lp-blue { background: #3b82f6; }
+  .lp-avatar.lp-red { background: #f43f5e; }
+  .lp-avatar.lp-orange { background: #fb923c; }
+  .lp-avatar.lp-black { background: #18181b; }
+  .lp-loved-by {
+    color: #757575;
+    font-size: 1.09rem;
+    font-weight: 500;
+  }
