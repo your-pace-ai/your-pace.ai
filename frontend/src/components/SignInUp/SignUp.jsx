@@ -1,8 +1,10 @@
 import "./SignUp.css"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export const SignUp = () => {
-    const [showPassword, setshowPassword] = useState(false);
+    const [showPassword, setshowPassword] = useState(false)
+    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("")
 
     return (
         <div className="sign-up-bg">
@@ -37,21 +39,7 @@ export const SignUp = () => {
                 <div className="sign-up-or-line" />
               </div>
               <form>
-
-                <input
-                  className="sign-up-input-first-name"
-                  type="text"
-                  placeholder="Enter your first name"
-                  autoComplete="username"
-                />
-
-                <input
-                  className="sign-up-input-last-name"
-                  type="text"
-                  placeholder="Enter your last name"
-                  autoComplete="username"
-                />
-
+                
                 <input
                   className="sign-up-input-email"
                   type="email"
