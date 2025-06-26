@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt')
 const prisma = new PrismaClient()
 
 passport.serializeUser((user, done) => {
-    console.log("Inside serialixer")
-    console.log(user)
     done(null, user.id)
 })
 
