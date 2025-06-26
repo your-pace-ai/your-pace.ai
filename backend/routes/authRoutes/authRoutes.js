@@ -40,4 +40,8 @@ router.get("/api/local-auth/status", (req, res) => {
     res.json(req.user)
 })
 
+router.post("/api/google-auth/signup", async (req, res) => {
+    
+})
+
 module.exports = router
