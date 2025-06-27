@@ -1,11 +1,11 @@
-.login-bg {
+.sign-up-bg {
     min-height: 100vh;
     background: #161616;
     display: flex;
     flex-direction: column;
   }
 
-  .login-navbar {
+  .sign-up-navbar {
     width: 100%;
     height: 60px;
     display: flex;
@@ -14,12 +14,12 @@
     padding: 20px 38px 0 38px;
     box-sizing: border-box;
   }
-  .login-logo-area {
+  .sign-up-logo-area {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .login-logo-text {
+  .sign-up-logo-text {
     color: #fff;
     font-size: 1.25rem;
     font-weight: 700;
@@ -37,13 +37,13 @@
     fill: #18181b;
   }
 
-  .login-form-container {
+  .sign-up-form-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .login-form {
+  .sign-up-form {
     width: 350px;
     background: transparent;
     border-radius: 16px;
@@ -52,24 +52,24 @@
     flex-direction: column;
     align-items: center;
   }
-  .login-form-logo {
+  .sign-up-form-logo {
     margin-bottom: 12px;
   }
-  .login-form-title {
+  .sign-up-form-title {
     color: #fff;
     font-size: 2rem;
     font-weight: 600;
     margin: 0 0 6px 0;
     text-align: center;
   }
-  .login-form-subtitle {
+  .sign-up-form-subtitle {
     color: #a3a3a3;
     font-size: 1.04rem;
     margin-bottom: 22px;
     font-weight: 400;
     text-align: center;
   }
-  .login-google-btn {
+  .sign-up-google-btn {
     width: 100%;
     background: #18181b;
     color: #fff;
@@ -86,7 +86,7 @@
     margin-bottom: 22px;
     transition: background 0.17s;
   }
-  .login-google-btn:hover {
+  .sign-up-google-btn:hover {
     background: #222;
   }
   .google-icon {
@@ -98,20 +98,20 @@
     vertical-align: middle;
   }
 
-  .login-or-row {
+  .sign-up-or-row {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 8px;
     margin: 8px 0 22px 0;
   }
-  .login-or-line {
+  .sign-up-or-line {
     flex: 1;
     height: 1px;
     background: #292929;
     border-radius: 2px;
   }
-  .login-or-text {
+  .sign-up-or-text {
     color: #6e6e6e;
     font-size: 0.98rem;
   }
@@ -122,7 +122,7 @@
     flex-direction: column;
     gap: 15px;
   }
-  .login-input-email, .login-input-password, .login-input-first-name, .login-input-last-name {
+  .sign-up-input-email, .sign-up-input-password {
     width: 320px;
     background: #18181b;
     color: #e5e5e5;
@@ -135,20 +135,20 @@
     transition: border 0.18s, background 0.18s;
   }
 
-  .login-input-email:focus, .login-input-password:focus, .login-input-first-name:focus, .login-input-last-name:focus {
+  .sign-up-input-email:focus, .sign-up-input-password:focus, .sign-up-input-first-name:focus, .sign-up-input-last-name:focus {
     border: 1.5px solid #fff;
     background: #202020;
   }
-  .login-password-row {
+  .sign-up-password-row {
     width: 100%;
     display: flex;
     align-items: center;
     position: relative;
   }
-  .login-password-row .login-input {
+  .sign-up-password-row .sign-up-input {
     padding-right: 38px;
   }
-  .login-eye {
+  .sign-up-eye {
     position: absolute;
     right: 12px;
     top: 7px;
@@ -160,28 +160,28 @@
     display: flex;
     align-items: center;
   }
-  .login-eye:active,
-  .login-eye:focus {
+  .sign-up-eye:active,
+  .sign-up-eye:focus {
     background: #262626;
   }
-  .login-actions-row {
+  .sign-up-actions-row {
     width: 100%;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 6px;
   }
-  .login-forgot {
+  .sign-up-forgot {
     color: #a3a3a3;
     font-size: 0.96rem;
     cursor: pointer;
     text-decoration: underline;
     transition: color 0.18s;
   }
-  .login-forgot:hover {
+  .sign-up-forgot:hover {
     color: #fff;
   }
 
-  .login-signin-btn {
+  .sign-up-signin-btn {
     width: 100%;
     background: #a3a3a3;
     color: #222;
@@ -194,18 +194,18 @@
     margin: 14px 0 10px 0;
     transition: background 0.18s, color 0.18s;
   }
-  .login-signin-btn:hover {
+  .sign-up-signin-btn:hover {
     background: #bbbbbb;
     color: #161616;
   }
 
-  .login-signup-row {
+  .sign-up-signup-row {
     text-align: center;
     color: #bbb;
     font-size: 1rem;
     margin-top: 12px;
   }
-  .login-signup-link {
+  .sign-up-signup-link {
     color: #fff;
     margin-left: 4px;
     text-decoration: underline;
@@ -213,17 +213,17 @@
     font-weight: 500;
     transition: color 0.18s;
   }
-  .login-signup-link:hover {
+  .sign-up-signup-link:hover {
     color: #aaa;
   }
 
   @media (max-width: 480px) {
-    .login-form {
+    .sign-up-form {
       width: 98vw;
       min-width: 0;
       padding: 40px 0 24px 0;
     }
-    .login-navbar {
+    .sign-up-navbar {
       padding: 18px 12px 0 12px;
     }
   }
