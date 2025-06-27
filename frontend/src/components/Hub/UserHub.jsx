@@ -13,7 +13,7 @@ export const UserHub = () => {
                         <button className="hub-btn" onClick={handleCreateExam}>
                             Create Exam
                         </button>
-                        <button className="hub-actions" onClick={handleViewResult}>
+                        <button className="hub-btn" onClick={handleViewResult}>
                             View Results
                         </button>
                     </div>
