@@ -1,0 +1,55 @@
+.user-hub {
+    background-color: #e8e8e8;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hub-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.hub-btn {
+    background-color: #d4d4d4;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #333;
+}
+
+.hub-btn:hover {
+    background-color: #c8c8c8;
+    transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+    .hub-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .hub-actions {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .hub-btn {
+        flex: 1;
+        min-width: 80px
+    }
+}
