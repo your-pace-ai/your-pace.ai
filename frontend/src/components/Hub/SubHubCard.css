@@ -1,0 +1,81 @@
+.subhub-card {
+    background-color: #e8e8e8;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 200px;
+    flex: 1;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .subhub-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .subhub-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .subhub-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .subhub-action-btn {
+    background-color: #d4d4d4;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #333;
+  }
+
+  .subhub-action-btn:hover {
+    background-color: #c8c8c8;
+    transform: translateY(-1px);
+  }
+
+  .subhub-action-btn:active {
+    transform: translateY(1px);
+  }
+
+  .subhub-action-btn:focus {
+    outline: 2px solid #007acc;
+    outline-offset: 2px;
+  }
+
+  .subhub-action-btn.delete {
+    background-color: #e8d4d4;
+    border-color: #d4a5a5;
+    color: #8b0000;
+  }
+
+  .subhub-action-btn.delete:hover {
+    background-color: #e0c0c0;
+    color: #a00000;
+  }
+
+  @media (max-width: 768px) {
+    .subhub-card {
+      max-width: none;
+      min-width: auto;
+    }
+
+    .subhub-actions {
+      gap: 12px;
+    }
+
+    .subhub-action-btn {
+      flex: 1;
+    }
+  }

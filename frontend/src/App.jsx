@@ -4,6 +4,7 @@ import LandingPage from './components/LandingPage/LandingPage.jsx'
 import { SignUp } from './components/SignInUp/SignUp.jsx'
 import { Routes, Route } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar/Sidebar.jsx'
+import { SubHubCard } from './components/Hub/SubHubCard.jsx'
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
         <Route path='/' element={<LandingPage></LandingPage>}></Route>
         <Route path='/login' element={<LoginPage></LoginPage>}></Route>
         <Route path='/signup' element={<SignUp></SignUp>}></Route>
-        <Route path='/dashboard' element={<Sidebar></Sidebar>}></Route>
+        <Route path='/dashboard' element={<><Sidebar></Sidebar><SubHubCard></SubHubCard></>}></Route>
       </Routes>
     </>
   )
