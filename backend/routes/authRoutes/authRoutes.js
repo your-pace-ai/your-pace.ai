@@ -25,7 +25,7 @@ router.post("/api/local-auth/signup", validateLocalSignUp, async (req, res) => {
 })
 
 router.post("/api/local-auth/login", passport.authenticate("local"), async (req, res) => {
-    res.json(req.user)
+    res.json(req.user.id)
 })
 
 router.post("/api/local-auth/logout", (req, res) => {
@@ -37,7 +37,8 @@ router.post("/api/local-auth/logout", (req, res) => {
 })
 
 router.get("/api/local-auth/status", (req, res) => {
-    res.json(req.user)
+    if (req.user.id) res.json(req.user.id)
+    return res.sendStatus(200)
 })
 
 module.exports = router

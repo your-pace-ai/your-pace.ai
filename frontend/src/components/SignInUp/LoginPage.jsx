@@ -1,9 +1,44 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "./LoginPage.css"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const navigate = useNavigate()
+
+  const handleLocalLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/local-auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      })
+      if (response.ok) {
+        navigate("/dashboard")
+        const data = await response.json()
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await handleLocalLogin()
+  }
+
+  useEffect(() => {
+    (async () => {
+      await handleLocalLogin()
+    })()
+  }, [])
 
   return (
     <div className="login-bg">
@@ -38,10 +73,12 @@ export default function LoginPage() {
             <span className="login-or-text">or continue with</span>
             <div className="login-or-line" />
           </div>
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               className="login-input-email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               autoComplete="username"
             />
@@ -49,6 +86,8 @@ export default function LoginPage() {
               <input
                 className="login-input-password"
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 autoComplete="current-password"
               />
