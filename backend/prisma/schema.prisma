@@ -27,7 +27,6 @@ model User {
   following User[] @relation("UserFollows")
 }
 
-
 model Post {
     id Int @id @default(autoincrement())
     title String

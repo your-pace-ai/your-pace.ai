@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt")
 const passport = require('passport')
 const { validateLocalSignUp } = require("../../validation/validation.js")
 require("../../strategies/localStrategy.js")
+require("../../strategies/googleStrategy.js")
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -39,6 +40,10 @@ router.post("/api/local-auth/logout", (req, res) => {
 router.get("/api/local-auth/status", (req, res) => {
     if (req.user.id) res.json(req.user.id)
     return res.sendStatus(200)
+})
+
+router.post("/api/google-auth/login",passport.authenticate("google"), async (req, res) => {
+    res.json(req.user).status(200)
 })
 
 module.exports = router
