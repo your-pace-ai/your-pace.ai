@@ -1,0 +1,18 @@
+.learning-hub {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hubs-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .hubs-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+}

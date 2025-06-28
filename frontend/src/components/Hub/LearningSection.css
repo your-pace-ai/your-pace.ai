@@ -1,0 +1,137 @@
+.learning-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.upload-options {
+  display: flex;
+  gap: 20px;
+}
+
+.upload-card {
+    background-color: #e8e8e8;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 40px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0,2s ease;
+    min-width: 180px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upload-card:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+
+.upload-card:active {
+    transform: translateY(0);
+    background-color: #d0d0d0;
+}
+
+.upload-card span {
+font-size: 14px;
+font-weight: 500;
+color: #555;
+}
+
+.search-container {
+display: flex;
+align-items: center;
+gap: 12px;
+width: 100%;
+max-width: 500px;
+}
+
+.search-input {
+flex: 1;
+background-color: #e8e8e8;
+border: 1px solid #ccc;
+border-radius: 6px;
+padding: 12px 16px;
+font-size: 14px;
+outline: none;
+transition: all 0.2s ease;
+}
+
+.search-input:focus {
+border-color: #999;
+background-color: #fff;
+box-shadow: 0 0 0 3px rgba(153, 153, 153, 0.1);
+}
+
+.search-input::placeholder {
+color: #888;
+}
+
+.search-submit {
+background-color: #d4d4d4;
+border: 1px solid #bbb;
+border-radius: 6px;
+padding: 12px 20px;
+cursor: pointer;
+font-size: 14px;
+transition: all 0.2s ease;
+color: #333;
+}
+
+.search-submit:hover {
+background-color: #c8c8c8;
+transform: translateY(-1px);
+}
+
+.search-submit:active {
+transform: translateY(1px);
+}
+
+.search-submit:focus {
+outline: 2px solid #007acc;
+outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+.learning-section {
+    gap: 20px;
+}
+
+.section-title {
+    font-size: 20px;
+}
+
+.upload-options {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-card {
+    width: 100%;
+    max-width: 250px;
+    padding: 30px 20px;
+}
+
+.search-container {
+    flex-direction: column;
+    gap: 8px;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.search-submit {
+    width: 100%;
+}
+  }
