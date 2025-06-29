@@ -10,11 +10,17 @@ const validateLocalSignUp = async (req, res, next) => {
             email: email
         }
     })
-    
+
     if (user) return res.status(400).json({ error: 'Email already exists' })
     next()
 }
 
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) return next()
+    return res.status(401).json({ error: 'Not authenticated' })
+}
+
 module.exports = {
-    validateLocalSignUp
+    validateLocalSignUp,
+    isAuthenticated
 }

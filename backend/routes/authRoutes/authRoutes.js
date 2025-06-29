@@ -3,7 +3,7 @@ const { Router } = express
 const { PrismaClient } = require('@prisma/client')
 const bcrypt = require("bcrypt")
 const passport = require('passport')
-const { validateLocalSignUp } = require("../../validation/validation.js")
+const { validateLocalSignUp } = require("../../middleware/middleware.js")
 require("../../strategies/localStrategy.js")
 require("../../strategies/googleStrategy.js")
 

@@ -7,6 +7,7 @@ const { PrismaClient } = require("@prisma/client")
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store')
 const passport = require('passport')
 const authRoutes = require("./routes/authRoutes/authRoutes.js")
+const userRoutes = require("./routes/userRoutes/userRoutes.js")
 
 dotenv.config()
 
@@ -20,7 +21,9 @@ const sessionStore = new PrismaSessionStore(prisma, {
 })
 
 app.use(json())
-app.use(cors())
+app.use(cors({
+    credentials : true,
+}))
 app.use(session({
     secret : "secret",
     resave : false,
@@ -33,6 +36,8 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(authRoutes)
 app.use(authRoutes)
 
 app.listen(PORT, () => {
