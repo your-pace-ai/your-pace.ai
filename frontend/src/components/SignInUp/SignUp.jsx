@@ -1,6 +1,7 @@
 import "./SignUp.css"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { signup } from "../../api/api"
 
 export const SignUp = () => {
     const navigate = useNavigate()
@@ -8,38 +9,16 @@ export const SignUp = () => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
 
-    const handleLocalSignUp = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/local-auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          })
-        })
+    const handleSubmit = async (e) => {
+      e.preventDefault()
 
-        if (response.ok) navigate("/login")
-        else throw new Error("Failed to sign up")
+      try {
+        await signup(email, password)
+        navigate("/login")
       } catch (error) {
         throw new Error(error)
       }
     }
-
-    const handleSubmit = async (e) => {
-      e.preventDefault()
-      await handleLocalSignUp()
-
-    }
-
-    useEffect(() => {
-
-      (async () => {
-        await handleLocalSignUp()
-      })()
-    }, [])
 
     return (
         <div className="sign-up-bg">

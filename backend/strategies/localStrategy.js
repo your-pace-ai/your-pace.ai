@@ -5,24 +5,6 @@ const bcrypt = require('bcrypt')
 
 const prisma = new PrismaClient()
 
-passport.serializeUser((user, done) => {
-    done(null, user.id)
-})
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await prisma.user.findFirst({
-            where : {
-                id : id
-            }
-        })
-        if (!user) throw new Error("User Not Found")
-        done(null, user)
-    } catch (error) {
-        done(error, null)
-    }
-})
-
 const strategy = new Strategy({ usernameField:"email" }, async (username, password, done) => {
     try {
         const user = await prisma.user.findUnique({

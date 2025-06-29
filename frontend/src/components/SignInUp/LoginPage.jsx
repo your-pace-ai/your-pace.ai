@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import "./LoginPage.css"
 import { Link, useNavigate } from 'react-router-dom'
+import { login } from "../../api/api"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -8,37 +9,16 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const navigate = useNavigate()
 
-  const handleLocalLogin = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
     try {
-      const response = await fetch("http://localhost:3000/api/local-auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      })
-      if (response.ok) {
-        navigate("/dashboard")
-        const data = await response.json()
-      }
+      await login(email, password)
+      navigate("/dashboard")
     } catch (error) {
       throw new Error(error)
     }
   }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    await handleLocalLogin()
-  }
-
-  useEffect(() => {
-    (async () => {
-      await handleLocalLogin()
-    })()
-  }, [])
 
   return (
     <div className="login-bg">
@@ -66,7 +46,7 @@ export default function LoginPage() {
           <p className="login-form-subtitle">Let's start your learning journey.</p>
           <button className="login-google-btn">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/250px-Google_Favicon_2025.svg.png" alt="G" className="google-icon" />
-            Continue with Google
+            <a className="login-google-link" href="http://localhost:3000/auth/google">Continue with Google</a>
           </button>
           <div className="login-or-row">
             <div className="login-or-line" />
