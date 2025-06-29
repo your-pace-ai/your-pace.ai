@@ -26,7 +26,7 @@ router.post("/api/local-auth/signup", validateLocalSignUp, async (req, res) => {
 })
 
 router.post("/api/local-auth/login", passport.authenticate("local"), async (req, res) => {
-    res.json(req.user.id)
+    res.json(req.user)
 })
 
 router.post("/api/local-auth/logout", (req, res) => {
@@ -37,13 +37,12 @@ router.post("/api/local-auth/logout", (req, res) => {
     })
 })
 
-router.get("/api/local-auth/status", (req, res) => {
-    if (req.user.id) res.json(req.user.id)
-    return res.sendStatus(200)
-})
+router.get("/auth/google",passport.authenticate("google", {failureRedirect: `${process.env.FRONTEND_URL}/login`, session: true, scope: ["profile", "email"]}), async (req, res) => {})
 
-router.post("/api/google-auth/login",passport.authenticate("google"), async (req, res) => {
-    res.json(req.user).status(200)
-})
+router.get("/auth/google/callback", passport.authenticate("google", {
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
+    successRedirect: `${process.env.FRONTEND_URL}/dashboard`,
+    session: true
+}))
 
 module.exports = router

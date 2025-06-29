@@ -22,6 +22,7 @@ const sessionStore = new PrismaSessionStore(prisma, {
 
 app.use(json())
 app.use(cors({
+    origin : process.env.FRONTEND_URL,
     credentials : true,
 }))
 app.use(session({
@@ -37,8 +38,26 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id
+            }
+        })
+        if (!user) throw new Error("User not found")
+        done(null, user)
+    } catch (error) {
+        done(error, null)
+    }
+})
+
 app.use(authRoutes)
-app.use(authRoutes)
+app.use(userRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
