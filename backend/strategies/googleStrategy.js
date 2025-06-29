@@ -28,11 +28,13 @@ const GoogleStrategy = new Strategy({
             const newUser = await prisma.user.create({
                 data: {
                     email: email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    firstName: profile.name.givenName ? profile.name.givenName : null,
+                    lastName: profile.name.familyName ? profile.name.familyName : null
                 }
             })
             return done(null, newUser)
-            
+
         } catch (error) {
             throw new Error(error)
         }
