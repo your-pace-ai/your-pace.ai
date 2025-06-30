@@ -27,7 +27,7 @@ const GoogleStrategy = new Strategy({
 
             const newUser = await prisma.user.create({
                 data: {
-                    email: email,
+                    email: profile.emails[0].value,
                     password: hashedPassword,
                     firstName: profile.name.givenName ? profile.name.givenName : null,
                     lastName: profile.name.familyName ? profile.name.familyName : null
