@@ -5,6 +5,7 @@ import { SignUp } from './components/SignInUp/SignUp.jsx'
 import { Routes, Route } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar/Sidebar.jsx'
 import { MainContent } from './components/Hub/MainContent.jsx'
+import { Modal } from './components/Modal/Modal.jsx'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <div className="app">
             <Sidebar></Sidebar>
             <MainContent></MainContent>
+            <Modal></Modal>
           </div>
         </>}>
         </Route>
