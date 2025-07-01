@@ -1,5 +1,4 @@
-.modal {
-    display: none;
+.create-learning-hub-modal {
     position: fixed;
     z-index: 1;
     left: 0;
@@ -11,7 +10,7 @@
     background-color: rgba(0,0,0,0.4);
   }
 
-  .modal-content {
+  .create-learning-hub-modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
