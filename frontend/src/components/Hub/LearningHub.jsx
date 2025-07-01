@@ -17,9 +17,9 @@ export const LearningHub = () => {
         <>
             <div className="learning-hub">
                 <div className="hubs-container">
-                    {hubs.map((hub) => {
+                    {hubs.map((hub) => (
                         <SubHubCard key={hub.id} name={hub.name}></SubHubCard>
-                    })}
+                    ))}
                 </div>
             </div>
         </>

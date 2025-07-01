@@ -230,6 +230,11 @@ form {
 .login-signup-link:hover {
   color: #aaa;
 }
+.login-google-link {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
 
 @media (max-width: 480px) {
   .login-form {

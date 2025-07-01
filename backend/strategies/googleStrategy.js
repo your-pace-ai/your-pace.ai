@@ -2,56 +2,42 @@ const { Strategy } = require("passport-google-oidc")
 const { PrismaClient } = require("@prisma/client")
 const bcrypt = require("bcrypt")
 const passport = require("passport")
-const {} = require("../utils/randomPasswordGenerator.js")
+const randomPasswordGenerator = require("../utils/randomPasswordGenerator.js")
 
 const prisma = new PrismaClient()
-
-passport.serializeUser((user, done) => {
-    done(null, user.id)
-})
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await prisma.user.findFirst({
-            where : {
-                id : id
-            }
-        })
-        if (!user) throw new Error("User not Found")
-        done(null, user)
-    } catch (error) {
-        done(error, null)
-    }
-})
 
 const GoogleStrategy = new Strategy({
     clientID : process.env.GOOGLE_CLIENT_ID,
     clientSecret : process.env.GOOGLE_CLIENT_SECRET,
     callbackURL : process.env.GOOGLE_CALLBACK_URL,
     scope : ["email", "profile"],
-}, async (accessToken, refreshToken, profile, email, done) => {
-    const findUser = await prisma.user.findFirst({
-        where : {
-            id : profile.id
-        }
-    })
+    }, async (issuer, profile, done) => {
+        try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: profile.emails[0].value
+                }
+            })
 
-    if (findUser) {
-        done(null, findUser)
-        return
-    }
+            if (user) return done(null, user)
 
-    const saltRounds = 12
-    const randomPassword = randomPasswordGenerator()
-    const password = await bcrypt.hash(randomPassword, saltRounds)
-    const newUser = await prisma.user.create({
-        data : {
-            id: profile.id,
-            email: email,
-            password: password
+            const saltRounds = 12;
+            const randomPassword = randomPasswordGenerator();
+            const hashedPassword = await bcrypt.hash(randomPassword, saltRounds);
+
+            const newUser = await prisma.user.create({
+                data: {
+                    email: profile.emails[0].value,
+                    password: hashedPassword,
+                    firstName: profile.name.givenName ? profile.name.givenName : null,
+                    lastName: profile.name.familyName ? profile.name.familyName : null
+                }
+            })
+            return done(null, newUser)
+
+        } catch (error) {
+            throw new Error(error)
         }
-    })
-    done(null, newUser)
 })
 
 module.exports = passport.use(GoogleStrategy)
