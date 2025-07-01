@@ -5,7 +5,7 @@ const { Router } = express
 const router = Router()
 
 router.get("/api/user", isAuthenticated, (req, res) => {
-  res.json({user: req.user})
+  res.json({user: req.user.id})
 })
 
 module.exports = router
