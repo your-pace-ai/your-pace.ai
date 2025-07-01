@@ -8,6 +8,7 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store')
 const passport = require('passport')
 const authRoutes = require("./routes/authRoutes/authRoutes.js")
 const userRoutes = require("./routes/userRoutes/userRoutes.js")
+const learningHubRoutes = require("./routes/hubRoutes/learningHubRoutes.js")
 
 dotenv.config()
 
@@ -58,6 +59,7 @@ passport.deserializeUser(async (id, done) => {
 
 app.use(authRoutes)
 app.use(userRoutes)
+app.use(learningHubRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

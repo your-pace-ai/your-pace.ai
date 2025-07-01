@@ -57,3 +57,18 @@ export const currentUser = async () => {
     const data = await response.json()
     return data.user
 }
+
+export const createLearningHub = async(title="anonymous") => {
+    const response = await fetch(`${apiUrl}/learning-hub/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title
+        })
+    })
+
+    if (!response.ok) throw new Error("Failed to create learning Hub")
+}

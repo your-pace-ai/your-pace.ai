@@ -43,7 +43,7 @@ model PostComment {
     id Int @id @default(autoincrement())
     comment String
     createdAt DateTime @default(now())
-    post Post @relation(fields: [postId], references: [id])
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId Int
 }
 
@@ -58,7 +58,7 @@ model LearningHub {
 model SubHub {
     id Int @id @default(autoincrement())
     name String
-    learningHub LearningHub @relation(fields: [learningHubId], references: [id])
+    learningHub LearningHub @relation(fields: [learningHubId], references: [id], onDelete: Cascade)
     learningHubId Int
     chapters Chapter []
     subHubComment SubHubComment []
@@ -69,7 +69,7 @@ model SubHub {
 model Chapter {
     id Int @id @default(autoincrement())
     content String
-    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHub SubHub @relation(fields: [subHubId], references: [id], onDelete: Cascade)
     subHubId Int
 }
 
@@ -77,7 +77,7 @@ model SubHubComment {
     id Int @id @default(autoincrement())
     comment String
     createdAt DateTime @default(now())
-    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHub SubHub @relation(fields: [subHubId], references: [id], onDelete: Cascade)
     subHubId Int
 }
 
@@ -85,7 +85,7 @@ model FlashCard {
     id Int @id @default(autoincrement())
     question String
     answer String
-    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHub SubHub @relation(fields: [subHubId], references: [id], onDelete: Cascade)
     subHubId Int
 }
 
@@ -94,7 +94,7 @@ model Quiz {
     question String
     options Json
     answer String
-    subHub SubHub @relation(fields: [subHubId], references: [id])
+    subHub SubHub @relation(fields: [subHubId], references: [id], onDelete: Cascade)
     subHubId Int
 }
 

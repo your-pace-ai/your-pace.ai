@@ -5,8 +5,11 @@ import { SignUp } from './components/SignInUp/SignUp.jsx'
 import { Routes, Route } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar/Sidebar.jsx'
 import { MainContent } from './components/Hub/MainContent.jsx'
+import { Modal } from './components/Modal/CreateLearningHubModal.jsx'
+import { useState } from 'react'
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   return (
     <>
       <Routes>
@@ -16,8 +19,9 @@ function App() {
         <Route path='/dashboard'
         element={<>
           <div className="app">
-            <Sidebar></Sidebar>
+            <Sidebar onOpenModal={() => setIsModalOpen(true)}></Sidebar>
             <MainContent></MainContent>
+            <Modal visible={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
           </div>
         </>}>
         </Route>
