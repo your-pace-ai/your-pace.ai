@@ -1,0 +1,19 @@
+.chat-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.chat-box input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.primary-btn.small {
+    padding: 0.4rem 1rem;
+}
