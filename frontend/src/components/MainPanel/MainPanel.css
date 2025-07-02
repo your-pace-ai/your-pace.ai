@@ -1,0 +1,17 @@
+.main-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.panel-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
