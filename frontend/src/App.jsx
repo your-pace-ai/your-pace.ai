@@ -13,6 +13,21 @@ import { Chatbox } from './components/Chatbox/Chatbox.jsx'
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const SubHubPage = () => {
+    return (
+      <>
+            <div className="app">
+              <Sidebar onOpenModal={() => setIsModalOpen(true)}></Sidebar>
+              <div className="content">
+                <MediaSection></MediaSection>
+                <MainPanel></MainPanel>
+                <Modal visible={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
+              </div>
+            </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Routes>
@@ -28,18 +43,7 @@ function App() {
           </div>
         </>}>
         </Route>
-        <Route path='/subhub' element={
-          <>
-            <div className="app">
-              <Sidebar onOpenModal={() => setIsModalOpen(true)}></Sidebar>
-              <div className="content">
-                <MediaSection></MediaSection>
-                <MainPanel></MainPanel>
-                <Modal visible={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
-              </div>
-            </div>
-          </>
-        }></Route>
+        <Route path='/subhub' element={<SubHubPage/>}></Route>
       </Routes>
     </>
   )
