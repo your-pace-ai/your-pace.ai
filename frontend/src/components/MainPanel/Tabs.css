@@ -1,0 +1,17 @@
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.tab-btn {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #ddd;
+}
