@@ -1,6 +1,7 @@
 import { Tabs } from "./Tabs"
 import { Chatbox } from "../Chatbox/Chatbox"
 import "./MainPanel.css"
+import { useState } from "react"
 
 export const MainPanel = () => {
     const [activeTab, setActiveTab] = useState("Comment")
@@ -14,6 +15,7 @@ export const MainPanel = () => {
                 <p>Learn here</p>
             </div>
             <Chatbox></Chatbox>
+            
         </div>
         </>
     )

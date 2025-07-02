@@ -8,6 +8,7 @@ export const Tabs = ({tabs, activeTab, onChange}) => {
                     <button
                         key={t}
                         className={`tab-btn ${t === activeTab ? "active" : ""}`}
+                        onClick={() => onChange(t)}
                     >
                         {t}
                     </button>

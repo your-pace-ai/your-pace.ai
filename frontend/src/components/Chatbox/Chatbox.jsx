@@ -1,4 +1,5 @@
 import "./Chatbox.css"
+import { useState } from "react"
 
 export const Chatbox = () => {
     const [input, setInput] = useState("")
@@ -12,10 +13,11 @@ export const Chatbox = () => {
         <>
             <form className="chat-box" onSubmit={handleSubmit}>
                 <input type="text"
-                placeholder="Ask anything..."
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                />
+                        name="chatbox"
+                        placeholder="Ask anything..."
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                ></input>
                 <button type="submit" className="primary-btn small">
                     Submit
                 </button>

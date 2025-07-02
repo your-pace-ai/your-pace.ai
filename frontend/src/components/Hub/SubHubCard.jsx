@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './SubHubCard.css'
 
 export const SubHubCard = (props) => {
@@ -6,7 +7,7 @@ export const SubHubCard = (props) => {
 
   return (
     <div className="subhub-card">
-      <h4 className="subhub-title">{props.name}</h4>
+      <Link to="/subhub"><h4 className="subhub-title">{props.name}</h4></Link>
       <div className="subhub-actions">
         <button className="subhub-action-btn" onClick={handleShare}>
           share

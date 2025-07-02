@@ -7,11 +7,6 @@ export const Sidebar = ({onOpenModal}) => {
     const navigate = useNavigate()
     const [modal, setModal] = useState("")
 
-
-    useEffect(() => {
-        setModal(document.getElementsByClassName("create-learning-hub-modal")[0])
-    }, [])
-
     const signOut = async () => {
         await logout()
         navigate("/login")

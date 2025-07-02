@@ -8,7 +8,7 @@ export const VideoPlayer = ({url}) => {
         <>
             <div className="yt-wrapper">
                 <iframe src={`https://www.youtube.com/embed/${videoId}`}
-                        frameborder="0" title="Youtube player"
+                        title="Youtube player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
