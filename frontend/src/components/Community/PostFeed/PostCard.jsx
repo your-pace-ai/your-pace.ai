@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import './PostCard.css'
 import { currentUser } from '../../../api/api'
 
-export const PostCard = ({ post, isLiked, onDelete, onLike }) => {
+export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment }) => {
    const [showComments, setShowComments] = useState(false)
+   const [newComment, setNewComment] = useState('')
    const [isLiking, setIsLiking] = useState(false)
+   const [isCommenting, setIsCommenting] = useState(false)
    const [currentUserId, setCurrentUserId] = useState("")
 
 
@@ -15,7 +17,7 @@ export const PostCard = ({ post, isLiked, onDelete, onLike }) => {
 
    const loadCurrentUser = async () => {
        try {
-           const user = await currentUser();
+           const user = await currentUser()
            setCurrentUserId(user)
        } catch (error) {
            throw new Error(error)
@@ -29,6 +31,17 @@ export const PostCard = ({ post, isLiked, onDelete, onLike }) => {
         setIsLiking(true)
         onLike(post.id)
         setIsLiking(false)
+   }
+
+
+   const handleComment = (e) => {
+       e.preventDefault()
+       if (!newComment.trim() || isCommenting) return
+
+        setIsCommenting(true)
+        onComment(post.id, newComment)
+        setNewComment('')
+        setIsCommenting(false)
    }
 
    const handleDelete = () => {
@@ -100,6 +113,33 @@ export const PostCard = ({ post, isLiked, onDelete, onLike }) => {
                    </button>
                </div>
            </div>
+           <div className="comments-section">
+               <form onSubmit={handleComment} className="add-comment">
+                   <input
+                       type="text"
+                       placeholder="Add a comment..."
+                       value={newComment}
+                       onChange={(e) => setNewComment(e.target.value)}
+                       className="comment-input"
+                   />
+                   <button
+                       type="submit"
+                       disabled={!newComment.trim() || isCommenting}
+                       className="comment-submit"
+                   >
+                       {isCommenting ? '...' : 'Post'}
+                   </button>
+               </form>
+
+               {showComments && (
+                   <CommentSection
+                       comments={post.comment || []}
+                       postId={post.id}
+                       onUpdate={onUpdate}
+                       post={post}
+                   />
+               )}
+           </div>
        </div>
-   );
-};
+   )
+}
