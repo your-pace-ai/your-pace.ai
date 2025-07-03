@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { MediaSection } from './components/MediaSection/MediaSection.jsx'
 import { MainPanel } from './components/MainPanel/MainPanel.jsx'
 import { Chatbox } from './components/Chatbox/Chatbox.jsx'
+import { PostFeed } from './components/Community/PostFeed/PostFeed.jsx'
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -30,7 +31,7 @@ function App() {
 
   return (
     <>
-      <Routes>
+      {/* <Routes>
         <Route path='/' element={<LandingPage></LandingPage>}></Route>
         <Route path='/login' element={<LoginPage></LoginPage>}></Route>
         <Route path='/signup' element={<SignUp></SignUp>}></Route>
@@ -44,7 +45,8 @@ function App() {
         </>}>
         </Route>
         <Route path='/subhub' element={<SubHubPage/>}></Route>
-      </Routes>
+      </Routes> */}
+      <PostFeed/>
     </>
   )
 }

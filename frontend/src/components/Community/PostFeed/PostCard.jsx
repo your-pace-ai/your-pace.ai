@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './PostCard.css'
 import { currentUser } from '../../../api/api'
+import { CommentSection } from './CommentSection'
 
 export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment }) => {
    const [showComments, setShowComments] = useState(false)
