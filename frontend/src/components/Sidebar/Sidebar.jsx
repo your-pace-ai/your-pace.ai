@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react"
 import "./Sidebar.css"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../../api/api"
 
 export const Sidebar = ({onOpenModal}) => {
     const navigate = useNavigate()
-    const [modal, setModal] = useState("")
 
     const signOut = async () => {
         await logout()
@@ -26,7 +24,7 @@ export const Sidebar = ({onOpenModal}) => {
                     <button className="sidebar-btn primary">+ Add Content</button>
                     <button className="sidebar-btn">Recent</button>
                     <button className="sidebar-btn" onClick={onOpenModal}>+ Create Hub</button>
-                    <button className="sidebar-btn">Community</button>
+                    <button className="sidebar-btn" onClick={() => navigate('/community')}>Community</button>
                     <button className="sidebar-btn sign-out" onClick={signOut}>Sign Out</button>
                 </div>
             </div>
