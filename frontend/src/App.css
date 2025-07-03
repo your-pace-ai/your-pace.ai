@@ -36,3 +36,8 @@ body {
     padding: 1rem;
     box-sizing: border-box;
 }
+
+.community-content {
+    background-color: #fafafa;
+    padding: 0;
+}
