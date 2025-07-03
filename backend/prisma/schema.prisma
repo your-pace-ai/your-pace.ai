@@ -25,6 +25,7 @@ model User {
   post Post []
   followedBy User[] @relation("UserFollows")
   following User[] @relation("UserFollows")
+  aiContextWindow AiContextWindow []
 }
 
 model Post {
@@ -104,3 +105,15 @@ model Session {
   data      String
   expiresAt DateTime
 }
+
+model AiContextWindow {
+    id Int @id @default(autoincrement())
+    context String
+    createdAt DateTime @default(now())
+    user User @relation(fields: [userId], references: [id])
+    userId String
+}
+
+/*
+context window
+*/
