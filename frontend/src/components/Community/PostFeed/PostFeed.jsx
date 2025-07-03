@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './PostFeed.css'
 import { PostCard } from './PostCard'
 
@@ -242,11 +242,6 @@ const addPersistentPost = (newPost) => {
    return persistentPostsData
 }
 
-const deletePersistentPost = (postId) => {
-   persistentPostsData = persistentPostsData.filter(post => post.id !== postId)
-   return persistentPostsData
-}
-
 export const PostFeed = () => {
    const [posts, setPosts] = useState(getPersistentPosts())
    const [loading, setLoading] = useState(false)
@@ -278,25 +273,6 @@ export const PostFeed = () => {
 
        setLoading(false)
    }
-
-
-   const handlePostCreated = (newPost) => {
-       const postWithDefaults = {
-           ...newPost,
-           id: Date.now(),
-           like: 0,
-           comment: [],
-           user: {
-               id: 1,
-               email: "you@yourpace.com"
-           },
-           createdAt: new Date().toISOString()
-       }
-
-       const updatedPosts = addPersistentPost(postWithDefaults)
-       setPosts([...updatedPosts])
-   }
-
 
    const handlePostUpdate = (updatedPost) => {
        updatePersistentPost(updatedPost.id, updatedPost)
@@ -367,63 +343,68 @@ export const PostFeed = () => {
 
 
    return (
-       <div className="post-feed">
-           <div className="feed-selector">
-               <button
-                   className={feedType === 'all' ? 'active' : ''}
-                   onClick={() => { setFeedType('all'); setCurrentPage(1); }}
-               >
-                   All Posts ({posts.length})
-               </button>
-               <button
-                   className={feedType === 'following' ? 'active' : ''}
-                   onClick={() => { setFeedType('following'); setCurrentPage(1); }}
-               >
-                   Following (3)
-               </button>
-           </div>
-           <div className="posts-container">
-               {posts.length === 0 ? (
-                   <div className="no-posts">
-                       <h3>No posts yet</h3>
-                       <p>Be the first to share something!</p>
-                   </div>
-               ) : (
-                   posts.map(post => (
-                       <PostCard
-                           key={post.id}
-                           post={post}
-                           isLiked={likedPosts.has(post.id)}
-                           onUpdate={handlePostUpdate}
-                           onDelete={handlePostDelete}
-                           onLike={handleLike}
-                           onComment={handleComment}
-                       />
-                   ))
-               )}
-           </div>
-
-           {pagination.totalPages > 1 && (
-               <div className="pagination">
+       <div className="feed-container">
+           <div className="post-feed">
+               <div className="feed-header">
+                   <h1>Community</h1>
+               </div>
+               <div className="feed-selector">
                    <button
-                       disabled={!pagination.hasPrev}
-                       onClick={() => setCurrentPage(currentPage - 1)}
-                       className="pagination-btn"
+                       className={feedType === 'all' ? 'active' : ''}
+                       onClick={() => { setFeedType('all'); setCurrentPage(1); }}
                    >
-                       Previous
+                       All Posts ({posts.length})
                    </button>
-                   <span className="pagination-info">
-                       Page {pagination.currentPage} of {pagination.totalPages}
-                   </span>
                    <button
-                       disabled={!pagination.hasNext}
-                       onClick={() => setCurrentPage(currentPage + 1)}
-                       className="pagination-btn"
+                       className={feedType === 'following' ? 'active' : ''}
+                       onClick={() => { setFeedType('following'); setCurrentPage(1); }}
                    >
-                       Next
+                       Following (3)
                    </button>
                </div>
-           )}
+               <div className="posts-container">
+                   {posts.length === 0 ? (
+                       <div className="no-posts">
+                           <h3>No posts yet</h3>
+                           <p>Be the first to share something!</p>
+                       </div>
+                   ) : (
+                       posts.map(post => (
+                           <PostCard
+                               key={post.id}
+                               post={post}
+                               isLiked={likedPosts.has(post.id)}
+                               onUpdate={handlePostUpdate}
+                               onDelete={handlePostDelete}
+                               onLike={handleLike}
+                               onComment={handleComment}
+                           />
+                       ))
+                   )}
+               </div>
+
+               {pagination.totalPages > 1 && (
+                   <div className="pagination">
+                       <button
+                           disabled={!pagination.hasPrev}
+                           onClick={() => setCurrentPage(currentPage - 1)}
+                           className="pagination-btn"
+                       >
+                           Previous
+                       </button>
+                       <span className="pagination-info">
+                           Page {pagination.currentPage} of {pagination.totalPages}
+                       </span>
+                       <button
+                           disabled={!pagination.hasNext}
+                           onClick={() => setCurrentPage(currentPage + 1)}
+                           className="pagination-btn"
+                       >
+                           Next
+                       </button>
+                   </div>
+               )}
+           </div>
        </div>
    )
 }

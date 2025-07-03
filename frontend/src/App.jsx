@@ -9,7 +9,6 @@ import { Modal } from './components/Modal/CreateLearningHubModal.jsx'
 import { useState } from 'react'
 import { MediaSection } from './components/MediaSection/MediaSection.jsx'
 import { MainPanel } from './components/MainPanel/MainPanel.jsx'
-import { Chatbox } from './components/Chatbox/Chatbox.jsx'
 import { PostFeed } from './components/Community/PostFeed/PostFeed.jsx'
 
 function App() {
@@ -29,9 +28,23 @@ function App() {
     )
   }
 
+  const CommunityPage = () => {
+    return (
+      <>
+          <div className="app">
+            <Sidebar onOpenModal={() => setIsModalOpen(true)}></Sidebar>
+            <div className="content community-content">
+              <PostFeed/>
+            </div>
+            <Modal visible={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
+          </div>
+        </>
+    )
+  }
+
   return (
     <>
-      {/* <Routes>
+      <Routes>
         <Route path='/' element={<LandingPage></LandingPage>}></Route>
         <Route path='/login' element={<LoginPage></LoginPage>}></Route>
         <Route path='/signup' element={<SignUp></SignUp>}></Route>
@@ -45,8 +58,10 @@ function App() {
         </>}>
         </Route>
         <Route path='/subhub' element={<SubHubPage/>}></Route>
-      </Routes> */}
-      <PostFeed/>
+        <Route path='/community'
+        element={<CommunityPage/>}>
+        </Route>
+      </Routes>
     </>
   )
 }
