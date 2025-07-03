@@ -1,0 +1,157 @@
+.post-card {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+ }
+
+ .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #efefef;
+ }
+
+ .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+ }
+
+ .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #0095f6, #d946ef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+ }
+
+
+ .user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+ }
+
+
+ .username {
+    font-weight: 600;
+    color: #262626;
+    font-size: 0.9rem;
+ }
+
+
+ .post-time {
+    font-size: 0.8rem;
+    color: #8e8e8e;
+ }
+
+
+ .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+ }
+
+
+ .delete-btn:hover {
+    opacity: 1;
+    background-color: #f8f8f8;
+ }
+
+ .post-content {
+    padding: 0;
+ }
+
+
+ .post-title {
+    margin: 0 0 0.5rem 0;
+    color: #262626;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0 1rem;
+ }
+
+
+ .post-text {
+    color: #262626;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+    padding: 0 1rem;
+ }
+
+
+ .post-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    border: none;
+ }
+
+ .post-actions {
+    padding: 0 1rem;
+    border-top: 1px solid #efefef;
+ }
+
+
+ .action-buttons {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 0;
+ }
+
+
+ .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #262626;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+ }
+
+
+ .action-btn:hover {
+    background-color: #f8f8f8;
+ }
+
+
+ .action-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+ }
+
+
+ .like-btn span {
+    font-weight: 600;
+ }
+
+
+ .like-btn.liked {
+    color: #ed4956;
+ }
+
+
+ .like-btn.liked:hover {
+    background-color: #ffeef0;
+ }
+
+
