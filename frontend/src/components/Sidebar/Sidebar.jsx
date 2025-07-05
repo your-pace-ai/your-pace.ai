@@ -1,6 +1,6 @@
 import "./Sidebar.css"
 import { useNavigate } from "react-router-dom"
-import { logout, getLearningHubs, deleteLearningHub } from "../../api/api.js"
+import { logout, getLearningHubs, deleteLearningHub } from "../../api/api"
 import { useState, useEffect } from "react"
 
 
@@ -27,7 +27,7 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
                onLearningHubSelect(mostRecent)
            }
        } catch (error) {
-           throw new Error("Failed to fetch learning hubs:", error)
+           throw Error("Failed to fetch learning hubs:", error)
        }
    }
 
@@ -56,7 +56,7 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
                if (selectedLearningHub?.id === hubId) onLearningHubSelect(null)
                fetchLearningHubs()
            } catch (error) {
-               throw new Error("Failed to delete learning hub:", error)
+               throw Error("Failed to delete learning hub:", error)
            }
    }
 
