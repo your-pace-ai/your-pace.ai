@@ -1,7 +1,7 @@
 import { useState } from "react"
 import "./LearningSection.css"
 
-export const LearningSection = () => {
+export const LearningSection = ({ onOpenUploadModal }) => {
     const [searchTerm, setSearchTerm] = useState("")
 
     const handleSubmit = (e) => {
@@ -18,7 +18,7 @@ export const LearningSection = () => {
                     <div className="upload-card">
                         <span>UPLOAD FILE</span>
                     </div>
-                    <div className="upload-card">
+                    <div className="upload-card" onClick={onOpenUploadModal}>
                         <span>UPLOAD YOUTUBE LINK</span>
                     </div>
                 </div>

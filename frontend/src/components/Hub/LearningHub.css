@@ -4,6 +4,13 @@
     gap: 20px;
 }
 
+.learning-hub-title {
+    font-size: 20px;
+    font-family: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
 .hubs-container {
     display: flex;
     gap: 20px;
