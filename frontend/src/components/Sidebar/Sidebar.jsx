@@ -1,6 +1,6 @@
 import "./Sidebar.css"
 import { useNavigate } from "react-router-dom"
-import { logout, getLearningHubs, deleteLearningHub } from "../../api/api"
+import { logout, getLearningHubs, deletedLearningHub } from "../../api/api"
 import { useState, useEffect } from "react"
 
 
@@ -52,7 +52,7 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
    const handleDeleteLearningHub = async (hubId, hubName, e) => {
        e.stopPropagation()
            try {
-               await deleteLearningHub(hubId)
+               await deletedLearningHub(hubId)
                if (selectedLearningHub?.id === hubId) onLearningHubSelect(null)
                fetchLearningHubs()
            } catch (error) {

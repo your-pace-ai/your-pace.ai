@@ -73,17 +73,21 @@ export const createLearningHub = async(title="anonymous") => {
     if (!response.ok) throw new Error("Failed to create learning Hub")
 }
 
-export const createSubHub = async (title, youtubeUrl) => {
+export const createSubHub = async (title, youtubeUrl, learningHubId=null) => {
+    const requestData = {
+        title,
+        youtubeUrl
+    }
+
+    if (learningHubId) requestData.learningHubId = learningHubId
+    
     const response = await fetch(`${apiUrl}/subhub/create`, {
         method: "POST",
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            title,
-            youtubeUrl
-        })
+        body: JSON.stringify(requestData)
     })
     if (!response.ok) throw new Error("Failed to create sub hub")
     const data = await response.json()

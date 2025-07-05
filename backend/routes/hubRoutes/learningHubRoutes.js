@@ -62,7 +62,7 @@ router.delete("/api/learning-hub/delete", isAuthenticated, async (req, res) => {
 
 router.get("/api/learning-hub/:id/subhubs", isAuthenticated, async (req, res) => {
   try {
-    const learningHubId = parsedInt(req.params.id)
+    const learningHubId = parseInt(req.params.id)
     const userId = req.user.id
 
     const learningHub = await prisma.learningHub.findFirst({

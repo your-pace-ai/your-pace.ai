@@ -40,15 +40,15 @@ router.post("/api/subhub/create", isAuthenticated, async (req, res) => {
                 }
             })
             hubId = learningHub.id
+        } else {
+            const learningHub = await prisma.learningHub.findFirst({
+                where: {
+                    id: hubId
+                }
+            })
+
+            if (!learningHub) return res.status(404).json({ message: "Learning hub not found" })
         }
-
-        const learningHub = await prisma.learningHub.findFirst({
-            where: {
-                id: hubId
-            }
-        })
-
-        if (!learningHub) return res.status(404).json({ message: "Learning hub not found" })
 
         const subhub = await prisma.subHub.create({
             data: {
