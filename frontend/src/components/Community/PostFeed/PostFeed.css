@@ -1,0 +1,172 @@
+.post-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 0;
+ }
+
+
+ .post-feed-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #8e8e8e;
+ }
+
+
+ .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0095f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+ }
+
+
+ @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+ }
+
+
+ .feed-selector {
+    display: flex;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+    overflow: hidden;
+    margin-bottom: 12px;
+ }
+
+
+ .feed-selector button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-weight: 500;
+    color: #8e8e8e;
+    transition: all 0.2s ease;
+ }
+
+ .feed-selector button:hover {
+    background-color: #f8f8f8;
+ }
+
+
+ .feed-selector button.active {
+    background-color: #0095f6;
+    color: white;
+ }
+
+
+ .feed-selector button:not(:last-child) {
+    border-right: 1px solid #dbdbdb;
+ }
+
+ .posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+ }
+
+
+ .no-posts {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+    color: #8e8e8e;
+ }
+
+
+ .no-posts h3 {
+    margin-bottom: 0.5rem;
+    color: #262626;
+ }
+
+ .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+ }
+
+
+ .pagination-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #dbdbdb;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+ }
+
+
+ .pagination-btn:hover:not(:disabled) {
+    background-color: #f8f8f8;
+    border-color: #c7c7c7;
+ }
+
+
+ .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+ }
+
+
+ .pagination-info {
+    font-weight: 500;
+    color: #262626;
+ }
+
+ .feed-container {
+    background-color: #fafafa;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px 0;
+ }
+ .feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 24px;
+ }
+
+ .feed-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #262626;
+ }
+
+ @media (max-width: 767px) {
+    .post-feed {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .feed-selector button {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 1rem;
+    }
+ }
