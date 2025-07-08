@@ -1,10 +1,14 @@
+const MAX_SIZE = 1000
+const DEFAULT_TTL = 3600000
+const CLEANUP_INTERVAL = 300000
+
 class InMemoryCache {
     constructor(options = {}) {
         this.store = new Map()
         this.ttlStore = new Map()
-        this.maxSize = options.maxSize || 1000
-        this.defaultTTL = options.defaultTTL || 3600000
-        this.cleanupInterval = options.cleanupInterval || 300000
+        this.maxSize = options.maxSize || MAX_SIZE
+        this.defaultTTL = options.defaultTTL || DEFAULT_TTL
+        this.cleanupInterval = options.cleanupInterval || CLEANUP_INTERVAL
         this.startCleanup()
     }
 
