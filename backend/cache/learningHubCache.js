@@ -1,11 +1,14 @@
 const InMemoryCache = require('./inMemoryCache')
+const MAX_SIZE = 500
+const DEFAULT_TTL = 600000
+const CLEANUP_INTERVAL = 180000
 
 class LearningHubCache extends InMemoryCache {
    constructor() {
        super({
-           maxSize: 500,
-           defaultTTL: 600000,
-           cleanupInterval: 180000
+           maxSize: MAX_SIZE,
+           defaultTTL: DEFAULT_TTL,
+           cleanupInterval: CLEANUP_INTERVAL
        })
    }
    // cache user's learning hubs
