@@ -1,11 +1,14 @@
 const InMemoryCache = require('./inMemoryCache')
+const MAX_SIZE = 1000
+const DEFAULT_TTL = 900000
+const CLEANUP_INTERVAL = 300000
 
 class SubHubCache extends InMemoryCache {
    constructor() {
        super({
-           maxSize: 1000,
-           defaultTTL: 900000,
-           cleanupInterval: 300000
+           maxSize: MAX_SIZE,
+           defaultTTL: DEFAULT_TTL,
+           cleanupInterval: CLEANUP_INTERVAL
        })
    }
    // cache all user subhubs
