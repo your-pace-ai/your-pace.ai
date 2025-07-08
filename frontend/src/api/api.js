@@ -1,4 +1,5 @@
 const apiUrl = import.meta.env.VITE_API_URL
+const agentUrl = import.meta.env.VITE_AGENT_API_URL
 
 export const signup = async (email, password) => {
     const response = await fetch(`${apiUrl}/local-auth/signup`, {
@@ -80,7 +81,7 @@ export const createSubHub = async (title, youtubeUrl, learningHubId=null) => {
     }
 
     if (learningHubId) requestData.learningHubId = learningHubId
-    
+
     const response = await fetch(`${apiUrl}/subhub/create`, {
         method: "POST",
         credentials: "include",
@@ -152,6 +153,22 @@ export const deleteSubHub = async (subHubId) => {
         })
     })
     if (!response.ok) throw new Error("Failed to delete sub hub")
+    const data = await response.json()
+    return data
+}
+
+export const getChapters = async (videoUrl) => {
+    const response = await fetch(`${agentUrl}/chapters`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            youtubeUrl: videoUrl
+        })
+    })
+
+    if (!response.ok) throw new Error("Failed to get chapters")
     const data = await response.json()
     return data
 }

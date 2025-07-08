@@ -18,7 +18,7 @@ export const MediaSection = () => {
                 <div className="media-section-yt-modal">
                     <VideoPlayer url={url}></VideoPlayer>
                 </div>
-                <Chapters></Chapters>
+                <Chapters url={url}></Chapters>
             </div>
         </>
     )

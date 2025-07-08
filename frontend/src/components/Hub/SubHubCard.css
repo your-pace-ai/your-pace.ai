@@ -1,5 +1,5 @@
 .subhub-card {
-    background-color: #e8e8e8;
+    background-color: #111111;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
@@ -18,7 +18,7 @@
   .subhub-title {
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: #e8e8e8;
     margin-bottom: 16px;
     text-align: center;
   }

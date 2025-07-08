@@ -1,15 +1,31 @@
 .all-chapters {
-    border: 1px solid #aaa;
+    border: 1px solid #333;
     border-radius: 8px;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
 }
 
 .chapter {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: #fafafa;
+    background-color: #212121;
+    border-radius: 6px;
+    padding: 0.8rem;
+    border: 1px solid #333;
+}
+
+.chapter h5 {
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.chapter p {
+    color: #cccccc;
+    margin: 0;
 }

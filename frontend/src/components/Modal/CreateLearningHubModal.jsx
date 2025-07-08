@@ -1,6 +1,6 @@
 import { createLearningHub } from "../../api/api"
 import "./CreateLearningHubModal.css"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 export const Modal = ({visible, onClose, onLearningHubCreated}) => {
    const [LearningHub, setLearningHub] = useState("")

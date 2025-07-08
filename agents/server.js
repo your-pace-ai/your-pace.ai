@@ -3,11 +3,13 @@ import { json } from "express"
 import dotenv from "dotenv"
 import { GoogleGenAI } from "@google/genai"
 import cors from "cors"
+import { getTranscript } from "./transcript.js"
 
 dotenv.config()
 
 const app = express()
 const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY})
+const PORT = process.env.PORT
 
 const CHAPTERS_PROMPT = `
     Generate chapter summaries(6 to 10 depending on transcript length)
@@ -64,8 +66,9 @@ const transformToJson = (inputString) => {
 app.use(json())
 app.use(cors())
 
-app.get("/api/chapters", async (req, res) => {
-    const { body: { context } } = req
+app.post("/api/chapters", async (req, res) => {
+    const { body: { youtubeUrl } } = req
+    const context = await getTranscript(youtubeUrl)
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash-001',
         contents: `This is the content ${context}. Do this: ${CHAPTERS_PROMPT}`
@@ -74,8 +77,9 @@ app.get("/api/chapters", async (req, res) => {
     res.json(transformedRes)
 })
 
-app.get("/api/flash-cards", async (req, res) => {
-    const { body: { context } } = req
+app.post("/api/flash-cards", async (req, res) => {
+    const { body: { youtubeUrl } } = req
+    const context = await getTranscript(youtubeUrl)
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash-001',
         contents: `This is the content ${context}. Do this: ${FLASHCARD_PROMPT}`
@@ -84,8 +88,9 @@ app.get("/api/flash-cards", async (req, res) => {
     res.json(transformedRes)
 })
 
-app.get("/api/quiz", async (req, res) => {
-    const { body: { context } } = req
+app.post("/api/quiz", async (req, res) => {
+    const { body: { youtubeUrl } } = req
+    const context = await getTranscript(youtubeUrl)
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash-001',
         contents: `This is the content ${context}. Do this: ${QUIZ_PROMP}`
@@ -94,6 +99,6 @@ app.get("/api/quiz", async (req, res) => {
     res.json(transformedRes)
 })
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`)
 })
