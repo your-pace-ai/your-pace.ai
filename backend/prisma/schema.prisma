@@ -59,6 +59,7 @@ model LearningHub {
 model SubHub {
     id Int @id @default(autoincrement())
     name String
+    youtubeUrl String?
     learningHub LearningHub @relation(fields: [learningHubId], references: [id], onDelete: Cascade)
     learningHubId Int
     chapters Chapter []
@@ -114,6 +115,3 @@ model AiContextWindow {
     userId String
 }
 
-/*
-context window
-*/

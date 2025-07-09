@@ -1,11 +1,12 @@
 .sidebar {
     width: 200px;
-    background-color: #e8e8e8;
-    border-right: 1px solid #ddd;
+    background-color: #121212;
+    border-right: 1px solid #333;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    color: #e0e0e0;
 }
 
 .sidebar-header {
@@ -17,13 +18,13 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #666;
+    color: #bbbbbb;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
 .back-button:hover {
-    color: #333;
+    color: #ffffff;
 }
 
 .sidebar-content {
@@ -33,50 +34,123 @@
 }
 
 .sidebar-btn {
-    background-color: #d4d4d4;
-    border: 1px solid #bbb;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
     padding: 12px 16px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     text-align: left;
     transition: all 0.2s ease;
-    color: #333;
+    color: #e0e0e0;
 }
 
 .sidebar-btn:hover {
-    background-color: #c8c8c8;
+    background-color: #252525;
     transform: translateY(-1px);
 }
 
 .sidebar-btn:active {
     transform: translateY(0);
+    background-color: #333333;
 }
 
 .sidebar-btn:focus {
-    outline: 2px solid #007acc;
+    outline: 2px solid #252525;
     outline-offset: 2px;
 }
 
 .sidebar-btn.primary {
-    background-color: #b8b8b8;
+    background-color: #1a1a1a;
     font-weight: 500;
+    color: #ffffff;
 }
 
 .sidebar-btn.primary:hover {
-    background-color: #a8a8a8;
+    background-color: #252525;
 }
 
 .sidebar-btn.sign-out {
     margin-top: auto;
-    background-color: #d4d4d4;
-    color: #666;
+    background-color: #1a1a1a;
+    color: #bbbbbb;
 }
 
 .sidebar-btn.sign-out:hover {
-    background-color: #e8d4d4;
-    color: #333;
+    background-color: #2a1a1a;
+    color: #ffffff;
 }
+
+.spaces-section {
+    margin: 16px 0;
+}
+
+.spaces-section h3 {
+    font-size: 14px;
+    color: #bbbbbb;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.learning-hub-item {
+    margin-bottom: 4px;
+}
+
+.hub-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+
+.hub-header.selected {
+    background-color: #333333;
+    font-weight: 500;
+}
+
+.hub-icon {
+    font-size: 14px;
+}
+
+.hub-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.expand-icon {
+    font-size: 10px;
+    color: #bbbbbb;
+}
+
+.hub-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 12px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.delete-btn:hover {
+    opacity: 1;
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
 
 @media (max-width: 768px) {
     .sidebar {
@@ -95,5 +169,9 @@
       white-space: nowrap;
       padding: 8px 12px;
       font-size: 12px;
+    }
+
+    .spaces-section {
+      display: none;
     }
 }

@@ -1,33 +1,27 @@
 import "./Chapters.css"
+import { getChapters } from "../../api/api.js"
+import { useState, useEffect } from "react"
 
-export const Chapters = () => {
-    // dummy data
-    const chapters = [
-        {
-            id: 1,
-            name: "Chapter 1",
-            content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor, inventore soluta? Possimus recusandae minima dolores excepturi id voluptatibus voluptates quia natus saepe nihil quisquam, dolor at consectetur non aut perferendis.",
-        },
-        {
-            id: 2,
-            name: "Chapter 2",
-            content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor, inventore soluta? Possimus recusandae minima dolores excepturi id voluptatibus voluptates quia natus saepe nihil quisquam, dolor at consectetur non aut perferendis.",
-        },
-        {
-            id: 3,
-            name: "Chapter 3",
-            content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor, inventore soluta? Possimus recusandae minima dolores excepturi id voluptatibus voluptates quia natus saepe nihil quisquam, dolor at consectetur non aut perferendis.",
-        }
-    ]
+export const Chapters = ({ url }) => {
+    const [chapters, setChapters] = useState({})
+
+    const getChaptersData = async () => {
+        const data = await getChapters(url)
+        setChapters(data)
+    }
+
+    useEffect(() => {
+        getChaptersData()
+    },[url])
 
     return (
         <>
             <div className="all-chapters">
                 <h4>Chapters</h4>
-                {chapters.map(chapter => (
-                    <div className="chapter" key={chapter.id}>
-                        <h5>{chapter.name}</h5>
-                        <p>{chapter.content}</p>
+                {Object.entries(chapters).map(([title, summary]) => (
+                    <div className="chapter">
+                        <h5>{title}</h5>
+                        <p>{summary}</p>
                     </div>
                 ))}
                     <span></span>

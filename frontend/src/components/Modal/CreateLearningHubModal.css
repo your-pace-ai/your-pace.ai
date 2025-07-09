@@ -6,16 +6,85 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
   }
 
   .create-learning-hub-modal-content {
-    background-color: #fefefe;
+    background-color: #1a1a1a;
     margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    padding: 25px;
+    border: 1px solid #333;
+    border-radius: 12px;
+    max-width: 700px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .create-learning-hub-modal-form{
+    display: flex;
+    flex-direction: column;
+    padding: 15px 10px;
+    font-size: 1em;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .create-learning-hub-modal-form input {
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #212121;
+    color: #e0e0e0;
+    font-size: 1em;
+    transition: all 0.2s ease;
+  }
+
+  .create-learning-hub-modal-form input:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  }
+
+  .create-learning-hub-modal-form input::placeholder {
+    color: #888;
+  }
+
+  .create-learning-hub-modal-header {
+    color: #e0e0e0;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+  }
+
+  .create-learning-hub-modal-button{
+    background-color: #1e3a5f;
+    color: #ffffff;
+    padding: 12px 20px;
+    font-size: 1em;
+    min-width: 120px;
+    cursor: pointer;
+    margin-right: 20px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-top: 15px;
+  }
+
+  .create-learning-hub-modal-button:hover {
+    background-color: #2196f3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .create-learning-hub-modal-button:active {
+    transform: translateY(0);
+    background-color: #1976d2;
+  }
+
+  .create-learning-hub-modal-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 
   .close {
@@ -23,11 +92,12 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    transition: color 0.2s ease;
   }
 
   .close:hover,
   .close:focus {
-    color: black;
+    color: #e0e0e0;
     text-decoration: none;
     cursor: pointer;
   }
