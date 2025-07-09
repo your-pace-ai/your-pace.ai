@@ -39,9 +39,9 @@ router.get("/api/admin/cache/health", isAuthenticated, (req, res) => {
 })
 
 // clear all caches (nuclear option)
-router.post("/api/admin/cache/clear-all", isAuthenticated, async (req, res) => {
+router.post("/api/admin/cache/clear-all", isAuthenticated, (req, res) => {
    try {
-       await invalidator.invalidateAllData()
+       invalidator.invalidateAllData()
        res.json({
            success: true,
            message: "All caches cleared successfully",
@@ -58,7 +58,7 @@ router.post("/api/admin/cache/clear-all", isAuthenticated, async (req, res) => {
 
 
 // clear cache for specific user
-router.post("/api/admin/cache/clear-user", isAuthenticated, async (req, res) => {
+router.post("/api/admin/cache/clear-user", isAuthenticated, (req, res) => {
    try {
        const { userId } = req.body
 
@@ -69,7 +69,7 @@ router.post("/api/admin/cache/clear-user", isAuthenticated, async (req, res) => 
            })
        }
 
-       await invalidator.invalidateUserData(userId)
+       invalidator.invalidateUserData(userId)
 
        res.json({
            success: true,
@@ -86,7 +86,7 @@ router.post("/api/admin/cache/clear-user", isAuthenticated, async (req, res) => 
 })
 
 // clear cache for specific learning hub
-router.post("/api/admin/cache/clear-hub", isAuthenticated, async (req, res) => {
+router.post("/api/admin/cache/clear-hub", isAuthenticated, (req, res) => {
    try {
        const { hubId, userId } = req.body
 
@@ -97,7 +97,7 @@ router.post("/api/admin/cache/clear-hub", isAuthenticated, async (req, res) => {
            })
        }
 
-       await invalidator.invalidateLearningHubData(hubId, userId)
+       invalidator.invalidateLearningHubData(hubId, userId)
 
        res.json({
            success: true,
@@ -114,7 +114,7 @@ router.post("/api/admin/cache/clear-hub", isAuthenticated, async (req, res) => {
 })
 
 // test cache functionality
-router.post("/api/admin/cache/test", isAuthenticated, async (req, res) => {
+router.post("/api/admin/cache/test", isAuthenticated, (req, res) => {
    try {
        const testKey = `test:${Date.now()}`
        const testData = {
@@ -125,11 +125,11 @@ router.post("/api/admin/cache/test", isAuthenticated, async (req, res) => {
 
 
        // test SET
-       await cacheManager.userCache.set(testKey, testData, 60000)
+       cacheManager.userCache.set(testKey, testData, 60000)
        // test GET
-       const retrieved = await cacheManager.userCache.get(testKey)
+       const retrieved = cacheManager.userCache.get(testKey)
        // test DELETE
-       const deleted = await cacheManager.userCache.delete(testKey)
+       const deleted = cacheManager.userCache.delete(testKey)
 
        res.json({
            success: true,

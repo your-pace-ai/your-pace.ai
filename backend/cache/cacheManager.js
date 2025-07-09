@@ -4,9 +4,11 @@ const InMemoryCache = require('./inMemoryCache')
 
 class CacheManager {
    constructor() {
+        // singleton instance. ensure only one instance is created
        if (CacheManager.instance) return CacheManager.instance
 
        try {
+        // initialize caches(learning hub, sub hub, user, session)
            this.learningHubCache = new LearningHubCache()
            this.subHubCache = new SubHubCache()
            this.userCache = new InMemoryCache({
@@ -19,11 +21,11 @@ class CacheManager {
            })
            CacheManager.instance = this
        } catch (error) {
-           throw new Error(`Failed to initialize CacheManager: ${error.message}`)
+           throw new Error({cause: error})
        }
    }
    // learning Hub operations
-   async cacheUserHubs(userId, hubs) {
+   cacheUserHubs(userId, hubs) {
        try {
            if (!userId) throw new Error('User ID is required')
            if (!hubs) throw new Error('Hubs data is required')
@@ -33,7 +35,7 @@ class CacheManager {
        }
    }
 
-   async getCachedUserHubs(userId) {
+   getCachedUserHubs(userId) {
        try {
            if (!userId) throw new Error('User ID is required')
            return this.learningHubCache.getUserHubs(userId)
@@ -42,7 +44,7 @@ class CacheManager {
        }
    }
 
-   async invalidateUserHubs(userId) {
+   invalidateUserHubs(userId) {
        try {
            if (!userId) throw new Error('User ID is required')
            return this.learningHubCache.invalidateUserHubs(userId)
@@ -51,7 +53,7 @@ class CacheManager {
        }
    }
    // subHub operations
-   async cacheUserSubhubs(userId, subhubs) {
+   cacheUserSubhubs(userId, subhubs) {
        try {
            if (!userId) throw new Error('User ID is required')
            if (!subhubs) throw new Error('Subhubs data is required')
@@ -61,7 +63,7 @@ class CacheManager {
        }
    }
 
-   async getCachedUserSubhubs(userId) {
+   getCachedUserSubhubs(userId) {
        try {
            if (!userId) {
                throw new Error('User ID is required')
@@ -72,7 +74,7 @@ class CacheManager {
        }
    }
 
-   async cacheHubSubhubs(hubId, subhubs) {
+   cacheHubSubhubs(hubId, subhubs) {
        try {
            if (!hubId) throw new Error('Hub ID is required')
            if (!subhubs) throw new Error('Subhubs data is required')
@@ -82,7 +84,7 @@ class CacheManager {
        }
    }
 
-   async getCachedHubSubhubs(hubId) {
+   getCachedHubSubhubs(hubId) {
        try {
            if (!hubId) throw new Error('Hub ID is required')
            return this.subHubCache.getHubSubhubs(hubId)
@@ -91,7 +93,7 @@ class CacheManager {
        }
    }
    // user operations
-   async cacheUser(userId, userData) {
+   cacheUser(userId, userData) {
        try {
            if (!userId) throw new Error('User ID is required')
            if (!userData) throw new Error('User data is required')
@@ -101,7 +103,7 @@ class CacheManager {
        }
    }
 
-   async getCachedUser(userId) {
+   getCachedUser(userId) {
        try {
            if (!userId) throw new Error('User ID is required')
            return this.userCache.get(`user:${userId}`)
@@ -110,7 +112,7 @@ class CacheManager {
        }
    }
    // session operations
-   async cacheSession(sessionId, sessionData) {
+   cacheSession(sessionId, sessionData) {
        try {
            if (!sessionId) throw new Error('Session ID is required')
            if (!sessionData) throw new Error('Session data is required')
@@ -120,7 +122,7 @@ class CacheManager {
        }
    }
 
-   async getCachedSession(sessionId) {
+   getCachedSession(sessionId) {
        try {
            if (!sessionId) throw new Error('Session ID is required')
            return this.sessionCache.get(`session:${sessionId}`)

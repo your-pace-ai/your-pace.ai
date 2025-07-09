@@ -9,7 +9,7 @@ const cacheMiddleware = (keyGenerator, ttl = 600000) => {
            if (cachedData) return res.json(cachedData)
            const originalJson = res.json
            // override res.json to cache the response
-           res.json = function(data) {
+           res.json = (data) => {
                try {
                    cacheManager.userCache.set(cacheKey, data, ttl)
                } catch (error) {

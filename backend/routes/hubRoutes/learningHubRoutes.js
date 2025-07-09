@@ -23,7 +23,7 @@ router.post("/api/learning-hub/create", isAuthenticated, async (req, res) => {
            }
        })
        // immediate cache invalidation
-       await invalidator.invalidateUserData(userId)
+       invalidator.invalidateUserData(userId)
        res.json(learningHub)
    } catch (error) {
        res.status(500).json({
@@ -37,7 +37,7 @@ router.post("/api/learning-hub/create", isAuthenticated, async (req, res) => {
 router.get("/api/learning-hub", isAuthenticated, async (req, res) => {
    const userId = req.user.id
    try {
-       const cachedHubs = await cacheManager.getCachedUserHubs(userId)
+       const cachedHubs = cacheManager.getCachedUserHubs(userId)
        if (cachedHubs) {
            return res.json(cachedHubs)
        }
@@ -53,7 +53,7 @@ router.get("/api/learning-hub", isAuthenticated, async (req, res) => {
        if (!user) return res.status(404).json({ error: "User not found" })
        const hubs = user.learningHub
        // cache the result
-       await cacheManager.cacheUserHubs(userId, hubs)
+       cacheManager.cacheUserHubs(userId, hubs)
        res.json(hubs)
    } catch (error) {
        res.status(500).json({
@@ -82,7 +82,7 @@ router.delete("/api/learning-hub/delete", isAuthenticated, async (req, res) => {
            }
        })
        // immediate cache invalidation for learning hub deletion
-       await invalidator.invalidateLearningHubData(learningHubId, userId)
+       invalidator.invalidateLearningHubData(learningHubId, userId)
        res.json(deletedLearningHub)
    } catch (error) {
        res.status(500).json({
@@ -97,7 +97,7 @@ router.get("/api/learning-hub/:id/subhubs", isAuthenticated, async (req, res) =>
        const learningHubId = parseInt(req.params.id)
        const userId = req.user.id
        // check cache first
-       const cachedSubhubs = await cacheManager.getCachedHubSubhubs(learningHubId)
+       const cachedSubhubs = cacheManager.getCachedHubSubhubs(learningHubId)
        if (cachedSubhubs) return res.json(cachedSubhubs)
        const learningHub = await prisma.learningHub.findFirst({
            where: {
@@ -112,7 +112,7 @@ router.get("/api/learning-hub/:id/subhubs", isAuthenticated, async (req, res) =>
        if (!learningHub) return res.status(404).json({ error: "Learning hub not found" })
        const subhubs = learningHub.subHub
        // cache the result
-       await cacheManager.cacheHubSubhubs(learningHubId, subhubs)
+       cacheManager.cacheHubSubhubs(learningHubId, subhubs)
        res.json(subhubs)
    } catch (error) {
        res.status(500).json({

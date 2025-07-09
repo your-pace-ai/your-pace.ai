@@ -14,7 +14,7 @@ router.get("/api/learning-hub/subhub", isAuthenticated, async (req, res) => {
        const { body : { learningHubId } } = req
        const userId = req.user.id
        // check cache first
-       const cachedSubhubs = await cacheManager.getCachedHubSubhubs(learningHubId)
+       const cachedSubhubs = cacheManager.getCachedHubSubhubs(learningHubId)
        if (cachedSubhubs) return res.json(cachedSubhubs)
        const learningHub = await prisma.learningHub.findFirst({
            where: {
@@ -28,7 +28,7 @@ router.get("/api/learning-hub/subhub", isAuthenticated, async (req, res) => {
        if (!learningHub) return res.status(404).json({ error: "Learning hub not found" })
        const subhubs = learningHub.subHub
        // cache the result
-       await cacheManager.cacheHubSubhubs(learningHubId, subhubs)
+       cacheManager.cacheHubSubhubs(learningHubId, subhubs)
        res.json(subhubs)
    } catch (error) {
        res.status(500).json({
@@ -42,7 +42,7 @@ router.get("/api/subhub/all", isAuthenticated, async (req, res) => {
    try {
        const userId = req.user.id
        // check cache first
-       const cachedSubhubs = await cacheManager.getCachedUserSubhubs(userId)
+       const cachedSubhubs = cacheManager.getCachedUserSubhubs(userId)
        if (cachedSubhubs) return res.json(cachedSubhubs)
        const learningHubs = await prisma.learningHub.findMany({
            where: {
@@ -55,7 +55,7 @@ router.get("/api/subhub/all", isAuthenticated, async (req, res) => {
        // flatten all subhubs from all learning hubs
        const allSubHubs = learningHubs.flatMap(hub => hub.subHub)
        // cache the result
-       await cacheManager.cacheUserSubhubs(userId, allSubHubs)
+       cacheManager.cacheUserSubhubs(userId, allSubHubs)
        res.json(allSubHubs)
    } catch (error) {
        res.status(500).json({
@@ -106,7 +106,7 @@ router.post("/api/subhub/create", isAuthenticated, async (req, res) => {
            },
        })
        // immediate cache invalidation for subhub creation
-       await invalidator.invalidateSubHubData(subhub.id, hubId, userId)
+       invalidator.invalidateSubHubData(subhub.id, hubId, userId)
        res.json(subhub)
    } catch (error) {
        res.status(500).json({
@@ -120,7 +120,7 @@ router.get("/api/subhub", isAuthenticated, async (req, res) => {
        const { subHubId } = req.body
        const userId = req.user.id
        // check cache first
-       const cachedSubhub = await cacheManager.subHubCache.getSubhubDetails(subHubId)
+       const cachedSubhub = cacheManager.subHubCache.getSubhubDetails(subHubId)
        if (cachedSubhub) return res.json(cachedSubhub)
        const subHub = await prisma.subHub.findFirst({
            where: {
@@ -139,7 +139,7 @@ router.get("/api/subhub", isAuthenticated, async (req, res) => {
        })
        if (!subHub) return res.status(404).json({ error: "SubHub not found" })
        // cache the result
-       await cacheManager.subHubCache.setSubhubDetails(subHubId, subHub)
+       cacheManager.subHubCache.setSubhubDetails(subHubId, subHub)
        res.json(subHub)
    } catch (error) {
        res.status(500).json({
@@ -172,7 +172,7 @@ router.delete("/api/subhub/delete", isAuthenticated, async (req, res) => {
        })
 
        // immediate cache invalidation for subhub deletion
-       await invalidator.invalidateSubHubData(subHubId, hubId, userId)
+       invalidator.invalidateSubHubData(subHubId, hubId, userId)
        res.json(deletedSubHub)
    } catch (error) {
        res.status(500).json({
