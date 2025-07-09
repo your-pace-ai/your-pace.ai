@@ -28,18 +28,3 @@ body {
     }
 }
 
-.content {
-    display: flex;
-    gap: 1rem;
-    flex-direction: row;
-    flex: 1;
-    padding: 1rem;
-    box-sizing: border-box;
-    background-color: #121212;
-    position: relative;
-}
-
-.community-content {
-    background-color: #1a1a1a;
-    padding: 0;
-}

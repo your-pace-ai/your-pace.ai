@@ -51,14 +51,18 @@ const QUIZ_PROMP = `
 `
 
 const transformToJson = (inputString) => {
-    inputString = inputString.replace(/"""|\\n/g, '')
+    try {
+        inputString = inputString.replace(/"""|\\n/g, '')
 
-    let startIndex = inputString.indexOf('{')
-    let endIndex = inputString.lastIndexOf('}')
-    let jsonData = inputString.substring(startIndex, endIndex + 1)
+        let startIndex = inputString.indexOf('{')
+        let endIndex = inputString.lastIndexOf('}')
+        let jsonData = inputString.substring(startIndex, endIndex + 1)
 
-    jsonData = jsonData.replace(/\\"/g, '"')
-    return JSON.parse(jsonData)
+        jsonData = jsonData.replace(/\\"/g, '"')
+        return JSON.parse(jsonData)
+    } catch (error) {
+        throw new Error("Failed to transform input string")
+    }
 }
 
 

@@ -59,9 +59,7 @@ function App() {
              onLearningHubSelect={handleLearningHubSelect}
              refreshLearningHubs={refreshLearningHubs}
            ></Sidebar>
-           <div className="content community-content">
              <PostFeed/>
-           </div>
            <Modal
              visible={isModalOpen}
              onClose={() => setIsModalOpen(false)}
