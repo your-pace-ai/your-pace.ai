@@ -9,6 +9,7 @@ const prisma = new PrismaClient()
 const router = Router()
 const invalidator = new SimpleInvalidator(cacheManager)
 
+// get all subhubs for a learning hub
 router.get("/api/learning-hub/subhub", isAuthenticated, async (req, res) => {
    try {
        const { body : { learningHubId } } = req

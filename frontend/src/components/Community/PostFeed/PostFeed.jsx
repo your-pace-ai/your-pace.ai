@@ -343,6 +343,7 @@ export const PostFeed = () => {
 
 
    return (
+    <div className="content community-content">
        <div className="feed-container">
            <div className="post-feed">
                <div className="feed-header">
@@ -406,5 +407,6 @@ export const PostFeed = () => {
                )}
            </div>
        </div>
+    </div>
    )
 }

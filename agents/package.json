@@ -11,10 +11,13 @@
   "license": "MIT",
   "dependencies": {
     "@google/genai": "^1.8.0",
+    "@langchain/community": "^0.3.48",
+    "@langchain/core": "^0.3.62",
     "cors": "^2.8.5",
-    "dotenv": "^17.0.1",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "youtubei.js": "^14.0.0"
   },
   "type": "module"
 }
