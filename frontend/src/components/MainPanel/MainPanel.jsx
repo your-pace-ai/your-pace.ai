@@ -5,7 +5,7 @@ import { Flashcards } from "../MediaSection/Flashcards"
 import "./MainPanel.css"
 import { useState, useRef, useEffect } from "react"
 
-export const MainPanel = () => {
+export const MainPanel = ({ url }) => {
     const [activeTab, setActiveTab] = useState("Comment")
     const tabs = ["Comment", "FlashCards", "Quizzes", "Summary", "Notes"]
     const contentRef = useRef(null)
@@ -24,7 +24,7 @@ export const MainPanel = () => {
             <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab}></Tabs>
             <div className="panel-content" ref={contentRef}>
                 {activeTab === "Comment" && <p>Comments section coming soon...</p>}
-                {activeTab === "FlashCards" && <Flashcards />}
+                {activeTab === "FlashCards" && <Flashcards url={url}/>}
                 {activeTab === "Quizzes" && <Quizzes />}
                 {activeTab === "Summary" && <p>Summary section coming soon...</p>}
                 {activeTab === "Notes" && <p>Notes section coming soon...</p>}

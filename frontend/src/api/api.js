@@ -172,3 +172,19 @@ export const getChapters = async (videoUrl) => {
     const data = await response.json()
     return data
 }
+
+export const getFlashCards = async (videoUrl) => {
+    const response = await fetch(`${agentUrl}/flash-cards`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            youtubeUrl: videoUrl
+        })
+    })
+
+    if (!response.ok) throw new Error("Failed to get flash cards")
+    const data = await response.json()
+    return data
+}
