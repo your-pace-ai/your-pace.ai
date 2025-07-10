@@ -67,12 +67,7 @@ model SubHub {
     flashCard FlashCard []
     quiz Quiz []
 }
-// transform json null in subhub
-// fyp. following like tiktok
-// scaling for stretch
-// global youtube data
-// 1.List of
-// while you're waiting...
+
 model Chapter {
     id Int @id @default(autoincrement())
     content String
