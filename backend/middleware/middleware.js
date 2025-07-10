@@ -20,7 +20,14 @@ const isAuthenticated = (req, res, next) => {
     return res.status(401).json({ error: 'Not authenticated' })
 }
 
+const validateFollowRequestBody = (req, res, next) => {
+    const { body : { followId } } = req
+    if (!followId) return res.status(400).json({ error: 'Follow ID is required' })
+    next()
+}
+
 module.exports = {
     validateLocalSignUp,
-    isAuthenticated
+    isAuthenticated,
+    validateFollowRequestBody
 }

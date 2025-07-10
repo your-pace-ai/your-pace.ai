@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes/authRoutes.js")
 const userRoutes = require("./routes/userRoutes/userRoutes.js")
 const learningHubRoutes = require("./routes/hubRoutes/learningHubRoutes.js")
 const subHubRoutes = require("./routes/hubRoutes/subHubRoutes.js")
+const followRoutes = require("./routes/followRoutes/followRoutes.js")
 
 dotenv.config()
 
@@ -62,6 +63,7 @@ app.use(authRoutes)
 app.use(userRoutes)
 app.use(learningHubRoutes)
 app.use(subHubRoutes)
+app.use(followRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
