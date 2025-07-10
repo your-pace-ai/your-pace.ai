@@ -10,7 +10,7 @@ export const MainPanel = ({ url }) => {
     const tabs = ["Comment", "FlashCards", "Quizzes", "Summary", "Notes"]
     const contentRef = useRef(null)
 
-    // This effect ensures the content container maintains a fixed height
+    // ensures the content container maintains a fixed height
     useEffect(() => {
         if (contentRef.current) {
             const height = contentRef.current.offsetHeight
@@ -25,7 +25,7 @@ export const MainPanel = ({ url }) => {
             <div className="panel-content" ref={contentRef}>
                 {activeTab === "Comment" && <p>Comments section coming soon...</p>}
                 {activeTab === "FlashCards" && <Flashcards url={url}/>}
-                {activeTab === "Quizzes" && <Quizzes />}
+                {activeTab === "Quizzes" && <Quizzes url={url} />}
                 {activeTab === "Summary" && <p>Summary section coming soon...</p>}
                 {activeTab === "Notes" && <p>Notes section coming soon...</p>}
             </div>
