@@ -1,6 +1,11 @@
-
+/**
+ * Custom OOP implementation of a priority(going for a max-heap idea here)
+ * armotized O(logn) push/pop
+ * O(1) peak/ size/ isEmpty
+ */
 class PriorityQueue {
     constructor(compareFunction) {
+        // (a,b) => true:: a has higher priotity than b
         this.compare = compareFunction ?? ((a,b) => (a > b))
         this.priorityQueue = []
     }
@@ -75,8 +80,10 @@ class PriorityQueue {
             i = swapIdx
         }
     }
-    
+
     #swap(i,j) {
         [this.priorityQueue[i], this.priorityQueue[j]] = [this.priorityQueue[j], this.priorityQueue[i]]
     }
 }
+
+module.exports = PriorityQueue
