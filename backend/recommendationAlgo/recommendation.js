@@ -3,9 +3,9 @@ const PriorityQueue = require("./priorityQueue")
 // using different category weights for mock category data
 const CATEGORY_WEIGHTS = {
   Education: 5,
-  Science: 4,
+  ScienceTech: 4,
   Entertainment: 3,
-  Sports: 2,
+  Music: 2,
   Other: 1,
 }
 
