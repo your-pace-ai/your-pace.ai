@@ -3,6 +3,7 @@ import { VideoPlayer } from "./VideoPlayer.jsx"
 import "./MediaSection.css"
 import { useState, useEffect } from "react"
 import { useLocation } from "react-router-dom"
+import { MainPanel } from "../MainPanel/MainPanel.jsx"
 
 export const MediaSection = () => {
    const [url, setUrl] = useState("")
@@ -20,6 +21,7 @@ export const MediaSection = () => {
                 </div>
                 <Chapters url={url}></Chapters>
             </div>
+            <MainPanel url={url}/>
         </>
     )
 }

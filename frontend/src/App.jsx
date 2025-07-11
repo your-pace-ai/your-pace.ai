@@ -36,7 +36,6 @@ function App() {
              ></Sidebar>
              <div className="content">
                <MediaSection></MediaSection>
-               <MainPanel></MainPanel>
                <Modal
                  visible={isModalOpen}
                  onClose={() => setIsModalOpen(false)}
