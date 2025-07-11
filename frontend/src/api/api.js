@@ -238,7 +238,6 @@ export const deletePost = async (postId) => {
 
 export const shareSubHub = async (subHubId, title = null, content = null) => {
     const requestBody = { subHubId }
-    
     // Only include title and content if they are provided
     if (title) requestBody.title = title
     if (content) requestBody.content = content

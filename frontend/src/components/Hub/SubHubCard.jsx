@@ -5,23 +5,23 @@ import { useState } from 'react'
 
 export const SubHubCard = (props) => {
   const [isSharing, setIsSharing] = useState(false)
-  
+
   const handleShare = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     if (isSharing) return
-    
+
     setIsSharing(true)
     try {
       // Let the backend generate smart content from chapters
       await shareSubHub(props.id)
-      
+
       // Show success feedback
       if (props.onShare) {
         props.onShare()
       }
-      
+
       // Simple success indication
       alert('SubHub shared to community!')
     } catch (error) {
@@ -57,8 +57,8 @@ export const SubHubCard = (props) => {
         <h4 className="subhub-title">{props.name}</h4>
       </Link>
       <div className="subhub-actions">
-        <button 
-          className="subhub-action-btn" 
+        <button
+          className="subhub-action-btn"
           onClick={handleShare}
           disabled={isSharing}
         >
