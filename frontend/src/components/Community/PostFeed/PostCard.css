@@ -89,6 +89,19 @@
     line-height: 1.5;
     margin: 0 0 1rem 0;
     padding: 0 1rem;
+    white-space: pre-line; /* Preserve line breaks for chapter insights */
+ }
+
+ .shared-subhub-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 1rem 1rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
  }
 
 

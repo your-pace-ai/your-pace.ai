@@ -2,7 +2,7 @@ import "./Quizzes.css"
 import { useState } from "react"
 
 export const Quizzes = () => {
-    // Dummy quiz data
+    // Placeholder quiz data - will be replaced with AI-generated content
     const [quizzes] = useState([
         {
             id: 1,
@@ -65,6 +65,8 @@ export const Quizzes = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [score, setScore] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleOptionSelect = (optionIndex) => {
         setSelectedOption(optionIndex);
@@ -96,7 +98,13 @@ export const Quizzes = () => {
         <div className="quizzes-container">
             <h4>Quizzes</h4>
 
-            {!showResult ? (
+            {loading ? (
+                <div className="quizzes-container">Loading quizzes...</div>
+            ) : error ? (
+                <div className="quizzes-container">Error: {error}</div>
+            ) : (!quizzes || Object.keys(quizzes).length === 0) ? (
+                <div className="quizzes-container">No quizzes available.</div>
+            ) : !showResult ? (
                 <div className="quiz-card">
                     <h5>Question {currentQuiz + 1} of {quizzes.length}</h5>
                     <p className="quiz-question">{quizzes[currentQuiz].question}</p>

@@ -15,7 +15,7 @@ class PriorityQueue {
     }
 
     isEmpty() {
-        return this.priorityQueue.length === 0
+        return this.size() === 0
     }
     peek () {
         return this.priorityQueue[0]
@@ -30,7 +30,7 @@ class PriorityQueue {
         if (len === 0) return null
         if (len === 1) return this.priorityQueue.pop()
 
-        const top = this.priorityQueue[0]
+        const top = this.peek()
         // move the last element to the top
         this.priorityQueue[0] = this.priorityQueue.pop()
         this.#bubbleDown(0)
@@ -63,21 +63,23 @@ class PriorityQueue {
 
     #bubbleDown(i) {
         const len = this.priorityQueue.length
-        while (true) {
-            const l = this.#left(i)
-            const r = this.#right(i)
+        let current = i
+        
+        while (current < len) {
+            const l = this.#left(current)
+            const r = this.#right(current)
 
             // pick child with higher priority
-            let swapIdx = i
+            let swapIdx = current
             if (l < len && !this.compare(this.priorityQueue[swapIdx], this.priorityQueue[l])) {
                 swapIdx = l
             }
             if (r < len && !this.compare(this.priorityQueue[swapIdx], this.priorityQueue[r])) {
                 swapIdx = r
             }
-            if (swapIdx == i) break
-            this.#swap(i, swapIdx)
-            i = swapIdx
+            if (swapIdx === current) break
+            this.#swap(current, swapIdx)
+            current = swapIdx
         }
     }
 
