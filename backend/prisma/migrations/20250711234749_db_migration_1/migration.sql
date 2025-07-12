@@ -23,6 +23,7 @@ CREATE TABLE "Post" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "like" INTEGER NOT NULL DEFAULT 0,
     "userId" TEXT NOT NULL,
+    "sharedSubHubId" INTEGER,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -33,8 +34,19 @@ CREATE TABLE "PostComment" (
     "comment" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "postId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "PostComment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PostLike" (
+    "id" SERIAL NOT NULL,
+    "userId" TEXT NOT NULL,
+    "postId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PostLike_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -50,6 +62,7 @@ CREATE TABLE "LearningHub" (
 CREATE TABLE "SubHub" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "youtubeUrl" TEXT,
     "learningHubId" INTEGER NOT NULL,
 
     CONSTRAINT "SubHub_pkey" PRIMARY KEY ("id")
@@ -58,8 +71,10 @@ CREATE TABLE "SubHub" (
 -- CreateTable
 CREATE TABLE "Chapter" (
     "id" SERIAL NOT NULL,
-    "content" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "summary" TEXT NOT NULL,
     "subHubId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
 );
@@ -106,6 +121,16 @@ CREATE TABLE "Session" (
 );
 
 -- CreateTable
+CREATE TABLE "AiContextWindow" (
+    "id" SERIAL NOT NULL,
+    "context" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "AiContextWindow_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_UserFollows" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
@@ -123,6 +148,12 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 CREATE INDEX "Post_title_idx" ON "Post"("title");
 
 -- CreateIndex
+CREATE INDEX "Post_createdAt_idx" ON "Post"("createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PostLike_userId_postId_key" ON "PostLike"("userId", "postId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Session_sid_key" ON "Session"("sid");
 
 -- CreateIndex
@@ -132,25 +163,40 @@ CREATE INDEX "_UserFollows_B_index" ON "_UserFollows"("B");
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostComment" ADD CONSTRAINT "PostComment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Post" ADD CONSTRAINT "Post_sharedSubHubId_fkey" FOREIGN KEY ("sharedSubHubId") REFERENCES "SubHub"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostComment" ADD CONSTRAINT "PostComment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostComment" ADD CONSTRAINT "PostComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "LearningHub" ADD CONSTRAINT "LearningHub_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubHub" ADD CONSTRAINT "SubHub_learningHubId_fkey" FOREIGN KEY ("learningHubId") REFERENCES "LearningHub"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SubHub" ADD CONSTRAINT "SubHub_learningHubId_fkey" FOREIGN KEY ("learningHubId") REFERENCES "LearningHub"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubHubComment" ADD CONSTRAINT "SubHubComment_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SubHubComment" ADD CONSTRAINT "SubHubComment_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FlashCard" ADD CONSTRAINT "FlashCard_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FlashCard" ADD CONSTRAINT "FlashCard_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_subHubId_fkey" FOREIGN KEY ("subHubId") REFERENCES "SubHub"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AiContextWindow" ADD CONSTRAINT "AiContextWindow_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
