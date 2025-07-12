@@ -12,6 +12,19 @@ enum Role {
     STUDENT
 }
 
+enum Category {
+    EDUCATION
+    SCIENCE_TECH
+    ENTERTAINMENT
+    MUSIC
+    BUSINESS
+    HEALTH_FITNESS
+    COOKING
+    LANGUAGE
+    ARTS_CRAFTS
+    OTHER
+}
+
 model User {
   id String @id @default(uuid())
   firstName String?
@@ -78,6 +91,7 @@ model SubHub {
     id Int @id @default(autoincrement())
     name String
     youtubeUrl String?
+    category Category @default(OTHER)
     learningHub LearningHub @relation(fields: [learningHubId], references: [id], onDelete: Cascade)
     learningHubId Int
     chapters Chapter []

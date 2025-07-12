@@ -21,11 +21,8 @@ export const SubHubCard = (props) => {
       if (props.onShare) {
         props.onShare()
       }
-      
-      // Simple success indication
-      alert('SubHub shared to community!')
     } catch (error) {
-      alert('Failed to share SubHub. Please try again.')
+      // Error handling could be improved with a toast notification system
     } finally {
       setIsSharing(false)
     }
@@ -44,6 +41,7 @@ export const SubHubCard = (props) => {
       throw new Error("Failed to delete subhub")
     }
   }
+  
   return (
     <div className="subhub-card">
       <Link

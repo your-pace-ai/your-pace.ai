@@ -22,10 +22,10 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-google-oidc": "^0.1.0",
-    "passport-local": "^1.0.0",
-    "prisma": "^6.10.1"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prisma": "^6.11.1"
   }
 }

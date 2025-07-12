@@ -449,4 +449,47 @@ This content has given me so many valuable insights. Can't wait to apply what I'
     }
 })
 
+// Get recommended posts (For You feed)
+router.get("/api/posts/recommendations", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.user.id
+        const topKRecommendations = require("../../recommendationAlgo/recommendation")
+
+        // Fetch all posts that share a SubHub (have a category) and include engagement data
+        const posts = await prisma.post.findMany({
+            include: {
+                user: {
+                    select: { id: true, firstName: true, lastName: true, email: true }
+                },
+                comment: true,
+                likes: true,
+                sharedSubHub: true
+            }
+        })
+
+        // Transform
+        const videoPosts = posts.filter(p => p.sharedSubHub) // only posts with shared subhub
+        const transformed = videoPosts.map(p => {
+            const likes = p.likes.length
+            const comments = p.comment.length
+            const category = p.sharedSubHub.category || 'OTHER'
+            return {
+                id: p.id,
+                post: p,
+                category,
+                likes,
+                comments,
+                isOwn: p.userId === userId
+            }
+        })
+
+        const recommended = topKRecommendations(transformed).filter(r => !r.isOwn)
+        // return only post objects, keep order
+        const postsRecommended = recommended.map(r => r.post)
+        res.json(postsRecommended)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch recommendations', details: error.message })
+    }
+})
+
 module.exports = router 

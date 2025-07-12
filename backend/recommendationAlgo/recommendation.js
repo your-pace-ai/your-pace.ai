@@ -5,17 +5,8 @@ const LIKE_COEFFICIENT = 0.5
 const COMMENT_COEFFICIENT = 0.5
 const TOP_K = 10
 
-// using different category weights for mock category data
-const CATEGORY_WEIGHTS = {
-    Education: CATEGORY_COEFFICIENT,
-    ScienceTech: CATEGORY_COEFFICIENT,
-    Entertainment: CATEGORY_COEFFICIENT,
-    Music: CATEGORY_COEFFICIENT,
-    Other: CATEGORY_COEFFICIENT,
-  }
-
 const videoScore = ({ category, likes, comments }) => {
-    return (CATEGORY_WEIGHTS[category] ?? CATEGORY_WEIGHTS.Other) * CATEGORY_COEFFICIENT + (likes * LIKE_COEFFICIENT) + (comments * COMMENT_COEFFICIENT)
+    return CATEGORY_COEFFICIENT + (likes * LIKE_COEFFICIENT) + (comments * COMMENT_COEFFICIENT)
 }
 
 const priorityQueue = new PriorityQueue((a,b) => a.score > b.score)
