@@ -367,3 +367,60 @@ export const getRecommendedPosts = async () => {
     const data = await response.json()
     return data
 }
+
+export const generateSummaryFromChapters = async (chapters) => {
+    const response = await fetch(`${agentUrl}/summary-from-chapters`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ chapters })
+    })
+    if (!response.ok) throw new Error("Failed to generate summary from chapters")
+    const data = await response.json()
+    return data
+ }
+
+export const getChaptersFromDB = async (subHubId) => {
+    const response = await fetch(`${apiUrl}/subhub/${subHubId}/chapters`, {
+        method: "GET",
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error("Failed to get chapters from database")
+    const data = await response.json()
+    return data
+}
+
+export const getFlashCardsFromDB = async (youtubeUrl, subHubId = null) => {
+    const requestBody = { youtubeUrl }
+    if (subHubId) requestBody.subHubId = subHubId
+
+    const response = await fetch(`${apiUrl}/flashcards/smart-get`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    })
+    if (!response.ok) throw new Error("Failed to get flashcards")
+    const data = await response.json()
+    return data
+}
+
+export const getQuizFromDB = async (youtubeUrl, subHubId = null) => {
+    const requestBody = { youtubeUrl }
+    if (subHubId) requestBody.subHubId = subHubId
+
+    const response = await fetch(`${apiUrl}/quizzes/smart-get`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    })
+    if (!response.ok) throw new Error("Failed to get quizzes")
+    const data = await response.json()
+    return data
+}

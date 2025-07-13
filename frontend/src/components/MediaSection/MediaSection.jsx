@@ -7,10 +7,14 @@ import { MainPanel } from "../MainPanel/MainPanel.jsx"
 
 export const MediaSection = () => {
    const [url, setUrl] = useState("")
+   const [hubId, setHubId] = useState(null)
    const location = useLocation()
 
    useEffect(() => {
-       if (location.state && location.state.youtubeUrl) setUrl(location.state.youtubeUrl)
+       if (location.state) {
+           if (location.state.youtubeUrl) setUrl(location.state.youtubeUrl)
+           if (location.state.hubId) setHubId(location.state.hubId)
+       }
    }, [location.state])
 
     return (
@@ -19,9 +23,9 @@ export const MediaSection = () => {
                 <div className="media-section-yt-modal">
                     <VideoPlayer url={url}></VideoPlayer>
                 </div>
-                <Chapters url={url}></Chapters>
+                <Chapters url={url} hubId={hubId}></Chapters>
             </div>
-            <MainPanel url={url}/>
+            <MainPanel url={url} hubId={hubId}/>
         </>
     )
 }

@@ -1,8 +1,8 @@
 import "./Flashcards.css"
 import { useState, useEffect } from "react"
-import { getFlashCards } from "../../api/api.js"
+import { getFlashCardsFromDB } from "../../api/api.js"
 
-export const Flashcards = ({ url }) => {
+export const Flashcards = ({ url, hubId }) => {
     const [flashcards, setFlashcards] = useState([])
     const [loading, setLoading] = useState(true)
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -10,23 +10,27 @@ export const Flashcards = ({ url }) => {
 
     const fetchFlashcards = async () => {
         try {
-            const response = await getFlashCards(url)
-            const formattedCards = Object.entries(response).map(([id, card], index) => ({
-                id: index + 1,
-                question: card.front,
-                answer: card.back
-            }))
-            setFlashcards(formattedCards);
+            if (hubId || url) {
+                // Use database-first approach with both hubId and url
+                const response = await getFlashCardsFromDB(url, hubId)
+                const formattedCards = Object.entries(response).map(([id, card], index) => ({
+                    id: index + 1,
+                    question: card.front,
+                    answer: card.back
+                }))
+                setFlashcards(formattedCards);
+            }
             setLoading(false);
         } catch (error) {
             setLoading(false)
-            throw new Error({cause:error})
         }
     }
 
     useEffect(() => {
-        fetchFlashcards()
-    }, [])
+        if (hubId || url) {
+            fetchFlashcards()
+        }
+    }, [hubId, url])
 
     const handleNext = () => {
         if (currentIndex < flashcards.length - 1) {
