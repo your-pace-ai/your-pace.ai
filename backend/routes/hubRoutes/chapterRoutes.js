@@ -3,6 +3,12 @@ const { Router } = express
 const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 
+// using dynamic import to avoid circular dependency
+const fetch = async (...args) => {
+   const { default: fetch } = await import('node-fetch')
+   return fetch(...args)
+}
+
 const prisma = new PrismaClient()
 const router = Router()
 
@@ -58,35 +64,45 @@ router.post("/api/chapters/smart-get", isAuthenticated, async (req, res) => {
 
             const chaptersData = await agentResponse.json()
 
-            // If we have a SubHub, save chapters to database
-            if (subHub) {
-                const chapterEntries = Object.entries(chaptersData).map(([title, summary]) => ({
-                    title,
-                    summary,
-                    subHubId: subHub.id
-                }))
+           // If we don't have a SubHub but have a YouTube URL, try to find it again
+           let targetSubHub = subHub
+           if (!targetSubHub && youtubeUrl) {
+               targetSubHub = await prisma.subHub.findFirst({
+                   where: {
+                       youtubeUrl: youtubeUrl,
+                       learningHub: {
+                           userId: userId
+                       }
+                   }
+               })
+           }
 
-                await prisma.chapter.createMany({
-                    data: chapterEntries
-                })
-            }
+           // Save chapters to database if we have a SubHub
+           if (targetSubHub) {
+               const chapterEntries = Object.entries(chaptersData).map(([title, summary]) => ({
+                   title,
+                   summary,
+                   subHubId: targetSubHub.id
+               }))
 
-            res.json(chaptersData)
-        } catch (agentError) {
-            res.status(500).json({
-                error: "Failed to generate chapters",
-                details: "Unable to process video content at this time"
-            })
-        }
-    } catch (error) {
-        res.status(500).json({
-            error: "Failed to get chapters",
-            details: "Internal server error"
-        })
-    }
+               await prisma.chapter.createMany({
+                   data: chapterEntries
+               })
+           }
+           res.json(chaptersData)
+       } catch (agentError) {
+           res.status(500).json({
+               error: "Failed to generate chapters",
+               details: "Unable to process video content at this time"
+           })
+       }
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to get chapters",
+           details: "Internal server error"
+       })
+   }
 })
-
-
 
 // Delete specific chapter
 router.delete("/api/chapters/:chapterId", isAuthenticated, async (req, res) => {
