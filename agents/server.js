@@ -50,6 +50,33 @@ const QUIZ_PROMP = `
     }
 `
 
+
+const SUMMARY_PROMPT = `
+   Generate a concise, engaging Twitter-style summary of this YouTube video content.
+   The summary should be:
+   - 280 characters or less
+   - Capture the main insight or takeaway
+   - Use engaging language
+   - Include relevant emojis
+   - Be shareable and compelling
+
+   Return only the summary text, no additional formatting or JSON.
+`
+
+
+const CHAPTERS_SUMMARY_PROMPT = `
+   Based on the provided chapter summaries, create a concise, engaging Twitter-style post summary.
+   The summary should be:
+   - 280 characters or less
+   - Capture the main insights from the chapters
+   - Use engaging language
+   - Include relevant emojis
+   - Be shareable and compelling
+
+   Return only the summary text, no additional formatting or JSON.
+`
+
+
 const transformToJson = (inputString) => {
     try {
         inputString = inputString.replace(/"""|\\n/g, '')
@@ -101,6 +128,47 @@ app.post("/api/quiz", async (req, res) => {
     })
     const transformedRes = transformToJson(response.text)
     res.json(transformedRes)
+})
+
+
+app.post("/api/summary", async (req, res) => {
+   try {
+       const { body: { youtubeUrl } } = req
+       const context = await getTranscript(youtubeUrl)
+       const response = await ai.models.generateContent({
+           model: 'gemini-2.0-flash-001',
+           contents: `This is the content ${context}. Do this: ${SUMMARY_PROMPT}`
+       })
+       res.json({ summary: response.text.trim() })
+   } catch (error) {
+       console.error('Error generating summary:', error)
+       res.status(500).json({ error: 'Failed to generate summary' })
+   }
+})
+
+
+app.post("/api/summary-from-chapters", async (req, res) => {
+   try {
+       const { body: { chapters } } = req
+
+       if (!chapters || chapters.length === 0) {
+           return res.status(400).json({ error: 'No chapters provided' })
+       }
+
+       // Format chapters for AI processing
+       const chaptersText = chapters.map(chapter =>
+           `${chapter.title}: ${chapter.summary}`
+       ).join('\n\n')
+
+       const response = await ai.models.generateContent({
+           model: 'gemini-2.0-flash-001',
+           contents: `These are the chapter summaries: ${chaptersText}. Do this: ${CHAPTERS_SUMMARY_PROMPT}`
+       })
+
+       res.json({ summary: response.text.trim() })
+   } catch (error) {
+       res.status(500).json({ error: 'Failed to generate summary from chapters' })
+   }
 })
 
 app.listen(PORT, () => {
