@@ -1,5 +1,5 @@
 import "./SignUp.css"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { signup } from "../../api/api"
 

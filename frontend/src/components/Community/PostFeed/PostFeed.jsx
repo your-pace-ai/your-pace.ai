@@ -1,58 +1,41 @@
 import { useState, useEffect } from 'react'
+import { getPosts, deletePost, likePost, commentOnPost, getRecommendedPosts, getFollowers, getFollowing, getAllUsers, followUser, unfollowUser } from '../../../api/api'
 import { PostCard } from './PostCard'
 import './PostFeed.css'
-import { 
-    getPosts, 
-    getFollowers, 
-    getFollowing, 
-    getAllUsers, 
-    deletePost, 
-    likePost, 
-    commentOnPost, 
-    followUser, 
-    unfollowUser 
-} from '../../../api/api'
 
 const UserList = ({ users, onFollow, feedType }) => {
     if (!users || users.length === 0) {
         return (
             <div className="no-users">
                 <h3>No users found</h3>
-                <p>Check back later or adjust your filters.</p>
+                <p>Try exploring the community!</p>
             </div>
         )
     }
 
     return (
-        <div className="users-list">
+        <div className="users-container">
             {users.map(user => (
-                <div key={user.id} className="user-card">
-                    <div className="user-info">
-                        <h4>{user.firstName} {user.lastName}</h4>
-                        <p>{user.email}</p>
+                <div key={user.id} className="user-item">
+                    <div className="user-avatar">
+                        {user.firstName ? user.firstName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
                     </div>
-                    {feedType === 'all-users' && (
-                        <button 
-                            className={`follow-btn ${user.isFollowing ? 'following' : ''}`}
-                            onClick={() => onFollow(user.id, user.isFollowing)}
-                        >
-                            {user.isFollowing ? 'Following' : 'Follow'}
-                        </button>
-                    )}
-                    {feedType === 'followers' && !user.isFollowing && (
-                        <button 
+                    <div className="user-info">
+                        <span className="user-email">{user.email}</span>
+                    </div>
+                    {(!user.isFollowing && feedType === 'followers') ? (
+                        <button
                             className="follow-btn follow-back"
                             onClick={() => onFollow(user.id, false)}
                         >
                             Follow Back
                         </button>
-                    )}
-                    {feedType === 'followers' && user.isFollowing && (
-                        <button 
-                            className="follow-btn unfollow"
-                            onClick={() => onFollow(user.id, true)}
+                    ) : (
+                        <button
+                            className={`follow-btn ${user.isFollowing ? (feedType === 'followers' || feedType === 'following' || feedType === 'all-users' ? 'unfollow' : 'following') : ''}`}
+                            onClick={() => onFollow(user.id, user.isFollowing)}
                         >
-                            Unfollow
+                            {user.isFollowing ? 'Unfollow' : 'Follow'}
                         </button>
                     )}
                 </div>
@@ -65,7 +48,7 @@ export const PostFeed = () => {
     const [posts, setPosts] = useState([])
     const [users, setUsers] = useState([])
    const [loading, setLoading] = useState(false)
-    const [feedType, setFeedType] = useState('posts')
+    const [feedType, setFeedType] = useState('for-you')
    const [currentPage, setCurrentPage] = useState(1)
    const [pagination, setPagination] = useState({
        totalPages: 1,
@@ -75,7 +58,7 @@ export const PostFeed = () => {
    })
 
    useEffect(() => {
-        if (feedType === 'posts') {
+        if (feedType === 'for-you' || feedType === 'posts') {
        loadPosts()
         } else {
             loadUsers()
@@ -85,9 +68,14 @@ export const PostFeed = () => {
     const loadPosts = async () => {
         setLoading(true)
         try {
-            const postsData = await getPosts('all', currentPage, 10)
+            let postsData
+            if (feedType === 'for-you') {
+                postsData = await getRecommendedPosts()
+       } else {
+                postsData = await getPosts('all', currentPage, 10)
+       }
             setPosts(postsData)
-            setPagination({ totalPages: 1, currentPage: 1, hasPrev: false, hasNext: false })
+       setPagination({ totalPages: 1, currentPage: 1, hasPrev: false, hasNext: false })
         } catch (error) {
             setPosts([])
         } finally {
@@ -125,7 +113,7 @@ export const PostFeed = () => {
             await deletePost(deletedPostId)
        setPosts(posts.filter(post => post.id !== deletedPostId))
         } catch (error) {
-            alert('Failed to delete post. Please try again.')
+            // Error handled silently
         }
     }
 
@@ -144,7 +132,7 @@ export const PostFeed = () => {
                 return post
             }))
         } catch (error) {
-            // Silently fail - user will see no change
+            // Error handled silently
         }
     }
 
@@ -162,7 +150,7 @@ export const PostFeed = () => {
                 return post
             }))
         } catch (error) {
-            alert('Failed to add comment. Please try again.')
+            // Error handled silently
         }
     }
 
@@ -176,7 +164,7 @@ export const PostFeed = () => {
             
             loadUsers()
         } catch (error) {
-            alert('Failed to update follow status. Please try again.')
+            // Error handled silently
         }
     }
 
@@ -184,7 +172,7 @@ export const PostFeed = () => {
        return (
            <div className="post-feed-loading">
                <div className="loading-spinner"></div>
-               <p>Loading posts...</p>
+                <p>Loading...</p>
            </div>
        )
    }
@@ -198,6 +186,12 @@ export const PostFeed = () => {
                </div>
                <div className="feed-selector">
                    <button
+                            className={feedType === 'for-you' ? 'active' : ''}
+                            onClick={() => { setFeedType('for-you'); setCurrentPage(1); }}
+                        >
+                            For You
+                        </button>
+                        <button
                             className={feedType === 'posts' ? 'active' : ''}
                             onClick={() => { setFeedType('posts'); setCurrentPage(1); }}
                         >
@@ -224,7 +218,28 @@ export const PostFeed = () => {
                </div>
                     
                     <div className="content-container">
-                        {feedType === 'posts' ? (
+                        {feedType === 'for-you' ? (
+                            <div className="posts-container">
+                                {posts.length === 0 ? (
+                                    <div className="no-posts">
+                                        <h3>Your personalized feed is empty</h3>
+                                        <p>Follow more people and explore content to see recommendations!</p>
+                                    </div>
+                                ) : (
+                                    posts.map(post => (
+                                        <PostCard
+                                            key={post.id}
+                                            post={post}
+                                            isLiked={post.isLikedByUser}
+                                            onUpdate={handlePostUpdate}
+                                            onDelete={handlePostDelete}
+                                            onLike={handleLike}
+                                            onComment={handleComment}
+                                        />
+                                    ))
+                                )}
+                            </div>
+                        ) : feedType === 'posts' ? (
                <div className="posts-container">
                    {posts.length === 0 ? (
                        <div className="no-posts">

@@ -74,10 +74,11 @@ export const createLearningHub = async(title="anonymous") => {
     if (!response.ok) throw new Error("Failed to create learning Hub")
 }
 
-export const createSubHub = async (title, youtubeUrl, learningHubId=null) => {
+export const createSubHub = async (title, youtubeUrl, learningHubId=null, category='OTHER') => {
     const requestData = {
         title,
-        youtubeUrl
+        youtubeUrl,
+        category
     }
 
     if (learningHubId) requestData.learningHubId = learningHubId
@@ -312,6 +313,26 @@ export const getCommunityStats = async () => {
         credentials: "include"
     })
     if (!response.ok) throw new Error("Failed to get community stats")
+    const data = await response.json()
+    return data
+}
+
+export const getRecommendations = async () => {
+    const response = await fetch(`${apiUrl}/subhub/recommendations`, {
+        method: "GET",
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error("Failed to get recommendations")
+    const data = await response.json()
+    return data
+}
+
+export const getRecommendedPosts = async () => {
+    const response = await fetch(`${apiUrl}/posts/recommendations`, {
+        method: "GET",
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error("Failed to get recommended posts")
     const data = await response.json()
     return data
 }
