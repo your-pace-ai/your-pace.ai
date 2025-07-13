@@ -2,12 +2,7 @@ const express = require("express")
 const { Router } = express
 const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
-
-// using dynamic import to avoid circular dependency
-const fetch = async (...args) => {
-   const { default: fetch } = await import('node-fetch')
-   return fetch(...args)
-}
+const { fetch } = require("../../utils/fetch.js")
 
 const prisma = new PrismaClient()
 const router = Router()
@@ -139,4 +134,4 @@ router.delete("/api/chapters/:chapterId", isAuthenticated, async (req, res) => {
     }
 })
 
-module.exports = router 
+module.exports = router
