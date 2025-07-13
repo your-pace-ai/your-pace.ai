@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const cacheManager = require("../../cache/cacheManager")
 const SimpleInvalidator = require("../../cache/simpleInvalidator")
+const { fetch } = require("../../utils/fetch.js")
 
 const prisma = new PrismaClient()
 const router = Router()
@@ -184,11 +185,43 @@ router.delete("/api/subhub/delete", isAuthenticated, async (req, res) => {
    }
 })
 
+// Get chapters for a SubHub from database
+router.get("/api/subhub/:subHubId/chapters", isAuthenticated, async (req, res) => {
+    try {
+        const { subHubId } = req.params
+        const userId = req.user.id
+
+        // Verify the subhub belongs to the user
+        const subHub = await prisma.subHub.findFirst({
+            where: {
+                id: parseInt(subHubId),
+                learningHub: {
+                    userId: userId
+                }
+            },
+            include: {
+                chapters: {
+                    orderBy: { createdAt: 'asc' }
+                }
+            }
+        })
+
+
+        if (!subHub) return res.status(404).json({ error: "SubHub not found or not authorized" })
+        res.json(subHub.chapters)
+    } catch (error) {
+        res.status(500).json({
+            error: "Failed to fetch chapters from database",
+            details: error.message
+        })
+    }
+  })
+
 router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
    try {
        const userId = req.user.id
        const topKRecommendations = require("../../recommendationAlgo/recommendation")
-       
+
        // Get all subhubs with their engagement metrics
        const allSubHubs = await prisma.subHub.findMany({
            include: {
@@ -201,13 +234,13 @@ router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
                }
            }
        })
-       
+
        // Transform data for recommendation algorithm
        const videosData = allSubHubs.map(subhub => {
            // Calculate total likes and comments from shared posts
            const totalLikes = subhub.sharedPosts.reduce((sum, post) => sum + post.likes.length, 0)
            const totalComments = subhub.sharedPosts.reduce((sum, post) => sum + post.comment.length, 0)
-           
+
            return {
                id: subhub.id,
                name: subhub.name,
@@ -219,13 +252,10 @@ router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
                isOwn: subhub.learningHub.userId === userId
            }
        })
-       
        // Get recommendations
        const recommendations = topKRecommendations(videosData)
-       
        // Filter out user's own subhubs from recommendations
        const filteredRecommendations = recommendations.filter(rec => !rec.isOwn)
-       
        res.json(filteredRecommendations)
    } catch (error) {
        res.status(500).json({
