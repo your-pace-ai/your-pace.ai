@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const cacheManager = require("../../cache/cacheManager")
 const SimpleInvalidator = require("../../cache/simpleInvalidator")
-const { fetch } = require("../../utils/fetch.js")
+const fetch = require("../../utils/fetch.js")
 
 const prisma = new PrismaClient()
 const router = Router()

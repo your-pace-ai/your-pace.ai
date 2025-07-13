@@ -2,7 +2,7 @@ const express = require("express")
 const { Router } = express
 const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
-const { fetch } = require("../../utils/fetch.js")
+const fetch = require("../../utils/fetch.js")
 
 const prisma = new PrismaClient()
 const router = Router()
