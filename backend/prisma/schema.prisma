@@ -92,6 +92,7 @@ model SubHub {
     name String
     youtubeUrl String?
     category Category @default(OTHER)
+    aiSummary String?
     learningHub LearningHub @relation(fields: [learningHubId], references: [id], onDelete: Cascade)
     learningHubId Int
     chapters Chapter []
