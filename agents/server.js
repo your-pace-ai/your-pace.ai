@@ -30,7 +30,7 @@ const FLASHCARD_PROMPT = `
         }
     }
 `
-const QUIZ_PROMP = `
+const QUIZ_PROMPT = `
     Generate 30 Quizzes split into 3 categories(easy, medium, hard). It should be based on the context
     the response should be a json in the form:
     {
@@ -80,19 +80,25 @@ const CHAPTERS_SUMMARY_PROMPT = `
 const transformToJson = (inputString) => {
     try {
         inputString = inputString.replace(/"""|\\n/g, '')
+        try {
+            return JSON.parse(inputString)
+        } catch (error) {
+            // if direct parsing fails, try to extract JSON
+            let startIndex = inputString.indexOf('{')
+            let endIndex = inputString.lastIndexOf('}')
 
-        let startIndex = inputString.indexOf('{')
-        let endIndex = inputString.lastIndexOf('}')
-        let jsonData = inputString.substring(startIndex, endIndex + 1)
+            if (startIndex === -1 || endIndex === -1) {
+                throw new Error("Could not find valid JSON in the response")
+            }
 
-        jsonData = jsonData.replace(/\\"/g, '"')
-        return JSON.parse(jsonData)
+            let jsonData = inputString.substring(startIndex, endIndex + 1)
+            jsonData = jsonData.replace(/\\"/g, '"')
+            return JSON.parse(jsonData)
+        }
     } catch (error) {
         throw new Error("Failed to transform input string")
     }
 }
-
-
 
 app.use(json())
 app.use(cors())
@@ -124,7 +130,7 @@ app.post("/api/quiz", async (req, res) => {
     const context = await getTranscript(youtubeUrl)
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash-001',
-        contents: `This is the content ${context}. Do this: ${QUIZ_PROMP}`
+        contents: `This is the content ${context}. Do this: ${QUIZ_PROMPT}`
     })
     const transformedRes = transformToJson(response.text)
     res.json(transformedRes)

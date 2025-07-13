@@ -174,6 +174,37 @@ export const getChapters = async (videoUrl) => {
     return data
 }
 
+export const getFlashCards = async (videoUrl) => {
+    const response = await fetch(`${agentUrl}/flash-cards`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            youtubeUrl: videoUrl
+        })
+    })
+
+    if (!response.ok) throw new Error("Failed to get flash cards")
+    const data = await response.json()
+    return data
+}
+
+export const getQuiz = async (videoUrl) => {
+    const response = await fetch(`${agentUrl}/quiz`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            youtubeUrl: videoUrl
+        })
+    })
+    if (!response.ok) throw new Error("Failed to get quiz")
+    const data = await response.json()
+    return data
+}
+
 // Post API functions
 export const getPosts = async (feedType = 'all', page = 1, limit = 10) => {
     const response = await fetch(`${apiUrl}/posts?feedType=${feedType}&page=${page}&limit=${limit}`, {
@@ -242,7 +273,7 @@ export const shareSubHub = async (subHubId, title = null, content = null) => {
     // Only include title and content if they are provided
     if (title) requestBody.title = title
     if (content) requestBody.content = content
-    
+
     const response = await fetch(`${apiUrl}/posts/share-subhub`, {
         method: "POST",
         credentials: "include",
