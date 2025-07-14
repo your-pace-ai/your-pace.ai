@@ -26,8 +26,6 @@ export const Quizzes = ({ url,hubId }) => {
             setLoading(false)
         }
     }
-
-
     useEffect(() => {
         if (hubId || url) {
             fetchQuizzes()

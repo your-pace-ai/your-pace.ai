@@ -143,7 +143,7 @@ const transformToJson = (inputString) => {
             jsonData = jsonData.replace(/\\"/g, '"')
             const parsed = JSON.parse(jsonData)
             return parsed
-        }
+       }
     } catch (error) {
         throw new Error("Failed to transform input string: ")
     }
