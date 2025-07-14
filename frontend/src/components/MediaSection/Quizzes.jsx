@@ -1,6 +1,7 @@
 import "./Quizzes.css"
 import { useState, useEffect } from "react"
 import { getQuizFromDB } from "../../api/api.js"
+import { QuizSkeleton} from "../Skeleton"
 
 export const Quizzes = ({ url,hubId }) => {
     const [quizzes, setQuizzes] = useState([])
@@ -71,7 +72,7 @@ export const Quizzes = ({ url,hubId }) => {
         setScore(0)
     }
 
-    if (loading) return <div className="quizzes-container">Loading quizzes...</div>
+    if (loading) return <QuizSkeleton />
     if (error) return <div className="quizzes-container">Error: {error}</div>
     if (!quizzes || Object.keys(quizzes).length === 0) {
         return <div className="quizzes-container">No quizzes available.</div>

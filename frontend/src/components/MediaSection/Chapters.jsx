@@ -1,9 +1,11 @@
 import "./Chapters.css"
 import { getChapters, getChaptersFromDB } from "../../api/api.js"
 import { useState, useEffect } from "react"
+import { ChapterSkeleton} from "../Skeleton"
 
 export const Chapters = ({ url, hubId }) => {
     const [chapters, setChapters] = useState({})
+    const [loading, setLoading] = useState(true)
 
     const getChaptersData = async () => {
         try {
@@ -45,12 +47,18 @@ export const Chapters = ({ url, hubId }) => {
                 setChapters(data)
             }
         } catch (error) {
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         if (hubId || url) getChaptersData()
     },[url, hubId])
+
+    if (loading) {
+        return <ChapterSkeleton />
+    }
 
     return (
         <>
