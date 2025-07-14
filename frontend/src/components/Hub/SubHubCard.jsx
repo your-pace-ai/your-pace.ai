@@ -1,9 +1,32 @@
 import { Link } from 'react-router-dom'
 import './SubHubCard.css'
-import { deleteSubHub } from '../../api/api'
+import { deleteSubHub, shareSubHub } from '../../api/api'
+import { useState } from 'react'
 
 export const SubHubCard = (props) => {
-  const handleShare = () => {}
+  const [isSharing, setIsSharing] = useState(false)
+
+  const handleShare = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (isSharing) return
+
+    setIsSharing(true)
+    try {
+      // Let the backend generate smart content from chapters
+      await shareSubHub(props.id)
+
+      // Show success feedback
+      if (props.onShare) {
+        props.onShare()
+      }
+    } catch (error) {
+      // Error handling could be improved with a toast notification system
+    } finally {
+      setIsSharing(false)
+    }
+  }
 
   const handleDelete = async (e) => {
     e.preventDefault()
@@ -18,6 +41,7 @@ export const SubHubCard = (props) => {
       throw new Error("Failed to delete subhub")
     }
   }
+  
   return (
     <div className="subhub-card">
       <Link
@@ -31,8 +55,12 @@ export const SubHubCard = (props) => {
         <h4 className="subhub-title">{props.name}</h4>
       </Link>
       <div className="subhub-actions">
-        <button className="subhub-action-btn" onClick={handleShare}>
-          share
+        <button
+          className="subhub-action-btn"
+          onClick={handleShare}
+          disabled={isSharing}
+        >
+          {isSharing ? 'Sharing...' : 'Share'}
         </button>
         <button className="subhub-action-btn delete" onClick={handleDelete}>
           Delete

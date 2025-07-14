@@ -12,6 +12,19 @@ enum Role {
     STUDENT
 }
 
+enum Category {
+    EDUCATION
+    SCIENCE_TECH
+    ENTERTAINMENT
+    MUSIC
+    BUSINESS
+    HEALTH_FITNESS
+    COOKING
+    LANGUAGE
+    ARTS_CRAFTS
+    OTHER
+}
+
 model User {
   id String @id @default(uuid())
   firstName String?
@@ -23,6 +36,8 @@ model User {
   createdAt DateTime @default(now())
   learningHub LearningHub []
   post Post []
+  postComment PostComment []
+  postLike PostLike []
   followedBy User[] @relation("UserFollows")
   following User[] @relation("UserFollows")
   aiContextWindow AiContextWindow []
@@ -37,7 +52,11 @@ model Post {
     user User @relation(fields: [userId], references: [id])
     userId String
     comment PostComment []
+    likes PostLike []
+    sharedSubHub SubHub? @relation(fields: [sharedSubHubId], references: [id])
+    sharedSubHubId Int?
     @@index([title])
+    @@index([createdAt])
 }
 
 model PostComment {
@@ -46,6 +65,18 @@ model PostComment {
     createdAt DateTime @default(now())
     post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId Int
+    user User @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model PostLike {
+    id Int @id @default(autoincrement())
+    user User @relation(fields: [userId], references: [id])
+    userId String
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId Int
+    createdAt DateTime @default(now())
+    @@unique([userId, postId])
 }
 
 model LearningHub {
@@ -60,19 +91,24 @@ model SubHub {
     id Int @id @default(autoincrement())
     name String
     youtubeUrl String?
+    category Category @default(OTHER)
+    aiSummary String?
     learningHub LearningHub @relation(fields: [learningHubId], references: [id], onDelete: Cascade)
     learningHubId Int
     chapters Chapter []
     subHubComment SubHubComment []
     flashCard FlashCard []
     quiz Quiz []
+    sharedPosts Post[]
 }
 
 model Chapter {
     id Int @id @default(autoincrement())
-    content String
+    title String
+    summary String
     subHub SubHub @relation(fields: [subHubId], references: [id], onDelete: Cascade)
     subHubId Int
+    createdAt DateTime @default(now())
 }
 
 model SubHubComment {

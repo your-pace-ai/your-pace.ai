@@ -1,8 +1,8 @@
 import "./Quizzes.css"
 import { useState, useEffect } from "react"
-import { getQuiz } from "../../api/api.js"
+import { getQuizFromDB } from "../../api/api.js"
 
-export const Quizzes = ({ url }) => {
+export const Quizzes = ({ url,hubId }) => {
     const [quizzes, setQuizzes] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -15,19 +15,22 @@ export const Quizzes = ({ url }) => {
     const fetchQuizzes = async () => {
         try {
             setLoading(true);
-            const data = await getQuiz(url)
-            setQuizzes(data)
+            if (hubId || url) {
+                // Use database-first approach with both hubId and url
+                const data = await getQuizFromDB(url, hubId)
+                setQuizzes(data)
+            }
             setLoading(false)
         } catch (err) {
             setError("Failed to load quizzes")
             setLoading(false)
         }
     }
-
-
     useEffect(() => {
-        fetchQuizzes()
-    }, [url])
+        if (hubId || url) {
+            fetchQuizzes()
+        }
+    }, [hubId, url])
 
     const currentQuizzes = quizzes[difficulty] || []
 

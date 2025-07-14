@@ -123,12 +123,8 @@ router.post("/api/admin/cache/test", isAuthenticated, (req, res) => {
            randomValue: Math.random()
        }
 
-
-       // test SET
        cacheManager.userCache.set(testKey, testData, 60000)
-       // test GET
        const retrieved = cacheManager.userCache.get(testKey)
-       // test DELETE
        const deleted = cacheManager.userCache.delete(testKey)
 
        res.json({

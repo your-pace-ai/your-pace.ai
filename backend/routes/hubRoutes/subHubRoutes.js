@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const cacheManager = require("../../cache/cacheManager")
 const SimpleInvalidator = require("../../cache/simpleInvalidator")
+const fetch = require("../../utils/fetch.js")
 
 const prisma = new PrismaClient()
 const router = Router()
@@ -68,7 +69,7 @@ router.get("/api/subhub/all", isAuthenticated, async (req, res) => {
 
 router.post("/api/subhub/create", isAuthenticated, async (req, res) => {
    try {
-       const { title, youtubeUrl, learningHubId } = req.body
+       const { title, youtubeUrl, learningHubId, category } = req.body
        const userId = req.user.id
        let hubId = learningHubId
        // if no learning hub ID provided, create a new learning hub
@@ -99,6 +100,7 @@ router.post("/api/subhub/create", isAuthenticated, async (req, res) => {
            data: {
                name: title,
                youtubeUrl: youtubeUrl,
+               category: category || 'OTHER',
                learningHub: {
                    connect: {
                        id: hubId
@@ -178,6 +180,86 @@ router.delete("/api/subhub/delete", isAuthenticated, async (req, res) => {
    } catch (error) {
        res.status(500).json({
            error: "Failed to delete subhub",
+           details: error.message
+       })
+   }
+})
+
+// Get chapters for a SubHub from database
+router.get("/api/subhub/:subHubId/chapters", isAuthenticated, async (req, res) => {
+    try {
+        const { subHubId } = req.params
+        const userId = req.user.id
+
+        // Verify the subhub belongs to the user
+        const subHub = await prisma.subHub.findFirst({
+            where: {
+                id: parseInt(subHubId),
+                learningHub: {
+                    userId: userId
+                }
+            },
+            include: {
+                chapters: {
+                    orderBy: { createdAt: 'asc' }
+                }
+            }
+        })
+
+
+        if (!subHub) return res.status(404).json({ error: "SubHub not found or not authorized" })
+        res.json(subHub.chapters)
+    } catch (error) {
+        res.status(500).json({
+            error: "Failed to fetch chapters from database",
+            details: error.message
+        })
+    }
+  })
+
+router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
+   try {
+       const userId = req.user.id
+       const topKRecommendations = require("../../recommendationAlgo/recommendation")
+
+       // Get all subhubs with their engagement metrics
+       const allSubHubs = await prisma.subHub.findMany({
+           include: {
+               learningHub: true,
+               sharedPosts: {
+                   include: {
+                       likes: true,
+                       comment: true
+                   }
+               }
+           }
+       })
+
+       // Transform data for recommendation algorithm
+       const videosData = allSubHubs.map(subhub => {
+           // Calculate total likes and comments from shared posts
+           const totalLikes = subhub.sharedPosts.reduce((sum, post) => sum + post.likes.length, 0)
+           const totalComments = subhub.sharedPosts.reduce((sum, post) => sum + post.comment.length, 0)
+
+           return {
+               id: subhub.id,
+               name: subhub.name,
+               youtubeUrl: subhub.youtubeUrl,
+               category: subhub.category,
+               likes: totalLikes,
+               comments: totalComments,
+               learningHubId: subhub.learningHubId,
+               isOwn: subhub.learningHub.userId === userId
+           }
+       })
+       // Get recommendations
+       const recommendations = topKRecommendations(videosData)
+       // Filter out user's own subhubs from recommendations
+       const filteredRecommendations = recommendations.filter(rec => !rec.isOwn)
+       res.json(filteredRecommendations)
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to get recommendations",
            details: error.message
        })
    }

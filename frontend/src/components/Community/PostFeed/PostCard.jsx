@@ -74,7 +74,12 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
 
            <div className="post-content">
                <h3 className="post-title">{post.title}</h3>
-               <p className="post-text">{post.content}</p>
+               {post.sharedSubHub && (
+                   <div className="shared-subhub-badge">
+                       📚 Shared Learning: {post.sharedSubHub.name}
+                   </div>
+               )}
+               <div className="post-text">{post.content}</div>
                {post.thumbnail && (
                    <img src={post.thumbnail} alt={post.title} className="post-image" />
                )}
