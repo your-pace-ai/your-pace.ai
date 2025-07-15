@@ -252,7 +252,6 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
        }
        res.json(results)
    } catch (error) {
-       console.error('Search error:', error)
        res.status(500).json({
            error: 'Search failed',
            details: error.message
