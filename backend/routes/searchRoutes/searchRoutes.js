@@ -78,20 +78,15 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
        const subHubs = await prisma.subHub.findMany({
            where: {
                OR: [
-                   { title: { contains: searchTerm, mode: 'insensitive' } },
-                   { description: { contains: searchTerm, mode: 'insensitive' } },
-                   {
-                       learningHub: {
-                           title: { contains: searchTerm, mode: 'insensitive' }
-                       }
-                   }
+                   { name: { contains: searchTerm, mode: 'insensitive' } },
+                   { aiSummary: { contains: searchTerm, mode: 'insensitive' } }
                ]
            },
            include: {
                learningHub: {
                    select: {
                        id: true,
-                       title: true
+                       name: true
                    }
                },
                _count: {
