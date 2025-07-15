@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getPosts, deletePost, likePost, commentOnPost, getRecommendedPosts, getFollowers, getFollowing, getAllUsers, followUser, unfollowUser } from '../../../api/api'
 import { PostCard } from './PostCard'
+import { PostFeedSkeleton } from '../../Skeleton'
 import './PostFeed.css'
 
 const UserList = ({ users, onFollow, feedType }) => {
@@ -113,14 +114,14 @@ export const PostFeed = () => {
             await deletePost(deletedPostId)
        setPosts(posts.filter(post => post.id !== deletedPostId))
         } catch (error) {
-            // Error handled silently
+
         }
     }
 
     const handleLike = async (postId) => {
         try {
             const result = await likePost(postId)
-            
+
             setPosts(posts.map(post => {
                 if (post.id === postId) {
                     return {
@@ -139,7 +140,7 @@ export const PostFeed = () => {
     const handleComment = async (postId, commentText) => {
         try {
             const newComment = await commentOnPost(postId, commentText)
-            
+
             setPosts(posts.map(post => {
                 if (post.id === postId) {
                     return {
@@ -161,21 +162,51 @@ export const PostFeed = () => {
             } else {
                 await followUser(userId)
             }
-            
+
             loadUsers()
         } catch (error) {
-            // Error handled silently
+
         }
     }
 
-   if (loading) {
-       return (
-           <div className="post-feed-loading">
-               <div className="loading-spinner"></div>
-                <p>Loading...</p>
-           </div>
-       )
-   }
+
+  if (loading) {
+      return (
+          <div className="content community-content">
+              <div className="feed-container">
+                  <div className="post-feed">
+                      <div className="feed-header">
+                          <h1>Community</h1>
+                      </div>
+                      <div className="feed-selector">
+                          <button className={feedType === 'for-you' ? 'active' : ''}>For You</button>
+                          <button className={feedType === 'posts' ? 'active' : ''}>All Posts</button>
+                          <button className={feedType === 'followers' ? 'active' : ''}>Followers</button>
+                          <button className={feedType === 'following' ? 'active' : ''}>Following</button>
+                          <button className={feedType === 'all-users' ? 'active' : ''}>All Users</button>
+                      </div>
+                      <div className="content-container">
+                          {feedType === 'for-you' || feedType === 'posts' ? (
+                              <PostFeedSkeleton count={5} />
+                          ) : (
+                              <div className="users-container">
+                                  {Array.from({ length: 5 }, (_, index) => (
+                                      <div key={index} className="user-item skeleton-item">
+                                          <div className="user-avatar skeleton" style={{ width: '40px', height: '40px', borderRadius: '50%' }}></div>
+                                          <div className="user-info" style={{ flex: 1 }}>
+                                              <div className="skeleton" style={{ width: '150px', height: '16px', marginBottom: '4px' }}></div>
+                                          </div>
+                                          <div className="skeleton" style={{ width: '80px', height: '32px', borderRadius: '6px' }}></div>
+                                      </div>
+                                  ))}
+                              </div>
+                          )}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      )
+  }
 
    return (
     <div className="content community-content">
@@ -216,7 +247,7 @@ export const PostFeed = () => {
                             All Users
                    </button>
                </div>
-                    
+
                     <div className="content-container">
                         {feedType === 'for-you' ? (
                             <div className="posts-container">
@@ -261,8 +292,8 @@ export const PostFeed = () => {
                                 )}
                             </div>
                         ) : (
-                            <UserList 
-                                users={users} 
+                            <UserList
+                                users={users}
                                 onFollow={handleFollow}
                                 feedType={feedType}
                             />
