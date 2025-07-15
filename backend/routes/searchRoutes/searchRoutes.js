@@ -140,10 +140,16 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
                        email: true
                    }
                },
-               learningHub: {
+               sharedSubHub: {
                    select: {
                        id: true,
-                       title: true
+                       name: true,
+                       learningHub: {
+                           select: {
+                               id: true,
+                               name: true
+                           }
+                       }
                    }
                }
            },
@@ -162,40 +168,34 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
                content: card.answer,
                question: card.question,
                answer: card.answer,
-               chapter: card.chapter,
-               path: `/hub/${card.chapter?.subHub?.learningHub?.id}/subhub/${card.chapter?.subHub?.id}/chapter/${card.chapter?.id}/flashcards`
+               subHub: card.subHub
            })),
            quizzes: quizzes.map(quiz => ({
                id: quiz.id,
                type: 'quiz',
                title: `Quiz: ${quiz.question.substring(0, 50)}...`,
-               content: quiz.correctAnswer,
+               content: quiz.answer,
                question: quiz.question,
-               correctAnswer: quiz.correctAnswer,
-               options: [quiz.wrongAnswer1, quiz.wrongAnswer2, quiz.wrongAnswer3],
-               chapter: quiz.chapter,
-               path: `/hub/${quiz.chapter?.subHub?.learningHub?.id}/subhub/${quiz.chapter?.subHub?.id}/chapter/${quiz.chapter?.id}/quizzes`
+               answer: quiz.answer,
+               options: quiz.options,
+               subHub: quiz.subHub
            })),
            subHubs: subHubs.map(subHub => ({
                id: subHub.id,
                type: 'subhub',
-               title: subHub.title,
-               content: subHub.description,
-               description: subHub.description,
-               learningHub: subHub.learningHub,
+               title: subHub.name,
+               content: subHub.aiSummary,
+               description: subHub.aiSummary,
+               learningHub: subHub.learningHubId,
                chapterCount: subHub._count.chapters,
-               path: `/hub/${subHub.learningHub?.id}/subhub/${subHub.id}`
            })),
            chapters: chapters.map(chapter => ({
                id: chapter.id,
                type: 'chapter',
                title: chapter.title,
-               content: chapter.content?.substring(0, 200) + (chapter.content?.length > 200 ? '...' : ''),
-               fullContent: chapter.content,
-               subHub: chapter.subHub,
-               flashcardCount: chapter._count.flashCards,
-               quizCount: chapter._count.quizzes,
-               path: `/hub/${chapter.subHub?.learningHub?.id}/subhub/${chapter.subHub?.id}/chapter/${chapter.id}`
+               content: chapter.summary?.substring(0, 200) + (chapter.summary?.length > 200 ? '...' : ''),
+               fullContent: chapter.summary,
+               subHub: chapter.subHubId,
            })),
            posts: posts.map(post => ({
                id: post.id,
@@ -203,8 +203,7 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
                title: post.title,
                content: post.content?.substring(0, 200) + (post.content?.length > 200 ? '...' : ''),
                user: post.user,
-               learningHub: post.learningHub,
-               path: `/community`
+               subHub: post.sharedSubHub,
            })),
            totalResults,
            query: searchTerm
