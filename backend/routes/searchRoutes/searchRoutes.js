@@ -29,29 +29,18 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
            where: {
                OR: [
                    { question: { contains: searchTerm, mode: 'insensitive' } },
-                   { answer: { contains: searchTerm, mode: 'insensitive' } },
-                   {
-                       chapter: {
-                           title: { contains: searchTerm, mode: 'insensitive' }
-                       }
-                   }
+                   { answer: { contains: searchTerm, mode: 'insensitive' } }
                ]
            },
            include: {
-               chapter: {
+               subHub: {
                    select: {
                        id: true,
-                       title: true,
-                       subHub: {
+                       name: true,
+                       learningHub: {
                            select: {
                                id: true,
-                               title: true,
-                               learningHub: {
-                                   select: {
-                                       id: true,
-                                       title: true
-                                   }
-                               }
+                               name: true
                            }
                        }
                    }
