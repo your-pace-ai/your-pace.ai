@@ -1,0 +1,220 @@
+const express = require('express')
+const { PrismaClient } = require('@prisma/client')
+const { isAuthenticated } = require('../../middleware/middleware')
+
+const router = express.Router()
+const prisma = new PrismaClient()
+
+// Search across all content types
+router.get('/api/search', isAuthenticated, async (req, res) => {
+   try {
+       const { query, limit = 20 } = req.query
+
+       if (!query || query.trim() === '') {
+           return res.json({
+               flashcards: [],
+               quizzes: [],
+               subHubs: [],
+               chapters: [],
+               posts: [],
+               totalResults: 0
+           })
+       }
+
+       const searchTerm = query.trim()
+       const searchLimit = parseInt(limit)
+
+       // Search Flashcards
+       const flashcards = await prisma.flashCard.findMany({
+           where: {
+               OR: [
+                   { question: { contains: searchTerm, mode: 'insensitive' } },
+                   { answer: { contains: searchTerm, mode: 'insensitive' } }
+               ]
+           },
+           include: {
+               subHub: {
+                   select: {
+                       id: true,
+                       name: true,
+                       learningHub: {
+                           select: {
+                               id: true,
+                               name: true
+                           }
+                       }
+                   }
+               }
+           },
+           take: searchLimit
+       })
+
+       // Search Quizzes
+       const quizzes = await prisma.quiz.findMany({
+           where: {
+               OR: [
+                   { question: { contains: searchTerm, mode: 'insensitive' } },
+                   { answer: { contains: searchTerm, mode: 'insensitive' } }
+               ]
+           },
+           include: {
+               subHub: {
+                   select: {
+                       id: true,
+                       name: true,
+                       learningHub: {
+                           select: {
+                               id: true,
+                               name: true
+                           }
+                       }
+                   }
+               }
+           },
+           take: searchLimit
+       })
+
+       // Search SubHubs
+       const subHubs = await prisma.subHub.findMany({
+           where: {
+               OR: [
+                   { name: { contains: searchTerm, mode: 'insensitive' } },
+                   { aiSummary: { contains: searchTerm, mode: 'insensitive' } }
+               ]
+           },
+           include: {
+               learningHub: {
+                   select: {
+                       id: true,
+                       name: true
+                   }
+               },
+               _count: {
+                   select: {
+                       chapters: true
+                   }
+               }
+           },
+           take: searchLimit
+       })
+
+       // Search Chapters
+       const chapters = await prisma.chapter.findMany({
+           where: {
+               OR: [
+                   { title: { contains: searchTerm, mode: 'insensitive' } },
+                   { summary: { contains: searchTerm, mode: 'insensitive' } }
+               ]
+           },
+           include: {
+               subHub: {
+                   select: {
+                       id: true,
+                       name: true,
+                       learningHub: {
+                           select: {
+                               id: true,
+                               name: true
+                           }
+                       }
+                   }
+               }
+           },
+           take: searchLimit
+       })
+
+       // Search Posts
+       const posts = await prisma.post.findMany({
+           where: {
+               OR: [
+                   { title: { contains: searchTerm, mode: 'insensitive' } },
+                   { content: { contains: searchTerm, mode: 'insensitive' } }
+               ]
+           },
+           include: {
+               user: {
+                   select: {
+                       id: true,
+                       firstName: true,
+                       lastName: true,
+                       email: true
+                   }
+               },
+               sharedSubHub: {
+                   select: {
+                       id: true,
+                       name: true,
+                       learningHub: {
+                           select: {
+                               id: true,
+                               name: true
+                           }
+                       }
+                   }
+               }
+           },
+           take: searchLimit
+       })
+
+       // Calculate total results
+       const totalResults = flashcards.length + quizzes.length + subHubs.length + chapters.length + posts.length
+
+       // Format the response
+       const results = {
+           flashcards: flashcards.map(card => ({
+               id: card.id,
+               type: 'flashcard',
+               title: `Flashcard: ${card.question.substring(0, 50)}...`,
+               content: card.answer,
+               question: card.question,
+               answer: card.answer,
+               subHub: card.subHub
+           })),
+           quizzes: quizzes.map(quiz => ({
+               id: quiz.id,
+               type: 'quiz',
+               title: `Quiz: ${quiz.question.substring(0, 50)}...`,
+               content: quiz.answer,
+               question: quiz.question,
+               answer: quiz.answer,
+               options: quiz.options,
+               subHub: quiz.subHub
+           })),
+           subHubs: subHubs.map(subHub => ({
+               id: subHub.id,
+               type: 'subhub',
+               title: subHub.name,
+               content: subHub.aiSummary,
+               description: subHub.aiSummary,
+               learningHub: subHub.learningHubId,
+               chapterCount: subHub._count.chapters,
+           })),
+           chapters: chapters.map(chapter => ({
+               id: chapter.id,
+               type: 'chapter',
+               title: chapter.title,
+               content: chapter.summary?.substring(0, 200) + (chapter.summary?.length > 200 ? '...' : ''),
+               fullContent: chapter.summary,
+               subHub: chapter.subHubId,
+           })),
+           posts: posts.map(post => ({
+               id: post.id,
+               type: 'post',
+               title: post.title,
+               content: post.content?.substring(0, 200) + (post.content?.length > 200 ? '...' : ''),
+               user: post.user,
+               subHub: post.sharedSubHub,
+           })),
+           totalResults,
+           query: searchTerm
+       }
+       res.json(results)
+   } catch (error) {
+       res.status(500).json({
+           error: 'Search failed',
+           details: error.message
+       })
+   }
+})
+
+module.exports = router
