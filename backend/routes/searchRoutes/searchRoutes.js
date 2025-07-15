@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 // Search across all content types
 router.get('/api/search', isAuthenticated, async (req, res) => {
    try {
-       const { query, limit = 20 } = req.query
+       const { query, limit = 20 } = req.body
 
        if (!query || query.trim() === '') {
            return res.json({

@@ -15,6 +15,7 @@ const postRoutes = require("./routes/postRoutes/postRoutes.js")
 const communityRoutes = require("./routes/communityRoutes/communityRoutes.js")
 const flashcardRoutes = require("./routes/hubRoutes/flashcardRoutes.js")
 const quizRoutes = require("./routes/hubRoutes/quizRoutes.js")
+const searchRoutes = require("./routes/searchRoutes/searchRoutes.js")
 
 dotenv.config()
 
@@ -72,6 +73,7 @@ app.use(postRoutes)
 app.use(communityRoutes)
 app.use(flashcardRoutes)
 app.use(quizRoutes)
+app.use(searchRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

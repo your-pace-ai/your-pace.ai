@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('INSTRUCTOR', 'STUDENT');
 
+-- CreateEnum
+CREATE TYPE "Category" AS ENUM ('EDUCATION', 'SCIENCE_TECH', 'ENTERTAINMENT', 'MUSIC', 'BUSINESS', 'HEALTH_FITNESS', 'COOKING', 'LANGUAGE', 'ARTS_CRAFTS', 'OTHER');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -63,6 +66,8 @@ CREATE TABLE "SubHub" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "youtubeUrl" TEXT,
+    "category" "Category" NOT NULL DEFAULT 'OTHER',
+    "aiSummary" TEXT,
     "learningHubId" INTEGER NOT NULL,
 
     CONSTRAINT "SubHub_pkey" PRIMARY KEY ("id")
