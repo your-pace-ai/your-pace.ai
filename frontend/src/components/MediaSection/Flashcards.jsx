@@ -1,6 +1,7 @@
 import "./Flashcards.css"
 import { useState, useEffect } from "react"
 import { getFlashCardsFromDB } from "../../api/api.js"
+import { FlashcardSkeleton} from "../Skeleton"
 
 export const Flashcards = ({ url, hubId }) => {
     const [flashcards, setFlashcards] = useState([])
@@ -51,7 +52,7 @@ export const Flashcards = ({ url, hubId }) => {
     }
 
     if (loading) {
-        return <div className="flashcards-container">Loading flashcards...</div>
+        return <FlashcardSkeleton />
     }
 
     if (flashcards.length === 0) {
