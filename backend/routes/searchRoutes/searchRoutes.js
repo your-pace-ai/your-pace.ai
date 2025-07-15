@@ -103,31 +103,20 @@ router.get('/api/search', isAuthenticated, async (req, res) => {
            where: {
                OR: [
                    { title: { contains: searchTerm, mode: 'insensitive' } },
-                   { content: { contains: searchTerm, mode: 'insensitive' } },
-                   {
-                       subHub: {
-                           title: { contains: searchTerm, mode: 'insensitive' }
-                       }
-                   }
+                   { summary: { contains: searchTerm, mode: 'insensitive' } }
                ]
            },
            include: {
                subHub: {
                    select: {
                        id: true,
-                       title: true,
+                       name: true,
                        learningHub: {
                            select: {
                                id: true,
-                               title: true
+                               name: true
                            }
                        }
-                   }
-               },
-               _count: {
-                   select: {
-                       flashCards: true,
-                       quizzes: true
                    }
                }
            },
