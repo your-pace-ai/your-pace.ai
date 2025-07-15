@@ -6,7 +6,7 @@ const router = express.Router()
 const prisma = new PrismaClient()
 
 // Search across all content types
-router.get('/api/search', isAuthenticated, async (req, res) => {
+router.post('/api/search',isAuthenticated, async (req, res) => {
    try {
        const { query, limit = 20 } = req.body
 
