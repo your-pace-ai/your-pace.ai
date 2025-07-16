@@ -10,7 +10,7 @@ This is a **Recommendation Algorithm** that combines a discovery-focused approac
 ## Algorithm Philosophy
 
 
-The algorithm now combines traditional content-based filtering with **Matrix Factorization using Gradient Descent** - a calculus and algebra intensive approach that learns user preferences through mathematical optimization.
+The algorithm now combines traditional content-based filtering with **Matrix Factorization using Gradient Descent**
 
 
 The enhanced system operates on multiple principles:
