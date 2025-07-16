@@ -172,7 +172,6 @@ export const PostFeed = () => {
 
     const handleSearch = () => {
         // TODO: Call search API from backend
-        console.log('Search')
     }
 
 
