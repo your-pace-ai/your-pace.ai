@@ -57,29 +57,33 @@ const getData = async () => {
     return data
 }
 
-let data = await getData()
+try {
+    let data = await getData()
 
-const extractAllStrings = (obj) => {
-    let result = []
+    const extractAllStrings = (obj) => {
+        let result = []
 
-    const dfs = (value, key = null) => {
-        if (typeof value === 'string') {
-            // skip if key is id or type
-            if (key != "id" && key != "type") {
-                result.push(value.toLowerCase())
-            }
-        } else if (Array.isArray(value)) {
-            value.forEach(item => dfs(item));
-        } else if (value && typeof value === 'object') {
-            for (const [k, v] of Object.entries(value)) {
-                dfs(v, k)
+        const dfs = (value, key = null) => {
+            if (typeof value === 'string') {
+                // skip if key is id or type
+                if (key != "id" && key != "type") {
+                    result.push(value.toLowerCase())
+                }
+            } else if (Array.isArray(value)) {
+                value.forEach(item => dfs(item));
+            } else if (value && typeof value === 'object') {
+                for (const [k, v] of Object.entries(value)) {
+                    dfs(v, k)
+                }
             }
         }
-    }
 
-    dfs(obj)
-    return result
+        dfs(obj)
+        return result
+    }
+    // manual test
+    const words = extractAllStrings(data)
+    console.log(autoComplete(words, "build"))
+} catch (error) {
+    throw new Error({cause: error})
 }
-// manual test
-const words = extractAllStrings(data)
-console.log(autoComplete(words, "build"))
