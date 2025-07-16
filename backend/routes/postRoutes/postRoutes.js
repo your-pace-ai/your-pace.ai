@@ -3,6 +3,8 @@ const { Router } = express
 const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const fetch = require("../../utils/fetch.js")
+const { updateUserInteraction } = require("../../recommendationAlgo/recommendation.js")
+
 const prisma = new PrismaClient()
 const router = Router()
 
@@ -162,6 +164,17 @@ router.post("/api/posts/:postId/like", isAuthenticated, async (req, res) => {
         const { postId } = req.params
         const userId = req.user.id
 
+        // Get post details for matrix factorization
+        const post = await prisma.post.findUnique({
+            where: { id: Number(postId) },
+            include: {
+                likes: true,
+                comment: true,
+            }
+        })
+
+        if (!post) return res.status(404).json({ error: "Post not found" })
+
         // Check if user already liked this post
         const existingLike = await prisma.postLike.findUnique({
             where: {
@@ -177,6 +190,9 @@ router.post("/api/posts/:postId/like", isAuthenticated, async (req, res) => {
             await prisma.postLike.delete({
                 where: { id: existingLike.id }
             })
+            // Update matrix factorization with new like count
+            const newLikeCount = post.likes.length - 1
+            updateUserInteraction(userId, postId, newLikeCount, post.comment.length)
             res.json({ liked: false, message: "Post unliked" })
         } else {
             // Like the post
@@ -186,6 +202,9 @@ router.post("/api/posts/:postId/like", isAuthenticated, async (req, res) => {
                     postId: parseInt(postId)
                 }
             })
+            // Update matrix factorization with new like count
+            const newLikeCount = post.likes.length + 1
+            updateUserInteraction(userId, postId, newLikeCount, post.comment.length)
             res.json({ liked: true, message: "Post liked" })
         }
     } catch (error) {
@@ -202,6 +221,17 @@ router.post("/api/posts/:postId/comment", isAuthenticated, async (req, res) => {
         const { postId } = req.params
         const { comment } = req.body
         const userId = req.user.id
+
+        // Get post details for matrix factorization
+        const post = await prisma.post.findUnique({
+            where: { id: Number(postId) },
+            include: {
+                likes: true,
+                comment: true,
+            }
+        })
+
+        if (!post) return res.status(404).json({ error: "Post not found" })
 
         const newComment = await prisma.postComment.create({
             data: {
@@ -221,6 +251,9 @@ router.post("/api/posts/:postId/comment", isAuthenticated, async (req, res) => {
             }
         })
 
+        // Update matrix factorization with new comment count
+        const newCommentCount = post.comment.length + 1
+        updateUserInteraction(userId, postId, post.likes.length, newCommentCount)
         res.status(201).json(newComment)
     } catch (error) {
         res.status(500).json({
@@ -443,6 +476,7 @@ router.get("/api/posts/recommendations", isAuthenticated, async (req, res) => {
 
            return {
                id: p.id,
+               userId: p.userId,
                post: p,
                category,
                likes,
