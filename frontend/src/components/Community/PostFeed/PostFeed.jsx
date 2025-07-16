@@ -170,7 +170,7 @@ export const PostFeed = () => {
         }
     }
 
-    const handleSearch = () => {
+    const handleSearch = (term) => {
         // TODO: Call search API from backend
     }
 
@@ -190,9 +190,6 @@ export const PostFeed = () => {
                           <button className={feedType === 'following' ? 'active' : ''}>Following</button>
                           <button className={feedType === 'all-users' ? 'active' : ''}>All Users</button>
                       </div>
-
-                      <TypeAheadSearchbar onSearch={handleSearch}/>
-
                       <div className="content-container">
                           {feedType === 'for-you' || feedType === 'posts' ? (
                               <PostFeedSkeleton count={5} />
@@ -255,6 +252,8 @@ export const PostFeed = () => {
                             All Users
                    </button>
                </div>
+
+               <TypeAheadSearchbar onSearch={handleSearch}/>
 
                     <div className="content-container">
                         {feedType === 'for-you' ? (
