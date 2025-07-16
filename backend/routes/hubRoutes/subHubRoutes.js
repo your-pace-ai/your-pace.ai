@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const cacheManager = require("../../cache/cacheManager")
 const SimpleInvalidator = require("../../cache/simpleInvalidator")
-const fetch = require("../../utils/fetch.js")
+const topKRecommendations = require("../../recommendationAlgo/recommendation")
 
 const prisma = new PrismaClient()
 const router = Router()
@@ -218,9 +218,8 @@ router.get("/api/subhub/:subHubId/chapters", isAuthenticated, async (req, res) =
   })
 
 router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
-   try {
-       const userId = req.user.id
-       const topKRecommendations = require("../../recommendationAlgo/recommendation")
+  try {
+      const userId = req.user.id
 
        // Get all subhubs with their engagement metrics
        const allSubHubs = await prisma.subHub.findMany({
@@ -241,28 +240,38 @@ router.get("/api/subhub/recommendations", isAuthenticated, async (req, res) => {
            const totalLikes = subhub.sharedPosts.reduce((sum, post) => sum + post.likes.length, 0)
            const totalComments = subhub.sharedPosts.reduce((sum, post) => sum + post.comment.length, 0)
 
-           return {
-               id: subhub.id,
-               name: subhub.name,
-               youtubeUrl: subhub.youtubeUrl,
-               category: subhub.category,
-               likes: totalLikes,
-               comments: totalComments,
-               learningHubId: subhub.learningHubId,
-               isOwn: subhub.learningHub.userId === userId
-           }
-       })
-       // Get recommendations
-       const recommendations = topKRecommendations(videosData)
-       // Filter out user's own subhubs from recommendations
-       const filteredRecommendations = recommendations.filter(rec => !rec.isOwn)
-       res.json(filteredRecommendations)
-   } catch (error) {
-       res.status(500).json({
-           error: "Failed to get recommendations",
-           details: error.message
-       })
-   }
+          // Calculate age of subhub for temporal scoring
+          const subhubAge = Date.now() - new Date(subhub.createdAt).getTime()
+          const hoursOld = subhubAge / (1000 * 60 * 60)
+
+          return {
+              id: subhub.id,
+              userId: subhub.learningHub.userId,
+              name: subhub.name,
+              youtubeUrl: subhub.youtubeUrl,
+              category: subhub.category,
+              likes: totalLikes,
+              comments: totalComments,
+              isFromFollowing: false,
+              hoursOld: hoursOld,
+              creatorFollowerCount: 0,
+              learningHubId: subhub.learningHubId,
+              isOwn: subhub.learningHub.userId === userId
+          }
+      })
+      // Get recommendations
+      const recommendations = topKRecommendations(videosData)
+
+      // Filter out user's own subhubs from recommendations
+      const filteredRecommendations = recommendations.filter(rec => !rec.isOwn)
+
+      res.json(filteredRecommendations)
+  } catch (error) {
+      res.status(500).json({
+          error: "Failed to get recommendations",
+          details: error.message
+      })
+  }
 })
 
 module.exports = router
