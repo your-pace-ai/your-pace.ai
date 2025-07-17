@@ -1,3 +1,6 @@
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
 class TrieNode {
     constructor() {
         this.children = {}
@@ -189,46 +192,42 @@ class AutocompleteSystem {
     }
 }
 
-const getData = async () => {
-    const response = await fetch("http://localhost:3000/api/search", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body:JSON.stringify({query: "byte"})
-    })
+// helper function to build typeahead index
+const buildTypeaheadIndex = async () => {
+    // fetch sample data from all content types for indexing (useing limit to avoid timeout)
+    const [flashcards, quizzes, subHubs, chapters, posts] = await Promise.all([
+        prisma.flashCard.findMany({
+            select: { question: true, answer: true },
+            take: 100
+        }),
+        prisma.quiz.findMany({
+            select: { question: true, answer: true, options: true },
+            take: 100
+        }),
+        prisma.subHub.findMany({
+            select: { name: true, aiSummary: true },
+            take: 100
+        }),
+        prisma.chapter.findMany({
+            select: { title: true, summary: true },
+            take: 100
+        }),
+        prisma.post.findMany({
+            select: { title: true, content: true },
+            take: 100
+        })
+    ])
 
-    const data = await response.json()
-    return data
+    return {
+        flashcards,
+        quizzes,
+        subHubs,
+        chapters,
+        posts
+    }
 }
 
-try {
-    let data = await getData()
-
-    const extractAllStrings = (obj) => {
-        let result = []
-
-        const dfs = (value, key = null) => {
-            if (typeof value === 'string') {
-                // skip if key is id or type
-                if (key != "id" && key != "type") {
-                    result.push(value.toLowerCase())
-                }
-            } else if (Array.isArray(value)) {
-                value.forEach(item => dfs(item));
-            } else if (value && typeof value === 'object') {
-                for (const [k, v] of Object.entries(value)) {
-                    dfs(v, k)
-                }
-            }
-        }
-
-        dfs(obj)
-        return result
-    }
-    // manual test
-    const words = extractAllStrings(data)
-    console.log(autoComplete(words, "build"))
-} catch (error) {
-    throw new Error({cause: error})
+module.exports = {
+    buildTypeaheadIndex,
+    AutocompleteSystem
 }
