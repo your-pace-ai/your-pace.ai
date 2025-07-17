@@ -1,38 +1,75 @@
 class TrieNode {
     constructor() {
         this.children = {}
-        this.words = []
+        this.words = new Map()
+        this.isEnd = false
     }
 }
 
 class Trie {
     constructor() {
         this.root = new TrieNode()
+        // store all words for fuzzy matching
+        this.allWords = new Set()
     }
 
-    add(word) {
+    add(word, frequency = 1) {
         let curr = this.root
-        for (const c of word) {
+        const lowerWord = word.toLowerCase()
+        this.allWords.add(lowerWord)
+
+        for (const c of lowerWord) {
             if (!curr.children[c]) {
                 curr.children[c] = new TrieNode()
             }
             curr = curr.children[c]
             curr.words.push(word)
+
+            const currFreq = curr.words.get(lowerWord) || 0
+            curr.words.set(lowerWord, currFreq + frequency)
         }
+        curr.isEnd = true
     }
 
     find(word) {
         let curr = this.root
-        const res = []
-        for (const c of word) {
+        const lowerWord = word.toLowerCase()
+        for (const c of lowerWord) {
             if (!curr.children[c]) {
-                break
+                return []
             }
             curr = curr.children[c]
-            res.push(curr.words)
         }
-        return res
+        // convert map to array and sort by frequency
+        return Array.from(curr.words.entries())
+            .sort((a, b) => b[1] - a[1])
+            .map(([word]) => word)
   }
+}
+
+const levenshteinDistance = (s1, s2) => {
+    const m = s1.length
+    const n = s2.length
+    const dp = new Array(m + 1).fill(null).map(() => new Array(n + 1).fill(0))
+
+    for (let i = 0; i <= m; i++) dp[i][0] = i
+    for (let j = 0; j <= n; j++) dp[0][j] = j
+
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            if (s1[i - 1] === s2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1]
+            } else {
+                dp[i][j] = Math.min(
+                    dp[i -1][j] + 1,
+                    dp[i][j - 1] + 1,
+                    dp[i - 1][j - 1] + 1
+                )
+            }
+        }
+    }
+    return dp[m][n]
+
 }
 
 const autoComplete = (words, searchWord) => {
