@@ -72,6 +72,41 @@ const levenshteinDistance = (s1, s2) => {
 
 }
 
+// fuzzy search with scoring
+const fuzzySearch = (query, words, threshold = 2) => {
+    const lowerQuery = query.toLowerCase()
+    const results = []
+
+    for (const word of words) {
+        const distance = levenshteinDistance(lowerQuery, word)
+
+        // include words within threshold distance
+        if (distance <= threshold) {
+            // calculate similarity score (higher is better)
+            const similarity = 1 - (distance / Math.max(lowerQuery.length, word.length))
+
+            // boost score for prefix matches
+            const isPrefixMatch = word.startsWith(lowerQuery)
+            const score = isPrefixMatch ? similarity + 0.5 : similarity
+
+            results.push({
+                word,
+                distance,
+                score,
+                isPrefixMatch
+            })
+        }
+    }
+
+    // sort by score (descending) and then by length (ascending)
+    return results
+        .sort((a, b) => {
+            if (b.score !== a.score) return b.score - a.score
+            return a.word.length - b.word.length
+        })
+        .map(r => r.word)
+}
+
 const autoComplete = (words, searchWord) => {
     words.sort()
     const trie = new Trie()
