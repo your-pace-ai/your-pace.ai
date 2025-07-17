@@ -1,9 +1,15 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const { isAuthenticated } = require('../../middleware/middleware')
+const { AutocompleteSystem} = require('../../typeAhead/typeAhead.js')
 
 const router = express.Router()
 const prisma = new PrismaClient()
+
+// Initialize autocomplete system globally
+let autocompleteSystem = null
+let lastIndexTime = 0
+const INDEX_CACHE_TIME = 5 * 60 * 1000
 
 // Search across all content types
 router.post('/api/search',isAuthenticated, async (req, res) => {
@@ -208,6 +214,14 @@ router.post('/api/search',isAuthenticated, async (req, res) => {
            totalResults,
            query: searchTerm
        }
+
+       // update autocomplete index with search results in the background
+       if (!autocompleteSystem || Date.now() - lastIndexTime > INDEX_CACHE_TIME) {
+           autocompleteSystem = new AutocompleteSystem()
+           lastIndexTime = Date.now()
+       }
+       autocompleteSystem.updateIndex(results)
+
        res.json(results)
    } catch (error) {
        res.status(500).json({
