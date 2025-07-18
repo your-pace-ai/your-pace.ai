@@ -26,7 +26,7 @@ class Trie {
                 curr.children[c] = new TrieNode()
             }
             curr = curr.children[c]
-            curr.words.push(word)
+            // curr.words.push(word)
 
             const currFreq = curr.words.get(lowerWord) || 0
             curr.words.set(lowerWord, currFreq + frequency)
@@ -34,7 +34,7 @@ class Trie {
         curr.isEnd = true
     }
 
-    find(word) {
+    findPrefix(word) {
         let curr = this.root
         const lowerWord = word.toLowerCase()
         for (const c of lowerWord) {
