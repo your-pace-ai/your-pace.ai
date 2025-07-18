@@ -1,6 +1,6 @@
 import "./Flashcards.css"
 import { useState, useEffect } from "react"
-import { getFlashCardsFromDB } from "../../api/api.js"
+import { getFlashCardsFromDB, getFlashCardsFromDBPublic } from "../../api/api.js"
 import { FlashcardSkeleton} from "../Skeleton"
 
 export const Flashcards = ({ url, hubId }) => {
@@ -10,22 +10,54 @@ export const Flashcards = ({ url, hubId }) => {
     const [flipped, setFlipped] = useState(false)
 
     const fetchFlashcards = async () => {
-        try {
-            if (hubId || url) {
-                // Use database-first approach with both hubId and url
-                const response = await getFlashCardsFromDB(url, hubId)
-                const formattedCards = Object.entries(response).map(([id, card], index) => ({
-                    id: index + 1,
-                    question: card.front,
-                    answer: card.back
-                }))
-                setFlashcards(formattedCards);
-            }
-            setLoading(false);
-        } catch (error) {
-            setLoading(false)
-        }
-    }
+       try {
+           if (hubId) {
+               // Try public API first (works for any user's content)
+               try {
+                   const publicResponse = await getFlashCardsFromDBPublic(hubId)
+                   if (publicResponse && Object.keys(publicResponse).length > 0) {
+                       const formattedCards = Object.entries(publicResponse).map(([id, card], index) => ({
+                           id: index + 1,
+                           question: card.front,
+                           answer: card.back
+                       }))
+                       setFlashcards(formattedCards)
+                       setLoading(false)
+                       return
+                   }
+               } catch (publicError) {
+                   // If public API fails, try private API (user's own content)
+                   try {
+                       const response = await getFlashCardsFromDB(url, hubId)
+                       const formattedCards = Object.entries(response).map(([id, card], index) => ({
+                           id: index + 1,
+                           question: card.front,
+                           answer: card.back
+                       }))
+                       setFlashcards(formattedCards)
+                       setLoading(false)
+                       return
+                   } catch (privateError) {
+                   }
+               }
+           } else if (url) {
+               // Fallback for URL-only access
+               try {
+                   const response = await getFlashCardsFromDB(url, null)
+                   const formattedCards = Object.entries(response).map(([id, card], index) => ({
+                       id: index + 1,
+                       question: card.front,
+                       answer: card.back
+                   }))
+                   setFlashcards(formattedCards)
+               } catch (error) {
+               }
+           }
+           setLoading(false)
+       } catch (error) {
+           setLoading(false)
+       }
+   }
 
     useEffect(() => {
         if (hubId || url) {
