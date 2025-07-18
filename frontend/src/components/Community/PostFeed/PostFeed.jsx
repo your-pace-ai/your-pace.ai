@@ -3,6 +3,7 @@ import { getPosts, deletePost, likePost, commentOnPost, getRecommendedPosts, get
 import { PostCard } from './PostCard'
 import { PostFeedSkeleton } from '../../Skeleton'
 import './PostFeed.css'
+import { TypeAheadSearchbar } from '../../TypeAheadSearchbar/TypeAheadSearchbar.jsx'
 
 const UserList = ({ users, onFollow, feedType }) => {
     if (!users || users.length === 0) {
@@ -169,6 +170,10 @@ export const PostFeed = () => {
         }
     }
 
+    const handleSearch = (term) => {
+        // TODO: Call search API from backend
+    }
+
 
   if (loading) {
       return (
@@ -247,6 +252,8 @@ export const PostFeed = () => {
                             All Users
                    </button>
                </div>
+
+               <TypeAheadSearchbar onSearch={handleSearch}/>
 
                     <div className="content-container">
                         {feedType === 'for-you' ? (
