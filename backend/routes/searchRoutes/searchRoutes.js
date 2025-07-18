@@ -1,9 +1,15 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const { isAuthenticated } = require('../../middleware/middleware')
+const { AutocompleteSystem, buildTypeaheadIndex } = require('../../typeAhead/typeAhead.js')
 
 const router = express.Router()
 const prisma = new PrismaClient()
+
+// Initialize autocomplete system globally
+let autocompleteSystem = null
+let lastIndexTime = 0
+const INDEX_CACHE_DURATION = 5 * 60 * 1000
 
 // Search across all content types
 router.post('/api/search',isAuthenticated, async (req, res) => {
@@ -208,6 +214,14 @@ router.post('/api/search',isAuthenticated, async (req, res) => {
            totalResults,
            query: searchTerm
        }
+
+       // update autocomplete index with search results in the background
+       if (!autocompleteSystem || Date.now() - lastIndexTime > INDEX_CACHE_DURATION) {
+           autocompleteSystem = new AutocompleteSystem()
+           lastIndexTime = Date.now()
+       }
+       autocompleteSystem.indexContent(results)
+
        res.json(results)
    } catch (error) {
        res.status(500).json({
@@ -215,6 +229,52 @@ router.post('/api/search',isAuthenticated, async (req, res) => {
            details: error.message
        })
    }
+})
+
+// typeahead autocomplete with fuzzy search
+router.post('/api/typeahead', async (req, res) => {
+    try {
+        const {
+            query,
+            maxResults = 10,
+            includeFuzzy = true,
+            rebuildIndex = false
+        } = req.body
+
+        if (!query || query.trim() === '') {
+            return res.json({ suggestions: [] })
+        }
+
+        // rebuild index if requested or if it's stale
+        if (!autocompleteSystem || rebuildIndex || Date.now() - lastIndexTime > INDEX_CACHE_DURATION) {
+            autocompleteSystem = new AutocompleteSystem()
+            lastIndexTime = Date.now()
+
+            // fetch sample data to build index
+            const indexData = await buildTypeaheadIndex()
+            autocompleteSystem.indexContent(indexData)
+        }
+
+        // get suggestions
+        const suggestions = autocompleteSystem.search(query, {
+            maxResults,
+            includeFuzzy,
+            // dynamic threshold based on query length
+            fuzzyThreshold: Math.min(3, Math.floor(query.length / 3))
+        })
+
+        res.json({
+            query,
+            suggestions,
+            totalFound: suggestions.length
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            error: 'Typeahead failed',
+            details: error.message
+        })
+    }
 })
 
 module.exports = router
