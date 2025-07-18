@@ -320,3 +320,13 @@
        background-position: calc(200px + 100%) 0;
    }
 }
+
+.post-feed .search-bar-container {
+   margin: 0 20px 1rem 1px;
+}
+
+@media (max-width: 768px) {
+   .post-feed .search-bar-container {
+       margin: 0 16px 1rem 16px;
+   }
+}
