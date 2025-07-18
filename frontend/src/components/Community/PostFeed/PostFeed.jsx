@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getPosts, deletePost, likePost, commentOnPost, getRecommendedPosts, getFollowers, getFollowing, getAllUsers, followUser, unfollowUser } from '../../../api/api'
+import { getPosts, deletePost, likePost, commentOnPost, getRecommendedPosts, getFollowers, getFollowing, getAllUsers, followUser, unfollowUser, searchContent } from '../../../api/api'
 import { PostCard } from './PostCard'
 import { PostFeedSkeleton } from '../../Skeleton'
 import './PostFeed.css'
@@ -170,8 +170,16 @@ export const PostFeed = () => {
         }
     }
 
-    const handleSearch = (term) => {
-        // TODO: Call search API from backend
+    const handleSearch = async (term) => {
+        if (!term || !term.trim()) return
+
+        try {
+            const searchResults = await searchContent(term)
+            setPosts(searchResults.posts || [])
+            setFeedType('search')
+        } catch (error) {
+            setPosts([])
+        }
     }
 
 
