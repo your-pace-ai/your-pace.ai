@@ -7,6 +7,63 @@ const fetch = require("../../utils/fetch.js")
 const prisma = new PrismaClient()
 const router = Router()
 
+// Public endpoint to get quizzes for any subhub
+router.get("/api/quizzes/:subHubId/public", isAuthenticated, async (req, res) => {
+   try {
+       const { subHubId } = req.params
+
+       const subHub = await prisma.subHub.findFirst({
+           where: {
+               id: parseInt(subHubId)
+           },
+           include: {
+               quiz: {
+                   orderBy: {
+                       id: 'asc'
+                   }
+               }
+           }
+       })
+
+       if (!subHub) return res.status(404).json({ error: "SubHub not found" })
+       if (subHub.quiz && subHub.quiz.length > 0) {
+           const quizData = {
+               easy: [],
+               medium: [],
+               hard: []
+           }
+           // Organize quizzes by difficulty
+           const quizzes = subHub.quiz
+           const perDifficulty = Math.ceil(quizzes.length / 3)
+
+
+           quizzes.forEach((quiz, index) => {
+               const formattedQuiz = {
+                   question: quiz.question,
+                   options: quiz.options,
+                   ans: quiz.answer,
+                   explanation: quiz.explanation || "No explanation provided"
+               }
+               if (index < perDifficulty) {
+                   quizData.easy.push(formattedQuiz)
+               } else if (index < perDifficulty * 2) {
+                   quizData.medium.push(formattedQuiz)
+               } else {
+                   quizData.hard.push(formattedQuiz)
+               }
+           })
+           res.json(quizData)
+       } else {
+           res.json({ easy: [], medium: [], hard: [] })
+       }
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to fetch quizzes",
+           details: error.message
+       })
+   }
+})
+
 // Smart quiz endpoint - checks database first, then calls agent if needed
 router.post("/api/quizzes/smart-get", isAuthenticated, async (req, res) => {
    try {
