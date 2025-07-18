@@ -10,24 +10,60 @@ This is a **Recommendation Algorithm** that combines a discovery-focused approac
 ## Algorithm Philosophy
 
 
-The algorithm operates on the principle that users should see:
+The algorithm now combines traditional content-based filtering with **Matrix Factorization using Gradient Descent**
+
+
+The enhanced system operates on multiple principles:
 1. **Educational content** (prioritized but not overwhelming)
 2. **Viral/trending posts** (TikTok-style discovery)
 3. **Content from followed users** (personal relevance)
 4. **New creator content** (platform diversity)
 5. **Recent content** (freshness)
+6. **Collaborative filtering** (user-item matrix factorization)
+7. **Dynamic weight adjustment** (learned through gradient descent)
 
 
-## Scoring Formula
+
+
+## Enhanced Scoring Formula
+
+
+The algorithm now uses a hybrid approach combining content-based filtering with collaborative filtering:
 
 
 ```
-Final Score = CategoryScore + EngagementScore + FollowingScore + TrendingScore + DiscoveryScore + RecencyScore
+Final Score = Base Score + Collaborative Score + Similarity Bonus
 ```
 
 
-Each component is weighted by its respective coefficient and calculated independently.
+Where:
+- **Base Score** = CategoryScore + EngagementScore + FollowingScore + TrendingScore + DiscoveryScore + RecencyScore
+- **Collaborative Score** = Matrix Factorization Prediction × 0.3
+- **Similarity Bonus** = Item Similarity Score × 0.2
 
+
+### Matrix Factorization Component
+
+
+The collaborative filtering uses **Matrix Factorization with Gradient Descent** to learn latent user preferences:
+
+
+```
+Prediction = GlobalMean + UserBias + ItemBias + UserFactors · ItemFactors
+```
+
+
+**Gradient Descent Updates:**
+- ∂L/∂user_bias = -2 × error + 2 × λ × user_bias
+- ∂L/∂item_bias = -2 × error + 2 × λ × item_bias
+- ∂L/∂user_factor = -2 × error × item_factor + 2 × λ × user_factor
+- ∂L/∂item_factor = -2 × error × user_factor + 2 × λ × item_factor
+
+
+**Loss Function:**
+```
+L = Σ(actual - predicted)² + λ × (||U||² + ||V||² + ||user_bias||² + ||item_bias||²)
+```
 
 ## Main Algorithm Coefficients
 
