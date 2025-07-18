@@ -10,6 +10,76 @@ const prisma = new PrismaClient()
 const router = Router()
 const invalidator = new SimpleInvalidator(cacheManager)
 
+// Public endpoint to get any subhub by ID (for viewing other users' content)
+router.get("/api/subhub/:subHubId/public", isAuthenticated, async (req, res) => {
+   try {
+       const { subHubId } = req.params
+
+       const subHub = await prisma.subHub.findFirst({
+           where: {
+               id: parseInt(subHubId)
+           },
+           include: {
+               learningHub: {
+                   select: {
+                       id: true,
+                       name: true,
+                       userId: true
+                   }
+               }
+           }
+       })
+
+       if (!subHub) {
+           return res.status(404).json({ error: "SubHub not found" })
+       }
+
+       res.json(subHub)
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to fetch subhub",
+           details: error.message
+       })
+   }
+})
+
+
+// Public endpoint to get chapters for any subhub
+router.get("/api/subhub/:subHubId/chapters/public", isAuthenticated, async (req, res) => {
+   try {
+       const { subHubId } = req.params
+
+       const subHub = await prisma.subHub.findFirst({
+           where: {
+               id: parseInt(subHubId)
+           },
+           include: {
+               chapters: {
+                   orderBy: {
+                       id: 'asc'
+                   }
+               }
+           }
+       })
+
+       if (!subHub) return res.status(404).json({ error: "SubHub not found" })
+
+       res.json({
+           subHub: {
+               id: subHub.id,
+               name: subHub.name,
+               youtubeUrl: subHub.youtubeUrl
+           },
+           chapters: subHub.chapters
+       })
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to fetch chapters",
+           details: error.message
+       })
+   }
+})
+
 // get all subhubs for a learning hub
 router.get("/api/learning-hub/subhub", isAuthenticated, async (req, res) => {
    try {
