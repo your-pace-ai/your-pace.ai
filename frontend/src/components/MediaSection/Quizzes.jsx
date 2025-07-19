@@ -27,6 +27,7 @@ export const Quizzes = ({ url,hubId }) => {
                        return
                    }
                } catch (publicError) {
+               }
                    // If public API fails, try private API (user's own content)
                    try {
                        const data = await getQuizFromDB(url, hubId)
@@ -35,7 +36,7 @@ export const Quizzes = ({ url,hubId }) => {
                        return
                    } catch (privateError) {
                    }
-               }
+
            } else if (url) {
                try {
                    const data = await getQuizFromDB(url, null)
