@@ -104,6 +104,20 @@
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
  }
 
+ .shared-subhub-badge.clickable {
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.shared-subhub-badge.clickable:hover {
+   background: linear-gradient(45deg, #4f46e5, #7c3aed);
+   transform: translateY(-1px);
+   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.shared-subhub-badge.clickable:active {
+   transform: translateY(0);
+}
 
  .post-image {
     width: 100%;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './PostCard.css'
 import { currentUser } from '../../../api/api'
 import { CommentSection } from './CommentSection'
@@ -10,6 +11,7 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
    const [isLiking, setIsLiking] = useState(false)
    const [isCommenting, setIsCommenting] = useState(false)
    const [currentUserId, setCurrentUserId] = useState("")
+   const navigate = useNavigate()
 
 
    useEffect(() => {
@@ -50,6 +52,18 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
            onDelete(post.id)
    }
 
+   const handleSharedSubHubClick = () => {
+      if (post.sharedSubHub && post.sharedSubHub.youtubeUrl) {
+          navigate('/subhub', {
+              state: {
+                  youtubeUrl: post.sharedSubHub.youtubeUrl,
+                  hubName: post.sharedSubHub.name,
+                  hubId: post.sharedSubHub.id,
+              }
+          })
+      }
+  }
+
    const isOwnPost = post.userId === currentUserId
 
 
@@ -75,7 +89,10 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
            <div className="post-content">
                <h3 className="post-title">{post.title}</h3>
                {post.sharedSubHub && (
-                   <div className="shared-subhub-badge">
+                   <div className="shared-subhub-badge clickable"
+                        onClick={handleSharedSubHubClick}
+                        title='Click to view shared subhub'
+                    >
                        📚 Shared Learning: {post.sharedSubHub.name}
                    </div>
                )}
