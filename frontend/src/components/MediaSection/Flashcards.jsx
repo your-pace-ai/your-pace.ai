@@ -26,6 +26,7 @@ export const Flashcards = ({ url, hubId }) => {
                        return
                    }
                } catch (publicError) {
+               }
                    // If public API fails, try private API (user's own content)
                    try {
                        const response = await getFlashCardsFromDB(url, hubId)
@@ -38,7 +39,6 @@ export const Flashcards = ({ url, hubId }) => {
                        setLoading(false)
                        return
                    } catch (privateError) {
-                   }
                }
            } else if (url) {
                // Fallback for URL-only access
