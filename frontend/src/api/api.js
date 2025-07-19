@@ -424,3 +424,71 @@ export const getQuizFromDB = async (youtubeUrl, subHubId = null) => {
     const data = await response.json()
     return data
 }
+
+export const getTypeaheadSuggestions = async (query) => {
+   const response = await fetch(`${apiUrl}/typeahead`, {
+       method: "POST",
+       credentials: "include",
+       headers: {
+           "Content-Type": "application/json"
+       },
+       body: JSON.stringify({ query })
+   })
+   if (!response.ok) throw new Error("Failed to get typeahead suggestions")
+   const data = await response.json()
+   return data
+}
+
+export const searchContent = async (query) => {
+   const response = await fetch(`${apiUrl}/search`, {
+       method: "POST",
+       credentials: "include",
+       headers: {
+           "Content-Type": "application/json"
+       },
+       body: JSON.stringify({ query })
+   })
+   if (!response.ok) throw new Error("Failed to search content")
+   const data = await response.json()
+   return data
+}
+
+export const getSubHubPublic = async (subHubId) => {
+   const response = await fetch(`${apiUrl}/subhub/${subHubId}/public`, {
+       method: "GET",
+       credentials: "include"
+   })
+   if (!response.ok) throw new Error("Failed to get subhub")
+   const data = await response.json()
+   return data
+}
+
+export const getChaptersFromDBPublic = async (subHubId) => {
+   const response = await fetch(`${apiUrl}/subhub/${subHubId}/chapters/public`, {
+       method: "GET",
+       credentials: "include"
+   })
+   if (!response.ok) throw new Error("Failed to get chapters")
+   const data = await response.json()
+   return data
+}
+
+export const getFlashCardsFromDBPublic = async (subHubId) => {
+   const response = await fetch(`${apiUrl}/flashcards/${subHubId}/public`, {
+       method: "GET",
+       credentials: "include"
+   })
+   if (!response.ok) throw new Error("Failed to get flashcards")
+   const data = await response.json()
+   return data
+}
+
+export const getQuizFromDBPublic = async (subHubId) => {
+   const response = await fetch(`${apiUrl}/quizzes/${subHubId}/public`, {
+       method: "GET",
+       credentials: "include"
+   })
+   if (!response.ok) throw new Error("Failed to get quizzes")
+   const data = await response.json()
+   return data
+}

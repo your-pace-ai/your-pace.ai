@@ -1,6 +1,6 @@
 import "./Quizzes.css"
 import { useState, useEffect } from "react"
-import { getQuizFromDB } from "../../api/api.js"
+import { getQuizFromDB, getQuizFromDBPublic } from "../../api/api.js"
 import { QuizSkeleton} from "../Skeleton"
 
 export const Quizzes = ({ url,hubId }) => {
@@ -13,15 +13,38 @@ export const Quizzes = ({ url,hubId }) => {
     const [showResult, setShowResult] = useState(false)
     const [score, setScore] = useState(0)
 
-    const fetchQuizzes = async () => {
-        try {
-            setLoading(true);
-            if (hubId || url) {
-                // Use database-first approach with both hubId and url
-                const data = await getQuizFromDB(url, hubId)
-                setQuizzes(data)
-            }
-            setLoading(false)
+
+   const fetchQuizzes = async () => {
+       try {
+           setLoading(true)
+           if (hubId) {
+               // Try public API first (works for any user's content)
+               try {
+                   const publicResponse = await getQuizFromDBPublic(hubId)
+                   if (publicResponse && (publicResponse.easy?.length > 0 || publicResponse.medium?.length > 0 || publicResponse.hard?.length > 0)) {
+                       setQuizzes(publicResponse)
+                       setLoading(false)
+                       return
+                   }
+               } catch (publicError) {
+               }
+                   // If public API fails, try private API (user's own content)
+                   try {
+                       const data = await getQuizFromDB(url, hubId)
+                       setQuizzes(data)
+                       setLoading(false)
+                       return
+                   } catch (privateError) {
+                   }
+
+           } else if (url) {
+               try {
+                   const data = await getQuizFromDB(url, null)
+                   setQuizzes(data)
+               } catch (error) {
+               }
+           }
+           setLoading(false)
         } catch (err) {
             setError("Failed to load quizzes")
             setLoading(false)
