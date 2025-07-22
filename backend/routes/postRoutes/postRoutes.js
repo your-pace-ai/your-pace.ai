@@ -379,9 +379,9 @@ router.post("/api/posts/share-subhub", isAuthenticated, async (req, res) => {
            data: {
                title: postTitle,
                content: postContent,
-               userId,
+               userId: userId,
                sharedSubHubId: parseInt(subHubId),
-               thumbnail
+               thumbnail: thumbnail
            },
            include: {
                user: {
