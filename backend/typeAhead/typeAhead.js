@@ -26,8 +26,7 @@ class Trie {
                 curr.children[c] = new TrieNode()
             }
             curr = curr.children[c]
-            // curr.words.push(word)
-
+            
             const currFreq = curr.words.get(lowerWord) || 0
             curr.words.set(lowerWord, currFreq + frequency)
         }
