@@ -49,15 +49,17 @@ const UserList = ({ users, onFollow, feedType }) => {
 export const PostFeed = () => {
     const [posts, setPosts] = useState([])
     const [users, setUsers] = useState([])
-   const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [feedType, setFeedType] = useState('for-you')
-   const [currentPage, setCurrentPage] = useState(1)
-   const [pagination, setPagination] = useState({
-       totalPages: 1,
-       currentPage: 1,
-       hasPrev: false,
-       hasNext: false
-   })
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pagination, setPagination] = useState({
+        totalPages: 1,
+        currentPage: 1,
+        hasPrev: false,
+        hasNext: false
+    })
+    const [searchRequestId, setSearchRequestId] = useState(0)
+
 
    useEffect(() => {
         if (feedType === 'for-you' || feedType === 'posts') {
@@ -141,20 +143,19 @@ export const PostFeed = () => {
     const handleComment = async (postId, commentText) => {
         try {
             const newComment = await commentOnPost(postId, commentText)
-
             setPosts(posts.map(post => {
-                if (post.id === postId) {
-                    return {
-                        ...post,
-                        comment: [...(post.comment || []), newComment]
-                    }
-                }
-                return post
-            }))
-        } catch (error) {
-            // Error handled silently
-        }
-    }
+               if (post.id === postId) {
+                   return {
+                       ...post,
+                       comment: [...(post.comment || []), newComment]
+                   }
+               }
+               return post
+           }))
+       } catch (error) {
+           // Error handled silently
+       }
+   }
 
     const handleFollow = async (userId, isCurrentlyFollowing) => {
         try {
@@ -171,16 +172,24 @@ export const PostFeed = () => {
     }
 
     const handleSearch = async (term) => {
-        if (!term || !term.trim()) return
+       if (!term || !term.trim()) return
 
-        try {
-            const searchResults = await searchContent(term)
-            setPosts(searchResults.posts || [])
-            setFeedType('search')
-        } catch (error) {
-            setPosts([])
-        }
-    }
+       const currentRequestId = searchRequestId + 1
+       setSearchRequestId(currentRequestId)
+
+       try {
+           const searchResults = await searchContent(term)
+
+           if (currentRequestId === searchRequestId) {
+               setPosts(searchResults.posts || [])
+               setFeedType('search')
+           }
+       } catch (error) {
+           if (currentRequestId === searchRequestId) {
+               setPosts([])
+           }
+       }
+   }
 
 
   if (loading) {
