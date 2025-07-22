@@ -39,7 +39,9 @@ export const Flashcards = ({ url, hubId }) => {
                        setLoading(false)
                        return
                    } catch (privateError) {
-               }
+
+                   }
+
            } else if (url) {
                // Fallback for URL-only access
                try {

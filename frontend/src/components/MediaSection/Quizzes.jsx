@@ -36,6 +36,7 @@ export const Quizzes = ({ url,hubId }) => {
                        return
                    } catch (privateError) {
                    }
+
            } else if (url) {
                try {
                    const data = await getQuizFromDB(url, null)
