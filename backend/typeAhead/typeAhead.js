@@ -229,5 +229,6 @@ const buildTypeaheadIndex = async () => {
 
 module.exports = {
     buildTypeaheadIndex,
-    AutocompleteSystem
+    AutocompleteSystem,
+    levenshteinDistance
 }

@@ -7,6 +7,45 @@ const fetch = require("../../utils/fetch.js")
 const prisma = new PrismaClient()
 const router = Router()
 
+// Public endpoint to get flashcards for any subhub (this is for the type ahead feature. I need content to be accessible publicly to other authenticated users)
+router.get("/api/flashcards/:subHubId/public", isAuthenticated, async (req, res) => {
+   try {
+       const { subHubId } = req.params
+
+       const subHub = await prisma.subHub.findFirst({
+           where: {
+               id: parseInt(subHubId)
+           },
+           include: {
+               flashCard: {
+                   orderBy: {
+                       id: 'asc'
+                   }
+               }
+           }
+       })
+
+       if (!subHub) return res.status(404).json({ error: "SubHub not found" })
+       if (subHub.flashCard && subHub.flashCard.length > 0) {
+           const flashcardsData = {}
+           subHub.flashCard.forEach((card, index) => {
+               flashcardsData[`flashcard${index + 1}`] = {
+                   front: card.question,
+                   back: card.answer
+               }
+           })
+           res.json(flashcardsData)
+       } else {
+           res.json({})
+       }
+   } catch (error) {
+       res.status(500).json({
+           error: "Failed to fetch flashcards",
+           details: error.message
+       })
+   }
+})
+
 // Smart flashcards endpoint - checks database first, then calls agent if needed
 router.post("/api/flashcards/smart-get", isAuthenticated, async (req, res) => {
    try {
