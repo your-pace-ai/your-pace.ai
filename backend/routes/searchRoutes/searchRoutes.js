@@ -30,195 +30,196 @@ router.post('/api/search',isAuthenticated, async (req, res) => {
        }
 
        const searchTerm = query.trim()
-       const searchLimit = parseInt(limit)
+       const searchLimit = Number(limit)
 
-       // Search Flashcards
-       const flashcards = await prisma.flashCard.findMany({
-           where: {
-               OR: [
-                   { question: { contains: searchTerm, mode: 'insensitive' } },
-                   { answer: { contains: searchTerm, mode: 'insensitive' } }
-               ]
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       learningHub: {
-                           select: {
-                               id: true,
-                               name: true
-                           }
-                       }
-                   }
-               }
-           },
-           take: searchLimit
-       })
+      // Search all content types in parallel
+        const [flashcards, quizzes, subHubs, chapters, posts] = await Promise.all([
+          // Search Flashcards
+          prisma.flashCard.findMany({
+              where: {
+                  OR: [
+                      { question: { contains: searchTerm, mode: 'insensitive' } },
+                      { answer: { contains: searchTerm, mode: 'insensitive' } }
+                  ]
+              },
+              include: {
+                  subHub: {
+                      select: {
+                          id: true,
+                          name: true,
+                          learningHub: {
+                              select: {
+                                  id: true,
+                                  name: true
+                              }
+                          }
+                      }
+                  }
+              },
+              take: searchLimit
+          }),
+          // Search Quizzes
+          prisma.quiz.findMany({
+              where: {
+                  OR: [
+                      { question: { contains: searchTerm, mode: 'insensitive' } },
+                      { answer: { contains: searchTerm, mode: 'insensitive' } }
+                  ]
+              },
+              include: {
+                  subHub: {
+                      select: {
+                          id: true,
+                          name: true,
+                          learningHub: {
+                              select: {
+                                  id: true,
+                                  name: true
+                              }
+                          }
+                      }
+                  }
+              },
+              take: searchLimit
+          }),
+          // Search SubHubs
+          prisma.subHub.findMany({
+              where: {
+                  OR: [
+                      { name: { contains: searchTerm, mode: 'insensitive' } },
+                      { aiSummary: { contains: searchTerm, mode: 'insensitive' } }
+                  ]
+              },
+              include: {
+                  learningHub: {
+                      select: {
+                          id: true,
+                          name: true
+                      }
+                  },
+                  _count: {
+                      select: {
+                          chapters: true
+                      }
+                  }
+              },
+              take: searchLimit
+          }),
+          // Search Chapters
+          prisma.chapter.findMany({
+              where: {
+                  OR: [
+                      { title: { contains: searchTerm, mode: 'insensitive' } },
+                      { summary: { contains: searchTerm, mode: 'insensitive' } }
+                  ]
+              },
+              include: {
+                  subHub: {
+                      select: {
+                          id: true,
+                          name: true,
+                          learningHub: {
+                              select: {
+                                  id: true,
+                                  name: true
+                              }
+                          }
+                      }
+                  }
+              },
+              take: searchLimit
+          }),
+          // Search Posts
+          prisma.post.findMany({
+              where: {
+                  OR: [
+                      { title: { contains: searchTerm, mode: 'insensitive' } },
+                      { content: { contains: searchTerm, mode: 'insensitive' } }
+                  ]
+              },
+              include: {
+                  user: {
+                      select: {
+                          id: true,
+                          firstName: true,
+                          lastName: true,
+                          email: true
+                      }
+                  },
+                  sharedSubHub: {
+                      select: {
+                          id: true,
+                          name: true,
+                          learningHub: {
+                              select: {
+                                  id: true,
+                                  name: true
+                              }
+                          }
+                      }
+                  }
+              },
+              take: searchLimit
+          })
+      ])
 
-       // Search Quizzes
-       const quizzes = await prisma.quiz.findMany({
-           where: {
-               OR: [
-                   { question: { contains: searchTerm, mode: 'insensitive' } },
-                   { answer: { contains: searchTerm, mode: 'insensitive' } }
-               ]
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       learningHub: {
-                           select: {
-                               id: true,
-                               name: true
-                           }
-                       }
-                   }
-               }
-           },
-           take: searchLimit
-       })
 
-       // Search SubHubs
-       const subHubs = await prisma.subHub.findMany({
-           where: {
-               OR: [
-                   { name: { contains: searchTerm, mode: 'insensitive' } },
-                   { aiSummary: { contains: searchTerm, mode: 'insensitive' } }
-               ]
-           },
-           include: {
-               learningHub: {
-                   select: {
-                       id: true,
-                       name: true
-                   }
-               },
-               _count: {
-                   select: {
-                       chapters: true
-                   }
-               }
-           },
-           take: searchLimit
-       })
+      // Calculate total results
+      const totalResults = flashcards.length + quizzes.length + subHubs.length + chapters.length + posts.length
 
-       // Search Chapters
-       const chapters = await prisma.chapter.findMany({
-           where: {
-               OR: [
-                   { title: { contains: searchTerm, mode: 'insensitive' } },
-                   { summary: { contains: searchTerm, mode: 'insensitive' } }
-               ]
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       learningHub: {
-                           select: {
-                               id: true,
-                               name: true
-                           }
-                       }
-                   }
-               }
-           },
-           take: searchLimit
-       })
 
-       // Search Posts
-       const posts = await prisma.post.findMany({
-           where: {
-               OR: [
-                   { title: { contains: searchTerm, mode: 'insensitive' } },
-                   { content: { contains: searchTerm, mode: 'insensitive' } }
-               ]
-           },
-           include: {
-               user: {
-                   select: {
-                       id: true,
-                       firstName: true,
-                       lastName: true,
-                       email: true
-                   }
-               },
-               sharedSubHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       learningHub: {
-                           select: {
-                               id: true,
-                               name: true
-                           }
-                       }
-                   }
-               }
-           },
-           take: searchLimit
-       })
-
-       // Calculate total results
-       const totalResults = flashcards.length + quizzes.length + subHubs.length + chapters.length + posts.length
-
-       // Format the response
-       const results = {
-           flashcards: flashcards.map(card => ({
-               id: card.id,
-               type: 'flashcard',
-               title: `Flashcard: ${card.question.substring(0, 50)}...`,
-               content: card.answer,
-               question: card.question,
-               answer: card.answer,
-               subHub: card.subHub
-           })),
-           quizzes: quizzes.map(quiz => ({
-               id: quiz.id,
-               type: 'quiz',
-               title: `Quiz: ${quiz.question.substring(0, 50)}...`,
-               content: quiz.answer,
-               question: quiz.question,
-               answer: quiz.answer,
-               options: quiz.options,
-               subHub: quiz.subHub
-           })),
-           subHubs: subHubs.map(subHub => ({
-               id: subHub.id,
-               type: 'subhub',
-               title: subHub.name,
-               name: subHub.name,
-               content: subHub.aiSummary,
-               description: subHub.aiSummary,
-               learningHub: subHub.learningHubId,
-               chapterCount: subHub._count.chapters,
-               youtubeUrl: subHub.youtubeUrl,
-               category: subHub.category
-           })),
-           chapters: chapters.map(chapter => ({
-               id: chapter.id,
-               type: 'chapter',
-               title: chapter.title,
-               content: chapter.summary?.substring(0, 200) + (chapter.summary?.length > 200 ? '...' : ''),
-               fullContent: chapter.summary,
-               subHub: chapter.subHubId,
-           })),
-           posts: posts.map(post => ({
-               id: post.id,
-               type: 'post',
-               title: post.title,
-               content: post.content?.substring(0, 200) + (post.content?.length > 200 ? '...' : ''),
-               user: post.user,
-               subHub: post.sharedSubHub,
-           })),
-           totalResults,
-           query: searchTerm
-       }
+      // Format the response
+      const results = {
+          flashcards: flashcards.map(card => ({
+              id: card.id,
+              type: 'flashcard',
+              title: `Flashcard: ${card.question.substring(0, 50)}...`,
+              content: card.answer,
+              question: card.question,
+              answer: card.answer,
+              subHub: card.subHub
+          })),
+          quizzes: quizzes.map(quiz => ({
+              id: quiz.id,
+              type: 'quiz',
+              title: `Quiz: ${quiz.question.substring(0, 50)}...`,
+              content: quiz.answer,
+              question: quiz.question,
+              answer: quiz.answer,
+              options: quiz.options,
+              subHub: quiz.subHub
+          })),
+          subHubs: subHubs.map(subHub => ({
+              id: subHub.id,
+              type: 'subhub',
+              title: subHub.name,
+              name: subHub.name,
+              content: subHub.aiSummary,
+              description: subHub.aiSummary,
+              learningHub: subHub.learningHubId,
+              chapterCount: subHub._count.chapters,
+              youtubeUrl: subHub.youtubeUrl,
+              category: subHub.category
+          })),
+          chapters: chapters.map(chapter => ({
+              id: chapter.id,
+              type: 'chapter',
+              title: chapter.title,
+              content: chapter.summary?.substring(0, 200) + (chapter.summary?.length > 200 ? '...' : ''),
+              fullContent: chapter.summary,
+              subHub: chapter.subHubId,
+          })),
+          posts: posts.map(post => ({
+              id: post.id,
+              type: 'post',
+              title: post.title,
+              content: post.content?.substring(0, 200) + (post.content?.length > 200 ? '...' : ''),
+              user: post.user,
+              subHub: post.sharedSubHub,
+          })),
+          totalResults,
+          query: searchTerm
+      }
 
        // update autocomplete index with search results in the background
        if (!autocompleteSystem || Date.now() - lastIndexTime > INDEX_CACHE_DURATION) {
@@ -317,98 +318,95 @@ router.post('/api/typeahead', isAuthenticated, async (req, res) => {
            }
        }
 
-       // Search SubHubs with fuzzy patterns
-       const subHubs = await prisma.subHub.findMany({
-           where: {
-               OR: fuzzyPatterns.flatMap(pattern => [
-                   { name: { contains: pattern, mode: 'insensitive' } },
-                   { aiSummary: { contains: pattern, mode: 'insensitive' } }
-               ])
-           },
-           take: searchLimit
-       })
-
-       // Search Chapters with fuzzy patterns
-       const chapters = await prisma.chapter.findMany({
-           where: {
-               OR: fuzzyPatterns.flatMap(pattern => [
-                   { title: { contains: pattern, mode: 'insensitive' } },
-                   { summary: { contains: pattern, mode: 'insensitive' } }
-               ])
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       youtubeUrl: true
+       // Search all content types with fuzzy patterns in parallel
+       const [subHubs, chapters, flashcards, quizzes, posts] = await Promise.all([
+           // Search SubHubs with fuzzy patterns
+           prisma.subHub.findMany({
+               where: {
+                   OR: fuzzyPatterns.flatMap(pattern => [
+                       { name: { contains: pattern, mode: 'insensitive' } },
+                       { aiSummary: { contains: pattern, mode: 'insensitive' } }
+                   ])
+               },
+               take: searchLimit
+           }),
+           // Search Chapters with fuzzy patterns
+           prisma.chapter.findMany({
+               where: {
+                   OR: fuzzyPatterns.flatMap(pattern => [
+                       { title: { contains: pattern, mode: 'insensitive' } },
+                       { summary: { contains: pattern, mode: 'insensitive' } }
+                   ])
+               },
+               include: {
+                   subHub: {
+                       select: {
+                           id: true,
+                           name: true,
+                           youtubeUrl: true
+                       }
                    }
-               }
-           },
-           take: searchLimit
-       })
-
-       // Search Flashcards with fuzzy patterns
-       const flashcards = await prisma.flashCard.findMany({
-           where: {
-               OR: fuzzyPatterns.flatMap(pattern => [
-                   { question: { contains: pattern, mode: 'insensitive' } },
-                   { answer: { contains: pattern, mode: 'insensitive' } }
-               ])
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       youtubeUrl: true
+               },
+               take: searchLimit
+           }),
+           // Search Flashcards with fuzzy patterns
+           prisma.flashCard.findMany({
+               where: {
+                   OR: fuzzyPatterns.flatMap(pattern => [
+                       { question: { contains: pattern, mode: 'insensitive' } },
+                       { answer: { contains: pattern, mode: 'insensitive' } }
+                   ])
+               },
+               include: {
+                   subHub: {
+                       select: {
+                           id: true,
+                           name: true,
+                           youtubeUrl: true
+                       }
                    }
-               }
-           },
-           take: searchLimit
-       })
-
-
-       // Search Quizzes with fuzzy patterns
-       const quizzes = await prisma.quiz.findMany({
-           where: {
-               OR: fuzzyPatterns.flatMap(pattern => [
-                   { question: { contains: pattern, mode: 'insensitive' } },
-                   { answer: { contains: pattern, mode: 'insensitive' } }
-               ])
-           },
-           include: {
-               subHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       youtubeUrl: true
+               },
+               take: searchLimit
+           }),
+           // Search Quizzes with fuzzy patterns
+           prisma.quiz.findMany({
+               where: {
+                   OR: fuzzyPatterns.flatMap(pattern => [
+                       { question: { contains: pattern, mode: 'insensitive' } },
+                       { answer: { contains: pattern, mode: 'insensitive' } }
+                   ])
+               },
+               include: {
+                   subHub: {
+                       select: {
+                           id: true,
+                           name: true,
+                           youtubeUrl: true
+                       }
                    }
-               }
-           },
-           take: searchLimit
-       })
-
-
-       // Search Posts with fuzzy patterns
-       const posts = await prisma.post.findMany({
-           where: {
-               OR: fuzzyPatterns.flatMap(pattern => [
-                   { title: { contains: pattern, mode: 'insensitive' } },
-                   { content: { contains: pattern, mode: 'insensitive' } }
-               ])
-           },
-           include: {
-               sharedSubHub: {
-                   select: {
-                       id: true,
-                       name: true,
-                       youtubeUrl: true
+               },
+               take: searchLimit
+           }),
+           // Search Posts with fuzzy patterns
+           prisma.post.findMany({
+               where: {
+                   OR: fuzzyPatterns.flatMap(pattern => [
+                       { title: { contains: pattern, mode: 'insensitive' } },
+                       { content: { contains: pattern, mode: 'insensitive' } }
+                   ])
+               },
+               include: {
+                   sharedSubHub: {
+                       select: {
+                           id: true,
+                           name: true,
+                           youtubeUrl: true
+                       }
                    }
-               }
-           },
-           take: searchLimit
-       })
+               },
+               take: searchLimit
+           })
+       ])
 
        // Helper function to calculate relevance score
        const calculateScore = (text, query) => {
