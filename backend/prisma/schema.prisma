@@ -49,6 +49,7 @@ model Post {
     content String
     createdAt DateTime @default(now())
     like Int @default(0)
+    thumbnail String?
     user User @relation(fields: [userId], references: [id])
     userId String
     comment PostComment []

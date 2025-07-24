@@ -12,9 +12,15 @@ export const SubHubCard = (props) => {
 
     if (isSharing) return
 
-    setIsSharing(true)
+
+   setIsSharing(true)
+
+   // Ensure minimum display time of 1.5 seconds for better UX
+   const startTime = Date.now()
+   const minDisplayTime = 1500 // 1.5 seconds
+
     try {
-      // Let the backend generate smart content from chapters
+      // backend generate smart content from chapters
       await shareSubHub(props.id)
 
       // Show success feedback
@@ -22,11 +28,17 @@ export const SubHubCard = (props) => {
         props.onShare()
       }
     } catch (error) {
-      // Error handling could be improved with a toast notification system
+      // throw new Error("Failed to share subhub")
     } finally {
-      setIsSharing(false)
-    }
-  }
+      // shows the "Sharing..." text for at least the minimum time
+      const elapsed = Date.now() - startTime
+      const remainingTime = Math.max(0, minDisplayTime - elapsed)
+
+      setTimeout(() => {
+        setIsSharing(false)
+      }, remainingTime)
+   }
+ }
 
   const handleDelete = async (e) => {
     e.preventDefault()
@@ -41,7 +53,7 @@ export const SubHubCard = (props) => {
       throw new Error("Failed to delete subhub")
     }
   }
-  
+
   return (
     <div className="subhub-card">
       <Link

@@ -3,6 +3,9 @@ const { Router } = express
 const { PrismaClient } = require("@prisma/client")
 const { isAuthenticated } = require("../../middleware/middleware.js")
 const fetch = require("../../utils/fetch.js")
+const { extractThumbnailFromUrl } = require("../../utils/youtubeThumbnail.js")
+const topKRecommendations = require("../../recommendationAlgo/recommendation")
+
 const prisma = new PrismaClient()
 const router = Router()
 
@@ -104,12 +107,25 @@ router.post("/api/posts", isAuthenticated, async (req, res) => {
         const { title, content, sharedSubHubId } = req.body
         const userId = req.user.id
 
+       // Get thumbnail from shared SubHub if available
+       let thumbnail = null
+       if (sharedSubHubId) {
+           const sharedSubHub = await prisma.subHub.findUnique({
+               where: { id: parseInt(sharedSubHubId) },
+               select: { youtubeUrl: true }
+           })
+           if (sharedSubHub && sharedSubHub.youtubeUrl) {
+               thumbnail = extractThumbnailFromUrl(sharedSubHub.youtubeUrl, 'hqdefault')
+           }
+       }
+
         const newPost = await prisma.post.create({
             data: {
                 title,
                 content,
                 userId,
-                sharedSubHubId: sharedSubHubId || null
+                sharedSubHubId: sharedSubHubId || null,
+                thumbnail: thumbnail
             },
             include: {
                 user: {
@@ -357,13 +373,15 @@ router.post("/api/posts/share-subhub", isAuthenticated, async (req, res) => {
                postContent = `Just completed "${subHub.name}" - incredible learning journey! 🧠 Can't wait to apply these insights! #Learning #Growth`
            }
        }
-
+       // Extract thumbnail from YouTube URL
+       const thumbnail = subHub.youtubeUrl ? extractThumbnailFromUrl(subHub.youtubeUrl, 'hqdefault') : null
        const sharedPost = await prisma.post.create({
            data: {
                title: postTitle,
                content: postContent,
-               userId,
-               sharedSubHubId: parseInt(subHubId)
+               userId: userId,
+               sharedSubHubId: parseInt(subHubId),
+               thumbnail: thumbnail
            },
            include: {
                user: {
@@ -403,7 +421,6 @@ router.post("/api/posts/share-subhub", isAuthenticated, async (req, res) => {
 router.get("/api/posts/recommendations", isAuthenticated, async (req, res) => {
    try {
        const userId = req.user.id
-       const topKRecommendations = require("../../recommendationAlgo/recommendation")
 
        // Get user's following list for enhanced recommendations
        const followingUsers = await prisma.user.findUnique({
