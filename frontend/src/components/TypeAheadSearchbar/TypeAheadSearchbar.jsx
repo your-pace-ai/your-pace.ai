@@ -13,6 +13,7 @@ export const TypeAheadSearchbar = ({ onSearch }) => {
    const debounceRef = useRef(null)
    const dropdownRef = useRef(null)
    const navigate = useNavigate()
+   const requestIdRef = useRef(0)
 
    const handleSubmit = (e) => {
        e.preventDefault()
@@ -42,19 +43,28 @@ export const TypeAheadSearchbar = ({ onSearch }) => {
           return
       }
 
+      const currentRequestId = ++requestIdRef.current
       setLoading(true)
       try {
           const results = await getTypeaheadSuggestions(query)
-          setSuggestions(results.suggestions || [])
-          setShowDropdown(true)
-          setSelectedIndex(-1)
+
+          if (currentRequestId === requestIdRef.current) {
+              setSuggestions(results.suggestions || [])
+              setShowDropdown(true)
+              setSelectedIndex(-1)
+          }
       } catch (error) {
-          setSuggestions([])
-          setShowDropdown(false)
+          if (currentRequestId === requestIdRef.current) {
+              setSuggestions([])
+              setShowDropdown(false)
+          }
       } finally {
-          setLoading(false)
+          if (currentRequestId === requestIdRef.current) {
+              setLoading(false)
+          }
       }
   }
+
 
   const handleInputChange = (e) => {
       const value = e.target.value
