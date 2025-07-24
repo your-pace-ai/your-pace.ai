@@ -40,6 +40,7 @@ export const UploadVideoModal = ({visible, onClose}) => {
                            onChange={e => setSubhubName(e.target.value)}
                            placeholder="Enter a name for your learning hub"
                            required
+                           className="cursor-text"
                        />
                        <input
                            type="url"
@@ -47,8 +48,9 @@ export const UploadVideoModal = ({visible, onClose}) => {
                            onChange={e => setYoutubeUrl(e.target.value)}
                            placeholder="Paste YouTube URL here..."
                            required
+                           className="cursor-text"
                        />
-                       <button type="submit" className="create-learning-hub-modal-button">Create Hub with Video</button>
+                       <button type="submit" className="create-learning-hub-modal-button hover-effect cursor-pointer" title="Create a new learning hub with this video">Create Hub with Video</button>
                    </form>
                </div>
            </div>

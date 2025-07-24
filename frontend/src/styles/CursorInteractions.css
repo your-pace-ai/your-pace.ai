@@ -1,0 +1,102 @@
+button,
+.button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a,
+.clickable,
+.action-btn,
+.subhub-action-btn,
+.feed-selector button,
+.pagination-btn,
+.clear-button,
+.comment-submit,
+.delete-btn,
+.follow-btn,
+.suggestion-item {
+  cursor: pointer !important;
+}
+
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled {
+  cursor: not-allowed !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
+.cursor-zoom {
+  cursor: zoom-in;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.hover-effect {
+  transition: all 0.2s ease;
+}
+
+.hover-effect:hover {
+  transform: scale(1.03);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button-hover {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-hover:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.button-hover:active {
+  transform: scale(0.98);
+}
+
+.click-effect {
+  transition: transform 0.1s ease;
+}
+
+.click-effect:active {
+  transform: scale(0.95);
+}
+
+.highlight-effect {
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.highlight-effect:hover {
+  border-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.03);
+}
+
+.underline-effect {
+  position: relative;
+}
+
+.underline-effect::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #007bff;
+  transition: width 0.3s ease;
+}
+
+.underline-effect:hover::after {
+  width: 100%;
+}

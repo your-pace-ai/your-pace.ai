@@ -239,32 +239,37 @@ export const PostFeed = () => {
                </div>
                <div className="feed-selector">
                    <button
-                            className={feedType === 'for-you' ? 'active' : ''}
+                            className={`${feedType === 'for-you' ? 'active' : ''} button-hover cursor-pointer`}
                             onClick={() => { setFeedType('for-you'); setCurrentPage(1); }}
+                            title="Show personalized content"
                         >
                             For You
                         </button>
                         <button
-                            className={feedType === 'posts' ? 'active' : ''}
+                            className={`${feedType === 'posts' ? 'active' : ''} button-hover cursor-pointer`}
                             onClick={() => { setFeedType('posts'); setCurrentPage(1); }}
+                            title="Show all posts"
                         >
                             All Posts
                         </button>
                         <button
-                            className={feedType === 'followers' ? 'active' : ''}
+                            className={`${feedType === 'followers' ? 'active' : ''} button-hover cursor-pointer`}
                             onClick={() => { setFeedType('followers'); setCurrentPage(1); }}
+                            title="Show your followers"
                         >
                             Followers
                    </button>
                    <button
-                       className={feedType === 'following' ? 'active' : ''}
+                       className={`${feedType === 'following' ? 'active' : ''} button-hover cursor-pointer`}
                        onClick={() => { setFeedType('following'); setCurrentPage(1); }}
+                       title="Show people you follow"
                    >
                             Following
                         </button>
                         <button
-                            className={feedType === 'all-users' ? 'active' : ''}
+                            className={`${feedType === 'all-users' ? 'active' : ''} button-hover cursor-pointer`}
                             onClick={() => { setFeedType('all-users'); setCurrentPage(1); }}
+                            title="Show all users"
                         >
                             All Users
                    </button>
