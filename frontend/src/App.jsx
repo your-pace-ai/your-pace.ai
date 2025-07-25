@@ -1,4 +1,5 @@
 import './App.css'
+import './styles/CursorInteractions.css'
 import LoginPage from './components/SignInUp/LoginPage.jsx'
 import LandingPage from './components/LandingPage/LandingPage.jsx'
 import { SignUp } from './components/SignInUp/SignUp.jsx'

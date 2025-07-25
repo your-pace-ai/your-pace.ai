@@ -172,7 +172,7 @@ export const TypeAheadSearchbar = ({ onSearch }) => {
                        onBlur={handleBlur}
                        onKeyDown={handleKeyDown}
                        placeholder="Search..."
-                       className="search-input"
+                       className="search-input cursor-text"
                        autoComplete="off"
                    />
 
@@ -207,7 +207,7 @@ export const TypeAheadSearchbar = ({ onSearch }) => {
                       suggestions.map((suggestion, index) => (
                           <div
                               key={`${suggestion.type}-${suggestion.id}-${index}`}
-                              className={`suggestion-item ${selectedIndex === index ? 'selected' : ''}`}
+                              className={`suggestion-item ${selectedIndex === index ? 'selected' : ''} cursor-pointer`}
                               onClick={() => handleSuggestionClick(suggestion)}
                               onMouseEnter={() => setSelectedIndex(index)}
                           >

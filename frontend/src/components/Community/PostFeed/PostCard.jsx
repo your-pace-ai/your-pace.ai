@@ -89,7 +89,7 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
            <div className="post-content">
                <h3 className="post-title">{post.title}</h3>
                {post.sharedSubHub && (
-                   <div className="shared-subhub-badge clickable"
+                   <div className="shared-subhub-badge clickable hover-effect cursor-pointer"
                         onClick={handleSharedSubHubClick}
                         title='Click to view shared subhub'
                     >
@@ -98,13 +98,13 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                )}
                <div className="post-text">{post.content}</div>
                {post.thumbnail && (
-                   <img src={post.thumbnail} alt={post.title} className="post-image" />
+                   <img src={post.thumbnail} alt={post.title} className="post-image cursor-zoom" />
                )}
            </div>
            <div className="post-actions">
                <div className="action-buttons">
                    <button
-                       className={`action-btn like-btn ${isLiked ? 'liked' : ''} ${isLiking ? 'loading' : ''}`}
+                       className={`action-btn like-btn ${isLiked ? 'liked' : ''} ${isLiking ? 'loading' : ''} click-effect cursor-pointer`}
                        onClick={handleLike}
                        disabled={isLiking}
                        title={isLiked ? 'Unlike' : 'Like'}
@@ -112,12 +112,13 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                        {isLiked ? '❤️' : '🤍'} <span>{post.like || 0}</span>
                    </button>
                    <button
-                       className="action-btn comment-btn"
+                       className="action-btn comment-btn cursor-pointer"
                        onClick={() => setShowComments(!showComments)}
+                       title={showComments ? "Hide comments" : "Show comments"}
                    >
                        💬 <span>{post.comment?.length || 0}</span>
                    </button>
-                   <button className="action-btn share-btn">
+                   <button className="action-btn share-btn button-hover cursor-pointer" title="Share this post">
                        📤
                    </button>
                </div>
@@ -129,7 +130,7 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                        placeholder="Add a comment..."
                        value={newComment}
                        onChange={(e) => setNewComment(e.target.value)}
-                       className="comment-input"
+                       className="comment-input cursor-text"
                    />
                    <button
                        type="submit"

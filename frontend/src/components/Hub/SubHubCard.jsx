@@ -55,7 +55,7 @@ export const SubHubCard = (props) => {
   }
 
   return (
-    <div className="subhub-card">
+    <div className="subhub-card highlight-effect">
       <Link
         to="/subhub"
         state={{
@@ -63,18 +63,24 @@ export const SubHubCard = (props) => {
           hubName: props.name,
           hubId: props.id,
         }}
+        className="cursor-pointer"
       >
-        <h4 className="subhub-title">{props.name}</h4>
+        <h4 className="subhub-title cursor-pointer">{props.name}</h4>
       </Link>
       <div className="subhub-actions">
         <button
-          className="subhub-action-btn"
+          className="subhub-action-btn click-effect cursor-pointer"
           onClick={handleShare}
           disabled={isSharing}
+          title="Share this learning hub"
         >
           {isSharing ? 'Sharing...' : 'Share'}
         </button>
-        <button className="subhub-action-btn delete" onClick={handleDelete}>
+        <button
+          className="subhub-action-btn delete click-effect cursor-pointer"
+          onClick={handleDelete}
+          title="Delete this learning hub"
+        >
           Delete
         </button>
       </div>
