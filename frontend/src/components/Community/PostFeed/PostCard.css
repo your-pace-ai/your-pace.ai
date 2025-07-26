@@ -181,6 +181,31 @@
     background-color: #ffeef0;
  }
 
+ .liked-icon {
+    color: #ed4956;
+ }
+
+ .action-btn svg {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+ }
+
+ .delete-btn svg {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    color: #8e8e8e;
+ }
+
+ .delete-btn:hover svg {
+    color: #262626;
+ }
+
+ .shared-subhub-badge svg {
+    margin-right: 0.5rem;
+ }
+
 
  .comment-btn span {
     font-weight: 600;

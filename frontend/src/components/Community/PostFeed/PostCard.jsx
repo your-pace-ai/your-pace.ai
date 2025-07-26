@@ -4,6 +4,14 @@ import './PostCard.css'
 import { currentUser } from '../../../api/api'
 import { CommentSection } from './CommentSection'
 import { formatDate } from '../../../utils/utils.js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faTrash,
+    faBook,
+    faHeart,
+    faComment,
+    faShareFromSquare
+} from '@fortawesome/free-solid-svg-icons'
 
 export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment }) => {
    const [showComments, setShowComments] = useState(false)
@@ -29,23 +37,33 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
    }
 
 
-   const handleLike = () => {
+   const handleLike = async () => {
        if (isLiking) return
 
         setIsLiking(true)
-        onLike(post.id)
-        setIsLiking(false)
+        try {
+            await onLike(post.id)
+        } catch (error) {
+            console.error("Error liking post:", error)
+        } finally {
+            setIsLiking(false)
+        }
    }
 
 
-   const handleComment = (e) => {
+   const handleComment = async (e) => {
        e.preventDefault()
        if (!newComment.trim() || isCommenting) return
 
         setIsCommenting(true)
-        onComment(post.id, newComment)
-        setNewComment('')
-        setIsCommenting(false)
+        try {
+            await onComment(post.id, newComment)
+            setNewComment('')
+        } catch (error) {
+            console.error("Error commenting on post:", error)
+        } finally {
+            setIsCommenting(false)
+        }
    }
 
    const handleDelete = () => {
@@ -81,7 +99,7 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                </div>
                {isOwnPost && (
                    <button className="delete-btn" onClick={handleDelete} title="Delete post">
-                       🗑️
+                       <FontAwesomeIcon icon={faTrash} />
                    </button>
                )}
            </div>
@@ -93,7 +111,7 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                         onClick={handleSharedSubHubClick}
                         title='Click to view shared subhub'
                     >
-                       📚 Shared Learning: {post.sharedSubHub.name}
+                       <FontAwesomeIcon icon={faBook} /> Shared Learning: {post.sharedSubHub.name}
                    </div>
                )}
                <div className="post-text">{post.content}</div>
@@ -109,17 +127,17 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                        disabled={isLiking}
                        title={isLiked ? 'Unlike' : 'Like'}
                    >
-                       {isLiked ? '❤️' : '🤍'} <span>{post.like || 0}</span>
+                       <FontAwesomeIcon icon={faHeart} className={isLiked ? 'liked-icon' : ''} /> <span>{post.like || 0}</span>
                    </button>
                    <button
                        className="action-btn comment-btn cursor-pointer"
                        onClick={() => setShowComments(!showComments)}
                        title={showComments ? "Hide comments" : "Show comments"}
                    >
-                       💬 <span>{post.comment?.length || 0}</span>
+                       <FontAwesomeIcon icon={faComment} /> <span>{post.comment?.length || 0}</span>
                    </button>
                    <button className="action-btn share-btn button-hover cursor-pointer" title="Share this post">
-                       📤
+                       <FontAwesomeIcon icon={faShareFromSquare} />
                    </button>
                </div>
            </div>

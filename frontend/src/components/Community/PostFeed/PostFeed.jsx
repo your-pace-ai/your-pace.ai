@@ -125,7 +125,8 @@ export const PostFeed = () => {
         try {
             const result = await likePost(postId)
 
-            setPosts(posts.map(post => {
+            // Update the posts state with the new like status
+            setPosts(prevPosts => prevPosts.map(post => {
                 if (post.id === postId) {
                     return {
                         ...post,
@@ -135,27 +136,35 @@ export const PostFeed = () => {
                 }
                 return post
             }))
+
+            return result; // Return the result so the PostCard component can update its state
         } catch (error) {
-            // Error handled silently
+            console.error("Error liking post:", error);
+            throw error; // Rethrow the error so the PostCard component can handle it
         }
     }
 
     const handleComment = async (postId, commentText) => {
         try {
             const newComment = await commentOnPost(postId, commentText)
-            setPosts(posts.map(post => {
-               if (post.id === postId) {
-                   return {
-                       ...post,
-                       comment: [...(post.comment || []), newComment]
-                   }
-               }
-               return post
-           }))
-       } catch (error) {
-           // Error handled silently
-       }
-   }
+
+            // Update the posts state with the new comment
+            setPosts(prevPosts => prevPosts.map(post => {
+                if (post.id === postId) {
+                    return {
+                        ...post,
+                        comment: [...(post.comment || []), newComment]
+                    }
+                }
+                return post
+            }))
+
+            return newComment; // Return the result so the PostCard component can update its state
+        } catch (error) {
+            console.error("Error commenting on post:", error);
+            throw error; // Rethrow the error so the PostCard component can handle it
+        }
+    }
 
     const handleFollow = async (userId, isCurrentlyFollowing) => {
         try {
