@@ -2,6 +2,18 @@ import "./Sidebar.css"
 import { useNavigate } from "react-router-dom"
 import { logout, getLearningHubs, deletedLearningHub } from "../../api/api"
 import { useState, useEffect } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faPlus,
+    faClock,
+    faBox,
+    faTrash,
+    faChevronDown,
+    faChevronRight,
+    faUsers,
+    faSignOutAlt,
+    faBars
+} from '@fortawesome/free-solid-svg-icons'
 
 
 export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, refreshLearningHubs}) => {
@@ -65,16 +77,22 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
            <div className="sidebar">
                <div className="sidebar-header">
                    <div className="back-button">
-                       <span>=</span>
+                       <FontAwesomeIcon icon={faBars} />
                        <span>your-pace.com</span>
                    </div>
                </div>
 
 
                <div className="sidebar-content">
-                   <button className="sidebar-btn primary">+ Add Content</button>
-                   <button className="sidebar-btn">Recent</button>
-                   <button className="sidebar-btn" onClick={onOpenModal}>+ Create Hub</button>
+                   <button className="sidebar-btn primary">
+                       <FontAwesomeIcon icon={faPlus} /> Add Content
+                   </button>
+                   <button className="sidebar-btn">
+                       <FontAwesomeIcon icon={faClock} /> Recent
+                   </button>
+                   <button className="sidebar-btn" onClick={onOpenModal}>
+                       <FontAwesomeIcon icon={faPlus} /> Create Hub
+                   </button>
 
                    <div className="spaces-section">
                        <h3>Spaces</h3>
@@ -84,7 +102,9 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
                                    className={`hub-header ${selectedLearningHub?.id === hub.id ? 'selected' : ''}`}
                                    onClick={() => toggleHub(hub)}
                                >
-                                   <span className="hub-icon">📦</span>
+                                   <span className="hub-icon">
+                                       <FontAwesomeIcon icon={faBox} />
+                                   </span>
                                    <span className="hub-name">{hub.name}</span>
                                    <div className="hub-actions">
                                        <button
@@ -92,10 +112,13 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
                                            onClick={(e) => handleDeleteLearningHub(hub.id, hub.name, e)}
                                            title="Delete learning hub"
                                        >
-                                           🗑️
+                                           <FontAwesomeIcon icon={faTrash} />
                                        </button>
                                        <span className="expand-icon">
-                                           {expandedHubs.has(hub.id) ? '▼' : '▶'}
+                                           {expandedHubs.has(hub.id) ?
+                                               <FontAwesomeIcon icon={faChevronDown} /> :
+                                               <FontAwesomeIcon icon={faChevronRight} />
+                                           }
                                        </span>
                                    </div>
                                </div>
@@ -103,8 +126,12 @@ export const Sidebar = ({onOpenModal, selectedLearningHub, onLearningHubSelect, 
                        ))}
                    </div>
 
-                   <button className="sidebar-btn" onClick={() => navigate('/community')}>Community</button>
-                   <button className="sidebar-btn sign-out" onClick={signOut}>Sign Out</button>
+                   <button className="sidebar-btn" onClick={() => navigate('/community')}>
+                       <FontAwesomeIcon icon={faUsers} /> Community
+                   </button>
+                   <button className="sidebar-btn sign-out" onClick={signOut}>
+                       <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out
+                   </button>
                </div>
            </div>
        </>
