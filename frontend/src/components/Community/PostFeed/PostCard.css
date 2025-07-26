@@ -1,9 +1,16 @@
 .post-card {
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #dbdbdb;
+    background: #1e1e1e;
+    border-radius: 12px;
+    border: 1px solid #333;
     overflow: hidden;
     margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+ }
+
+ .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
  }
 
  .post-header {
@@ -11,7 +18,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #333;
  }
 
  .user-info {
@@ -24,13 +31,14 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(45deg, #0095f6, #d946ef);
+    background: linear-gradient(45deg, #4f46e5, #7c3aed);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: bold;
     font-size: 1.1rem;
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.4);
  }
 
 
@@ -43,14 +51,14 @@
 
  .username {
     font-weight: 600;
-    color: #262626;
+    color: #e0e0e0;
     font-size: 0.9rem;
  }
 
 
  .post-time {
     font-size: 0.8rem;
-    color: #8e8e8e;
+    color: #a0a0a0;
  }
 
 
@@ -67,7 +75,7 @@
 
  .delete-btn:hover {
     opacity: 1;
-    background-color: #f8f8f8;
+    background-color: #333;
  }
 
  .post-content {
@@ -77,23 +85,23 @@
 
  .post-title {
     margin: 0 0 0.5rem 0;
-    color: #262626;
+    color: #e0e0e0;
     font-size: 1.1rem;
     font-weight: 600;
-    padding: 0 1rem;
+    padding: 1rem 1rem 0.5rem;
  }
 
 
  .post-text {
-    color: #262626;
+    color: #c0c0c0;
     line-height: 1.5;
     margin: 0 0 1rem 0;
     padding: 0 1rem;
-    white-space: pre-line; /* Preserve line breaks for chapter insights */
+    white-space: pre-line;
  }
 
  .shared-subhub-badge {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     color: white;
     padding: 0.5rem 1rem;
     margin: 0.5rem 1rem 1rem 1rem;
@@ -101,18 +109,18 @@
     font-size: 0.85rem;
     font-weight: 600;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
  }
 
  .shared-subhub-badge.clickable {
    cursor: pointer;
-   transition: all 0.2s ease;
+   transition: all 0.3s ease;
 }
 
 .shared-subhub-badge.clickable:hover {
-   background: linear-gradient(45deg, #4f46e5, #7c3aed);
-   transform: translateY(-1px);
-   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+   background: linear-gradient(45deg, #4338ca, #6d28d9);
+   transform: translateY(-2px);
+   box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
 }
 
 .shared-subhub-badge.clickable:active {
@@ -126,11 +134,13 @@
     display: block;
     margin: 0;
     border: none;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
  }
 
  .post-actions {
     padding: 0 1rem;
-    border-top: 1px solid #efefef;
+    border-top: 1px solid #333;
  }
 
 
@@ -149,20 +159,21 @@
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
-    color: #262626;
+    color: #c0c0c0;
     padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    transition: all 0.3s ease;
  }
 
 
  .action-btn:hover {
-    background-color: #f8f8f8;
+    background-color: #252525;
+    color: #e0e0e0;
  }
 
 
  .action-btn.loading {
-    opacity: 0.7;
+    opacity: 0.5;
     cursor: not-allowed;
  }
 
@@ -173,33 +184,39 @@
 
 
  .like-btn.liked {
-    color: #ed4956;
+    color: #f43f5e;
  }
 
 
  .like-btn.liked:hover {
-    background-color: #ffeef0;
+    background-color: rgba(244, 63, 94, 0.1);
  }
 
  .liked-icon {
-    color: #ed4956;
+    color: #f43f5e;
+    filter: drop-shadow(0 0 3px rgba(244, 63, 94, 0.5));
  }
 
  .action-btn svg {
     font-size: 1.1rem;
     width: 1.1rem;
     height: 1.1rem;
+    transition: transform 0.2s ease;
+ }
+
+ .action-btn:hover svg {
+    transform: scale(1.1);
  }
 
  .delete-btn svg {
     font-size: 1rem;
     width: 1rem;
     height: 1rem;
-    color: #8e8e8e;
+    color: #a0a0a0;
  }
 
  .delete-btn:hover svg {
-    color: #262626;
+    color: #e0e0e0;
  }
 
  .shared-subhub-badge svg {
@@ -211,7 +228,7 @@
     font-weight: 600;
  }
  .comments-section {
-    border-top: 1px solid #efefef;
+    border-top: 1px solid #333;
  }
 
 
@@ -228,31 +245,38 @@
     border: none;
     outline: none;
     font-size: 0.9rem;
-    color: #262626;
+    color: #e0e0e0;
     background: transparent;
+    border-bottom: 1px solid #333;
+    padding: 0.5rem 0;
+    transition: border-color 0.3s ease;
  }
 
+ .comment-input:focus {
+    border-color: #4f46e5;
+ }
 
  .comment-input::placeholder {
-    color: #8e8e8e;
+    color: #a0a0a0;
  }
 
 
  .comment-submit {
     background: none;
     border: none;
-    color: #0095f6;
+    color: #4f46e5;
     font-weight: 600;
     cursor: pointer;
     font-size: 0.9rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
  }
 
 
  .comment-submit:hover:not(:disabled) {
-    background-color: #f0f8ff;
+    background-color: rgba(79, 70, 229, 0.1);
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
  }
 
 
@@ -265,7 +289,7 @@
  @media (max-width: 480px) {
     .post-card {
         margin-bottom: 1rem;
-        border-radius: 0;
+        border-radius: 8px;
     }
 
 
