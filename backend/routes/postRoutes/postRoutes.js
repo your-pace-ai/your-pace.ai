@@ -441,7 +441,19 @@ router.get("/api/posts/recommendations", isAuthenticated, async (req, res) => {
                        followedBy: { select: { id: true } }
                    }
                },
-               comment: true,
+               comment: {
+                   include: {
+                       user: {
+                           select: {
+                               id: true,
+                               email: true,
+                               firstName: true,
+                               lastName: true
+                           }
+                       }
+                   },
+                   orderBy: { createdAt: 'asc' }
+               },
                likes: true,
                sharedSubHub: true
            }
