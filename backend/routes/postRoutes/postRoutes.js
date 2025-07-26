@@ -472,7 +472,14 @@ router.get("/api/posts/recommendations", isAuthenticated, async (req, res) => {
        })
 
        const recommended = topKRecommendations(transformed).filter(r => !r.isOwn)
-       const postsRecommended = recommended.map(r => r.post)
+       const postsRecommended = recommended.map(r => {
+           const post = r.post;
+           return {
+               ...post,
+               like: post.likes.length,
+               isLikedByUser: post.likes.some(like => like.userId === userId)
+           };
+       });
        res.json(postsRecommended)
    } catch (error) {
        res.status(500).json({ error: 'Failed to fetch recommendations', details: error.message })

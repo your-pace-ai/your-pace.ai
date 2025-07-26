@@ -127,7 +127,11 @@ export const PostCard = ({ post, isLiked, onUpdate, onDelete, onLike, onComment 
                        disabled={isLiking}
                        title={isLiked ? 'Unlike' : 'Like'}
                    >
-                       <FontAwesomeIcon icon={faHeart} className={isLiked ? 'liked-icon' : ''} /> <span>{post.like || 0}</span>
+                       <FontAwesomeIcon
+                           icon={faHeart}
+                           className={(isLiked || (post.like && post.like > 0)) ? 'liked-icon' : ''}
+                       />
+                       <span>{post.like || 0}</span>
                    </button>
                    <button
                        className="action-btn comment-btn cursor-pointer"
