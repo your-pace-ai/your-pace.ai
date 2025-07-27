@@ -25,6 +25,7 @@ CREATE TABLE "Post" (
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "like" INTEGER NOT NULL DEFAULT 0,
+    "thumbnail" TEXT,
     "userId" TEXT NOT NULL,
     "sharedSubHubId" INTEGER,
 
