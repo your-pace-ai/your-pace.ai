@@ -46,7 +46,7 @@ export default function LoginPage() {
           <p className="login-form-subtitle">Let's start your learning journey.</p>
           <button className="login-google-btn">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/250px-Google_Favicon_2025.svg.png" alt="G" className="google-icon" />
-            <a className="login-google-link" href="http://localhost:3000/auth/google">Continue with Google</a>
+            <a className="login-google-link" href="https://your-pace-ai-backend.onrender.com/auth/google">Continue with Google</a>
           </button>
           <div className="login-or-row">
             <div className="login-or-line" />
